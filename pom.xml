@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2012 Xi CHEN
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.seanchenxi.gwt.storage</groupId>
+    <artifactId>gwt-storage</artifactId>
+    <version>0.9-SNAPSHOT</version>
+    <name>GWT Storage</name>
+    <url>http://code.google.com/p/gwt-storage</url>
+    <description>GWT Client-side Storage API extension</description>
+
+    <organization>
+        <name>seanchenxi.com</name>
+        <url>http://seanchenxi.com/</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Xi Chen</name>
+            <organization>seanchenxi.com</organization>
+            <organizationUrl>http://seanchenxi.com/</organizationUrl>
+            <roles>
+                <role>Original Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <system>Google Code</system>
+        <url>http://code.google.com/p/gwt-storage/issues/list</url>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <properties>
+        <gwt.version>2.5.0</gwt.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <version>${gwt.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <scm>
+        <connection>scm:git:http://gwt-storage.googlecode.com/git</connection>
+        <developerConnection>scm:git:https://gwt-storage.googlecode.com/git</developerConnection>
+        <url>http://gwt-storage.googlecode.com/git</url>
+    </scm>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.java</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+</project>

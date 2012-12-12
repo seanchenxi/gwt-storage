@@ -1,0 +1,53 @@
+<!--
+  ~ Copyright 2012 Xi CHEN
+  ~
+  ~    Licensed under the Apache License, Version 2.0 (the "License");
+  ~    you may not use this file except in compliance with the License.
+  ~    You may obtain a copy of the License at
+  ~
+  ~        http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~    Unless required by applicable law or agreed to in writing, software
+  ~    distributed under the License is distributed on an "AS IS" BASIS,
+  ~    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~    See the License for the specific language governing permissions and
+  ~    limitations under the License.
+  -->
+
+<module>
+  
+  <!--
+      Define if to use memory cache or not. default value is "true".
+  -->
+  <define-property name="storage.cache" values="true, false" />
+  <set-property-fallback name="storage.cache" value="true" />
+  <set-property name="storage.cache" value="true" />
+  
+  <!--
+   - Configuration property define how to find types that will persist in web storage
+   - Valid values are (case insensitive): rpc/xml/rpc_xml(others are treated as rpc).
+   -->
+  <define-configuration-property name="storage.type.finder" is-multi-valued="false" />
+  <set-configuration-property name="storage.type.finder" value="rpc"/>
+    
+  <generate-with class="com.seanchenxi.gwt.storage.rebind.StorageTypeSerializerGenerator">
+  	<when-type-is class="com.seanchenxi.gwt.storage.client.serializer.StorageTypeSerializer"/>
+  </generate-with>
+  
+  <replace-with class="com.seanchenxi.gwt.storage.client.cache.StorageMemoryCache">
+  	<when-type-is class="com.seanchenxi.gwt.storage.client.cache.StorageCache" />
+  	<when-property-is name="storage.cache" value="true"/>
+  </replace-with>
+  
+  <replace-with class="com.seanchenxi.gwt.storage.client.cache.NoStorageCache">
+  	<when-type-is class="com.seanchenxi.gwt.storage.client.cache.StorageCache" />
+  	<when-property-is name="storage.cache" value="false"/>
+  </replace-with>
+ 
+  <replace-with class="com.seanchenxi.gwt.storage.client.serializer.StorageRPCSerializerImpl">
+  	<when-type-is class="com.seanchenxi.gwt.storage.client.serializer.StorageSerializer" />
+  </replace-with>
+  
+  <source path='client'/>
+  
+</module>
