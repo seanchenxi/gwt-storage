@@ -17,7 +17,6 @@
 package com.seanchenxi.gwt.storage.client;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
@@ -88,6 +87,10 @@ public final class StorageExt {
     fireEvent(StorageChangeEvent.ChangeType.CLEAR, null, null, null, null, null);
   }
 
+  public void clearCache() {
+    cache.clear();
+  }
+
   public <T> boolean containsKey(StorageKey<T> key) {
     return storage.getItem(key.name()) != null;
   }
@@ -136,7 +139,7 @@ public final class StorageExt {
       fireEvent(StorageChangeEvent.ChangeType.PUT, key, value, oldValue, data, oldData);
     } catch (JavaScriptException e) {
       String msg = e.getMessage();
-      if (msg != null && msg.indexOf("QUOTA") != -1 && msg.indexOf("DOM") != -1) {
+      if (msg != null && msg.contains("QUOTA") && msg.contains("DOM")) {
         throw new StorageQuotaExceededException(key, e);
       }
       throw e;
@@ -181,9 +184,9 @@ public final class StorageExt {
       }
 
       final StorageChangeEvent event = new StorageChangeEvent(changeType, key, value, oldValue, data, oldData);
-      for (Iterator<StorageChangeEvent.Handler> it = handlers.iterator(); it.hasNext();) {
+      for (StorageChangeEvent.Handler handler : handlers) {
         try{
-          it.next().onStorageChange(event);
+          handler.onStorageChange(event);
         }catch(Exception e){
           if(ueh != null){
             ueh.onUncaughtException(e);
