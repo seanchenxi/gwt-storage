@@ -15,38 +15,13 @@
  */
 package com.seanchenxi.gwt.storage.client;
 
-import com.google.gwt.junit.client.GWTTestCase;
+import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.rpc.SerializationException;
 
 /**
  * Created by: Xi
  */
-public class StorageTest extends GWTTestCase {
-
-  @Override
-  public String getModuleName() {
-    return "com.seanchenxi.gwt.storage.StorageTest";
-  }
-
-  public void testStoragePUT() throws StorageQuotaExceededException, SerializationException {
-    System.out.print("begin");
-    StorageExt localStorage = StorageExt.getLocalStorage();
-    assertNotNull(localStorage);
-    StorageExt sessionStorage = StorageExt.getSessionStorage();
-    assertNotNull(sessionStorage);
-
-    int localStorageLength = localStorage.size();
-    int sessionStorageLength = sessionStorage.size();
-
-    putStringValue(localStorage, ++localStorageLength);
-    putStringValue(sessionStorage, ++sessionStorageLength);
-
-    putBooleanValue(localStorage, ++localStorageLength);
-    putBooleanValue(sessionStorage, ++sessionStorageLength);
-
-    putIntegerValue(localStorage, ++localStorageLength);
-    putIntegerValue(sessionStorage, ++sessionStorageLength);
-  }
+public class StorageTest implements EntryPoint {
 
   private static void putStringValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
     StorageKey<String> key = new StorageKey<String>("testString", String.class);
@@ -66,6 +41,14 @@ public class StorageTest extends GWTTestCase {
     assertEquals(value, storage.get(key));
   }
 
+  private static void assertEquals(Object expected, Object value){
+    assert expected.equals(value) || expected == value;
+  }
+
+  private static void assertTrue(boolean value){
+    assert value;
+  }
+
   private static void putIntegerValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
     StorageKey<Integer> key = new StorageKey<Integer>("testInteger", Integer.class);
     final Integer value = Integer.MAX_VALUE;
@@ -75,4 +58,29 @@ public class StorageTest extends GWTTestCase {
     assertEquals(value, storage.get(key));
   }
 
+  public void onModuleLoad() {
+    StorageExt localStorage = StorageExt.getLocalStorage();
+    assert localStorage != null;
+    StorageExt sessionStorage = StorageExt.getSessionStorage();
+    assert sessionStorage != null;
+
+    int localStorageLength = localStorage.size();
+    int sessionStorageLength = sessionStorage.size();
+
+    try {
+      putStringValue(localStorage, ++localStorageLength);
+      putStringValue(sessionStorage, ++sessionStorageLength);
+
+      putBooleanValue(localStorage, ++localStorageLength);
+      putBooleanValue(sessionStorage, ++sessionStorageLength);
+
+      putIntegerValue(localStorage, ++localStorageLength);
+      putIntegerValue(sessionStorage, ++sessionStorageLength);
+    } catch (SerializationException e) {
+      e.printStackTrace();
+    } catch (StorageQuotaExceededException e) {
+      e.printStackTrace();
+    }
+
+  }
 }

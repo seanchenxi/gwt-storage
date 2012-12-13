@@ -72,12 +72,6 @@
             <version>${gwt.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-          <groupId>junit</groupId>
-          <artifactId>junit</artifactId>
-          <version>3.8</version>
-          <scope>provided</scope>
-        </dependency>
     </dependencies>
 
     <scm>
@@ -95,9 +89,6 @@
           <executions>
             <execution>
               <goals>
-                <goal>compile</goal>
-                <goal>generateAsync</goal>
-                <goal>test</goal>
                 <goal>resources</goal>
               </goals>
             </execution>
