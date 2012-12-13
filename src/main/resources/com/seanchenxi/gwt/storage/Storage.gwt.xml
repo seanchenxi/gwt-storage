@@ -14,7 +14,9 @@
      limitations under the License.
   -->
 <module>
-  
+
+  <inherits name='com.google.gwt.user.User'/>
+
   <!--
       Define if to use memory cache or not. default value is "true".
   -->
