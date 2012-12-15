@@ -16,12 +16,14 @@
 
 package com.seanchenxi.gwt.storage.client;
 
-public class StorageKey<T> {
+import java.io.Serializable;
 
-  private final Class<T> clazz;
+public class StorageKey<T extends Serializable> {
+
+  private final Class<? super T> clazz;
   private final String name;
 
-  public StorageKey(String name, Class<T> clazz) {
+  public StorageKey(String name, Class<? super T> clazz) {
     if(name == null || name.trim().length() < 1){
       throw new IllegalArgumentException("StorageKey's name can not be null or empty");
     }
@@ -32,7 +34,7 @@ public class StorageKey<T> {
     this.clazz = clazz;
   }
 
-  public Class<T> getClazz() {
+  public Class<? super T> getClazz() {
     return clazz;
   }
 

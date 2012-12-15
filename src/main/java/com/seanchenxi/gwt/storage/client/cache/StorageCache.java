@@ -18,16 +18,18 @@ package com.seanchenxi.gwt.storage.client.cache;
 
 import com.seanchenxi.gwt.storage.client.StorageKey;
 
+import java.io.Serializable;
+
 public interface StorageCache {
 
   void clear();
 
-  <T> boolean containsValue(T value);
+  <T extends Serializable> boolean containsValue(T value);
 
-  <T> T get(StorageKey<T> key);
+  <T extends Serializable> T get(StorageKey<T> key);
 
-  <T> T put(StorageKey<T> key, T value);
+  <T extends Serializable> T put(StorageKey<T> key, T value);
 
-  <T> T remove(StorageKey<T> key);
+  <T extends Serializable> T remove(StorageKey<T> key);
 
 }

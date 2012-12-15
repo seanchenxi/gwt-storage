@@ -14,13 +14,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
   -->
-<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.5.0//EN"
-        "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
-<module rename-to="storage_test">
-  <inherits name='com.google.gwt.user.User'/>
-  <inherits name="com.seanchenxi.gwt.storage.Storage"/>
-  <set-property name="storage.cache" value="false" />
-  <set-configuration-property name="storage.type.finder" value="xml" />
-  <entry-point class='com.seanchenxi.gwt.storage.client.StorageTest'/>
-  <source path='client'/>
-</module>
+
+<!-- The StorageSerialization root element -->
+<!ELEMENT StorageSerialization (class)*>
+<!-- Specify the full qualified name of storage serializable type-->
+<!ELEMENT class (#PCDATA)*>

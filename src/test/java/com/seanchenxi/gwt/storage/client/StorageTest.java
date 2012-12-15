@@ -16,71 +16,139 @@
 package com.seanchenxi.gwt.storage.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.user.client.rpc.SerializationException;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 
 /**
  * Created by: Xi
  */
 public class StorageTest implements EntryPoint {
 
-  private static void putStringValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
-    StorageKey<String> key = new StorageKey<String>("testString", String.class);
-    final String value = "StringValue";
-    storage.put(key, value);
-    assertEquals(expectedSize, storage.size());
-    assertTrue(storage.containsKey(key));
-    assertEquals(value, storage.get(key));
-  }
-
-  private static void putBooleanValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
-    StorageKey<Boolean> key = new StorageKey<Boolean>("testBoolean", Boolean.class);
-    final Boolean value = Boolean.FALSE;
-    storage.put(key, value);
-    assertEquals(expectedSize, storage.size());
-    assertTrue(storage.containsKey(key));
-    assertEquals(value, storage.get(key));
-  }
-
-  private static void assertEquals(Object expected, Object value){
-    assert expected.equals(value) || expected == value;
-  }
-
-  private static void assertTrue(boolean value){
-    assert value;
-  }
-
-  private static void putIntegerValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
-    StorageKey<Integer> key = new StorageKey<Integer>("testInteger", Integer.class);
-    final Integer value = Integer.MAX_VALUE;
-    storage.put(key, value);
-    assertEquals(expectedSize, storage.size());
-    assertTrue(storage.containsKey(key));
-    assertEquals(value, storage.get(key));
-  }
-
   public void onModuleLoad() {
-    StorageExt localStorage = StorageExt.getLocalStorage();
-    assert localStorage != null;
-    StorageExt sessionStorage = StorageExt.getSessionStorage();
-    assert sessionStorage != null;
-
-    int localStorageLength = localStorage.size();
-    int sessionStorageLength = sessionStorage.size();
-
-    try {
-      putStringValue(localStorage, ++localStorageLength);
-      putStringValue(sessionStorage, ++sessionStorageLength);
-
-      putBooleanValue(localStorage, ++localStorageLength);
-      putBooleanValue(sessionStorage, ++sessionStorageLength);
-
-      putIntegerValue(localStorage, ++localStorageLength);
-      putIntegerValue(sessionStorage, ++sessionStorageLength);
-    } catch (SerializationException e) {
-      e.printStackTrace();
-    } catch (StorageQuotaExceededException e) {
-      e.printStackTrace();
+    //testStorage(StorageExt.getSessionStorage(), StorageChangeEvent.Level.STRING);
+    //testStorage(StorageExt.getLocalStorage(), StorageChangeEvent.Level.STRING);
+    try{
+      //StorageExt.getLocalStorage().clear();
+      ArrayValueTest.putBooleanArrayValue(StorageExt.getLocalStorage(), 1);
+    }catch(Exception e){
+      GWT.log("error", e);
     }
+  }
+
+  private void testStorage(final StorageExt storage, final StorageChangeEvent.Level level){
+    assert storage != null;
+    storage.clear();
+    StorageTestUnit.assertEquals("storage size", 0, storage.size());
+    final HandlerRegistration hr1 = OtherTest.listenerTest(storage, level);
+
+    Scheduler.get().scheduleIncremental(new Scheduler.RepeatingCommand() {
+      private int count = 0;
+      @Override
+      public boolean execute() {
+        int storageLength = storage.size();
+        try {
+          switch(count){
+            case 0:
+              SimpleValueTest.putBooleanValue(storage, ++storageLength);
+              break;
+            case 1:
+              SimpleValueTest.putByteValue(storage, ++storageLength);
+              break;
+            case 2:
+              SimpleValueTest.putCharacterValue(storage, ++storageLength);
+              break;
+            case 3:
+              SimpleValueTest.putDoubleValue(storage, ++storageLength);
+              break;
+            case 4:
+              SimpleValueTest.putFloatValue(storage, ++storageLength);
+              break;
+            case 5:
+              SimpleValueTest.putIntegerValue(storage, ++storageLength);
+              break;
+            case 6:
+              SimpleValueTest.putLongValue(storage, ++storageLength);
+              break;
+            case 7:
+              SimpleValueTest.putShortValue(storage, ++storageLength);
+              break;
+            case 8:
+              SimpleValueTest.putStringValue(storage, ++storageLength);
+              break;
+            case 9:
+              OtherTest.removeValue(storage);
+              break;
+            default:
+              hr1.removeHandler();
+              testStorageArray(StorageExt.getSessionStorage(), level);
+              return false;
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        count++;
+        return true;
+      }
+    });
+  }
+
+  private void testStorageArray(final StorageExt storage, final StorageChangeEvent.Level level){
+    assert storage != null;
+    storage.clear();
+    StorageTestUnit.assertEquals("storageArray - storage size", 0, storage.size());
+    final HandlerRegistration hr1 = OtherTest.listenerTest(storage, level);
+
+    Scheduler.get().scheduleIncremental(new Scheduler.RepeatingCommand() {
+      private int count = 0;
+      @Override
+      public boolean execute() {
+        int storageLength = storage.size();
+        try {
+          switch (count){
+            case 0:
+              ArrayValueTest.putBooleanArrayValue(storage, ++storageLength);
+              break;
+            case 1:
+              ArrayValueTest.putByteArrayValue(storage, ++storageLength);
+              break;
+            case 2:
+              ArrayValueTest.putCharacterArrayValue(storage, ++storageLength);
+              break;
+            case 3:
+              ArrayValueTest.putDoubleArrayValue(storage, ++storageLength);
+              break;
+            case 4:
+              ArrayValueTest.putFloatArrayValue(storage, ++storageLength);
+              break;
+            case 5:
+              ArrayValueTest.putIntegerArrayValue(storage, ++storageLength);
+              break;
+            case 6:
+              ArrayValueTest.putLongArrayValue(storage, ++storageLength);
+              break;
+            case 7:
+              ArrayValueTest.putShortArrayValue(storage, ++storageLength);
+              break;
+            case 8:
+              ArrayValueTest.putStringArrayValue(storage, ++storageLength);
+              break;
+            default:
+              hr1.removeHandler();
+              if(StorageChangeEvent.Level.STRING.equals(level)){
+                testStorage(storage, StorageChangeEvent.Level.OBJECT);
+              }
+              return false;
+          }
+        } catch (Exception e){
+          e.printStackTrace();
+        }
+        count++;
+        return true;
+      }
+    });
+
 
   }
+
 }

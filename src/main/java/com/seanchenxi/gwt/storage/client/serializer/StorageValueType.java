@@ -16,6 +16,7 @@
 
 package com.seanchenxi.gwt.storage.client.serializer;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
 
@@ -46,10 +47,11 @@ enum StorageValueType {
           writer.writeBoolean(vector[i]);
         }
       } else if (instance instanceof boolean[]) {
+        GWT.log("write boolean vector");
         boolean[] vector = (boolean[]) instance;
         writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeBoolean(vector[i]);
+        for (boolean bool : vector) {
+          writer.writeBoolean(bool);
         }
       }
     }

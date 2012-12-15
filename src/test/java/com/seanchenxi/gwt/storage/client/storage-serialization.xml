@@ -14,13 +14,16 @@
      See the License for the specific language governing permissions and
      limitations under the License.
   -->
-<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.5.0//EN"
-        "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
-<module rename-to="storage_test">
-  <inherits name='com.google.gwt.user.User'/>
-  <inherits name="com.seanchenxi.gwt.storage.Storage"/>
-  <set-property name="storage.cache" value="false" />
-  <set-configuration-property name="storage.type.finder" value="xml" />
-  <entry-point class='com.seanchenxi.gwt.storage.client.StorageTest'/>
-  <source path='client'/>
-</module>
+<!DOCTYPE StorageSerialization PUBLIC "-//seanchenxi.com//DTD Storage Serialization 1.0//EN"
+  "D:\GitRepo\gwt-storage\src\main\resources\storage-serialization.dtd">
+<StorageSerialization>
+  <class>java.lang.Boolean</class>
+  <class>java.lang.Byte</class>
+  <class>java.lang.Character</class>
+  <class>java.lang.Double</class>
+  <class>java.lang.Float</class>
+  <class>java.lang.Long</class>
+  <class>java.lang.Integer</class>
+  <class>java.lang.Short</class>
+  <class>java.lang.String</class>
+</StorageSerialization>

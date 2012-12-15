@@ -16,6 +16,7 @@
 
 package com.seanchenxi.gwt.storage.client;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -91,11 +92,11 @@ public final class StorageExt {
     cache.clear();
   }
 
-  public <T> boolean containsKey(StorageKey<T> key) {
+  public <T extends Serializable> boolean containsKey(StorageKey<T> key) {
     return storage.getItem(key.name()) != null;
   }
   
-  public <T> T get(StorageKey<T> key) throws SerializationException {
+  public <T extends Serializable> T get(StorageKey<T> key) throws SerializationException {
     T item = cache.get(key);
     if (item == null) {
       item = TYPE_SERIALIZER.deserialize(key.getClazz(), storage.getItem(key.name()));
@@ -125,7 +126,7 @@ public final class StorageExt {
    * @see <a href="http://www.w3.org/TR/webstorage/#dom-storage-setitem">W3C Web
    *      Storage - Storage.setItem(k,v)</a>
    */
-  public <T> void put(StorageKey<T> key, T value) throws SerializationException,
+  public <T extends Serializable> void put(StorageKey<T> key, T value) throws SerializationException,
       StorageQuotaExceededException {
     if(value == null){
       throw new NullPointerException();
@@ -146,7 +147,7 @@ public final class StorageExt {
     }
   }
 
-  public <T> void remove(StorageKey<T> key) {
+  public <T extends Serializable> void remove(StorageKey<T> key) {
     String data = storage.getItem(key.name());
     storage.removeItem(key.name());
     T value = cache.remove(key);
@@ -168,11 +169,10 @@ public final class StorageExt {
     return handlers;
   }
 
-  private void fireEvent(StorageChangeEvent.ChangeType changeType, StorageKey<?> key, Object value,
-      Object oldVal, String data, String oldData) {
+  private <T extends Serializable> void fireEvent(StorageChangeEvent.ChangeType changeType, StorageKey<T> key, T value, T oldVal, String data, String oldData) {
     UncaughtExceptionHandler ueh = com.google.gwt.core.client.GWT.getUncaughtExceptionHandler();
     if (handlers != null && !handlers.isEmpty()) {
-      Object oldValue = oldVal;
+      T oldValue = oldVal;
       if (oldValue == null && oldData != null && StorageChangeEvent.Level.OBJECT.equals(eventLevel)) {    
         try {
           oldValue = TYPE_SERIALIZER.deserialize(key.getClazz(), data);

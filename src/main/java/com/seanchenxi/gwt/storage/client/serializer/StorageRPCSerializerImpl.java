@@ -16,50 +16,19 @@
 
 package com.seanchenxi.gwt.storage.client.serializer;
 
-import java.util.HashMap;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
 import com.google.gwt.user.client.rpc.impl.Serializer;
 
+import java.io.Serializable;
+
 final class StorageRPCSerializerImpl implements StorageSerializer {
 
-  private final static HashMap<Class<?>, StorageValueType> TYPE_MAP = new HashMap<Class<?>, StorageValueType>();
   private final static Serializer TYPE_SERIALIZER = GWT.create(StorageTypeSerializer.class);
-  static {
-    TYPE_MAP.put(boolean[].class, StorageValueType.BOOLEAN_VECTOR);
-    TYPE_MAP.put(byte[].class, StorageValueType.BYTE_VECTOR);
-    TYPE_MAP.put(char[].class, StorageValueType.CHAR_VECTOR);
-    TYPE_MAP.put(double[].class, StorageValueType.DOUBLE_VECTOR);
-    TYPE_MAP.put(float[].class, StorageValueType.FLOAT_VECTOR);
-    TYPE_MAP.put(int[].class, StorageValueType.INT_VECTOR);
-    TYPE_MAP.put(long[].class, StorageValueType.LONG_VECTOR);
-    TYPE_MAP.put(short[].class, StorageValueType.SHORT_VECTOR);
-    TYPE_MAP.put(String[].class, StorageValueType.STRING_VECTOR);
 
-    TYPE_MAP.put(Boolean[].class, StorageValueType.BOOLEAN_VECTOR);
-    TYPE_MAP.put(Byte[].class, StorageValueType.BYTE_VECTOR);
-    TYPE_MAP.put(Character[].class, StorageValueType.CHAR_VECTOR);
-    TYPE_MAP.put(Double[].class, StorageValueType.DOUBLE_VECTOR);
-    TYPE_MAP.put(Float[].class, StorageValueType.FLOAT_VECTOR);
-    TYPE_MAP.put(Integer[].class, StorageValueType.INT_VECTOR);
-    TYPE_MAP.put(Long[].class, StorageValueType.LONG_VECTOR);
-    TYPE_MAP.put(Short[].class, StorageValueType.SHORT_VECTOR);
-
-    TYPE_MAP.put(boolean.class, StorageValueType.BOOLEAN);
-    TYPE_MAP.put(byte.class, StorageValueType.BYTE);
-    TYPE_MAP.put(char.class, StorageValueType.CHAR);
-    TYPE_MAP.put(double.class, StorageValueType.DOUBLE);
-    TYPE_MAP.put(float.class, StorageValueType.FLOAT);
-    TYPE_MAP.put(int.class, StorageValueType.INT);
-    TYPE_MAP.put(long.class, StorageValueType.LONG);
-    TYPE_MAP.put(short.class, StorageValueType.SHORT);
-    TYPE_MAP.put(String.class, StorageValueType.STRING);
-  }
-
-  @SuppressWarnings("unchecked")
-  public <T> T deserialize(Class<T> clazz, String encodedString) throws SerializationException {
+  @Override @SuppressWarnings("unchecked")
+  public <T extends Serializable> T deserialize(Class<? super T> clazz, String encodedString) throws SerializationException {
     if (encodedString == null) {
       return null;
     }
@@ -69,7 +38,8 @@ final class StorageRPCSerializerImpl implements StorageSerializer {
     return obj != null ? (T) obj : null;
   }
 
-  public <T> String serialize(Class<T> clazz, T instance) throws SerializationException {
+  @Override
+  public <T extends Serializable> String serialize(Class<? super T> clazz, T instance) throws SerializationException {
     if (instance == null) {
       return null;
     }

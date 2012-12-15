@@ -53,10 +53,12 @@ import com.google.gwt.user.rebind.rpc.SerializableTypeOracle;
 import com.google.gwt.user.rebind.rpc.SerializableTypeOracleBuilder;
 import com.google.gwt.user.rebind.rpc.TypeSerializerCreator;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+
 public class StorageTypeSerializerGenerator extends IncrementalGenerator {
 
   private static final String CACHED_EXT_TYPE_INFO_KEY = "cached-ext-type-info";
-  private static final String CLASS_NODE = "class";
   private static final long GENERATOR_VERSION_ID = 1L;
 
   private static final String SERIALIZATION_CONFIG = "storage-serialization.xml";
@@ -154,25 +156,17 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
     if (null == resource)
       return;
     try {
-      String content = Util.readStreamAsString(resource.openContents());
-      Document doc =
-          new W3cDomHelper(logger, resourceOracle).documentFor(content, resource.getPath());
-      Element el = doc.getDocumentElement();
-      NodeList nodeList = el.getChildNodes();
-      for (int i = 0; i < nodeList.getLength(); i++) {
-        Node node = nodeList.item(i);
-        if (CLASS_NODE.equalsIgnoreCase(node.getNodeName())) {
-          String typeName = node.getTextContent();
-          if (typeName == null || typeName.trim().isEmpty())
-            continue;
-          addIfIsValidType(serializables, typeOracle.findType(typeName), logger);
-        }
+      JAXBContext jaxbContext = JAXBContext.newInstance(StorageSerialization.class);
+      StorageSerialization storageSerialization = (StorageSerialization) jaxbContext.createUnmarshaller().unmarshal(resource.openContents());
+      for (String typeName : storageSerialization.getClasses()) {
+        if (typeName == null || typeName.trim().isEmpty())
+          continue;
+        addIfIsValidType(serializables, typeOracle.findType(typeName), logger);
       }
-    } catch (SAXParseException e) {
-      logger.log(Type.ERROR, "Error parsing XML (line " + e.getLineNumber() + "): "
-          + e.getMessage(), e);
     } catch (IOException e) {
-      logger.log(Type.ERROR, "Error reading XML Source: " + e.getMessage(), e);
+      logger.log(Type.INFO, "Error reading XML Source: " + e.getMessage(), e);
+    } catch (JAXBException e) {
+      logger.log(Type.INFO, "Error reading XML Source: " + e.getMessage(), e);
     }
   }
 

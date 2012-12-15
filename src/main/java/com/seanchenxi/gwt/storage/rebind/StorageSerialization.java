@@ -13,37 +13,23 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+package com.seanchenxi.gwt.storage.rebind;
 
-package com.seanchenxi.gwt.storage.client.cache;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
-import com.seanchenxi.gwt.storage.client.StorageKey;
+/**
+ * Created by: Xi
+ */
+@XmlRootElement(name = "StorageSerialization")
+class StorageSerialization {
 
-import java.io.Serializable;
+  @XmlElement(required = true, name = "class")
+  private List<String> classes;
 
-public class NoStorageCache implements StorageCache {
-
-  @Override
-  public void clear() {
-  }
-
-  @Override
-  public <T extends Serializable> boolean containsValue(T value) {
-    return false;
-  }
-
-  @Override
-  public <T extends Serializable> T get(StorageKey<T> key) {
-    return null;
-  }
-
-  @Override
-  public <T extends Serializable> T put(StorageKey<T> key, T value) {
-    return null;
-  }
-
-  @Override
-  public <T extends Serializable> T remove(StorageKey<T> key) {
-    return null;
+  public List<String> getClasses() {
+    return classes;
   }
 
 }

@@ -18,9 +18,58 @@ package com.seanchenxi.gwt.storage.client.serializer;
 
 import com.google.gwt.user.client.rpc.SerializationException;
 
+import java.io.Serializable;
+import java.util.HashMap;
+
 public interface StorageSerializer {
 
-  <T> T deserialize(Class<T> clazz, String encodedString) throws SerializationException;
+  static final class PrimitiveTypeMap extends HashMap<Class<?>, StorageValueType> {
 
-  <T> String serialize(Class<T> clazz, T instance) throws SerializationException;
+    private PrimitiveTypeMap() {
+      put(boolean[].class, StorageValueType.BOOLEAN_VECTOR);
+      put(byte[].class, StorageValueType.BYTE_VECTOR);
+      put(char[].class, StorageValueType.CHAR_VECTOR);
+      put(double[].class, StorageValueType.DOUBLE_VECTOR);
+      put(float[].class, StorageValueType.FLOAT_VECTOR);
+      put(int[].class, StorageValueType.INT_VECTOR);
+      put(long[].class, StorageValueType.LONG_VECTOR);
+      put(short[].class, StorageValueType.SHORT_VECTOR);
+      put(String[].class, StorageValueType.STRING_VECTOR);
+
+      put(Boolean[].class, StorageValueType.BOOLEAN_VECTOR);
+      put(Byte[].class, StorageValueType.BYTE_VECTOR);
+      put(Character[].class, StorageValueType.CHAR_VECTOR);
+      put(Double[].class, StorageValueType.DOUBLE_VECTOR);
+      put(Float[].class, StorageValueType.FLOAT_VECTOR);
+      put(Integer[].class, StorageValueType.INT_VECTOR);
+      put(Long[].class, StorageValueType.LONG_VECTOR);
+      put(Short[].class, StorageValueType.SHORT_VECTOR);
+
+      put(boolean.class, StorageValueType.BOOLEAN);
+      put(byte.class, StorageValueType.BYTE);
+      put(char.class, StorageValueType.CHAR);
+      put(double.class, StorageValueType.DOUBLE);
+      put(float.class, StorageValueType.FLOAT);
+      put(int.class, StorageValueType.INT);
+      put(long.class, StorageValueType.LONG);
+      put(short.class, StorageValueType.SHORT);
+      put(String.class, StorageValueType.STRING);
+
+      put(Boolean.class, StorageValueType.BOOLEAN);
+      put(Byte.class, StorageValueType.BYTE);
+      put(Character.class, StorageValueType.CHAR);
+      put(Double.class, StorageValueType.DOUBLE);
+      put(Float.class, StorageValueType.FLOAT);
+      put(Integer.class, StorageValueType.INT);
+      put(Long.class, StorageValueType.LONG);
+      put(Short.class, StorageValueType.SHORT);
+    }
+
+  }
+
+  static final PrimitiveTypeMap TYPE_MAP = new PrimitiveTypeMap();
+
+  <T extends Serializable> T deserialize(Class<? super T> clazz, String encodedString) throws SerializationException;
+
+  <T extends Serializable> String serialize(Class<? super T> clazz, T instance) throws SerializationException;
 }
