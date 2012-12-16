@@ -24,8 +24,9 @@ import java.util.HashMap;
 /**
  * Interface for deferred binding implementation.
  * <p>
- *   <b>Object</b> to <b>String</b> serialization
- *   and <b>String</b> to <b>Object</b> deserialization
+ *   Realize: <br/>
+ *   <b>Object</b> to <b>String</b> serialization, <br/>
+ *   <b>String</b> to <b>Object</b> deserialization
  * </p>
  */
 public interface StorageSerializer {
