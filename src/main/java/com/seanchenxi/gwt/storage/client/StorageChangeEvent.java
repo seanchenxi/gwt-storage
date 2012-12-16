@@ -19,17 +19,61 @@ package com.seanchenxi.gwt.storage.client;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 
+/**
+ * Represents a Storage Change Event.
+ *
+ * <p>
+ *   A Storage Change Event is fired when a storage area changes
+ * </p>
+ *
+ * <p>
+ *   <span style="color:red">
+ *     Note: If the {@link StorageExt#eventLevel} is set to {@link StorageChangeEvent.Level#STRING},
+ *     the value returned by {@link #getOldValue()} could be null</code>, if it wasn't cached before
+ *   </span>
+ * </p>
+ *
+ * @see Handler
+ */
 public class StorageChangeEvent extends GwtEvent<StorageChangeEvent.Handler> {
 
+  /**
+   * Level of Storage Change Event information
+   */
   public enum Level {
-    STRING, OBJECT
+    /**
+     * Prevents the deserialization in {@link StorageChangeEvent} creation process.
+     */
+    STRING,
+    /**
+     * Enables the deserialization in {@link StorageChangeEvent} creation process.
+     */
+    OBJECT
   }
-  
+
+  /**
+   * Type of Storage Change
+   */
   public enum ChangeType {
     CLEAR, PUT, REMOVE
   }
 
+  /**
+   * Represents an Event handler for {@link StorageChangeEvent}s.
+   *
+   * <p>
+   *   Apply your StorageChangeEventHandler using
+   *   {@link StorageExt#addStorageChangeHandler(StorageChangeEvent.Handler)}
+   * </p>
+   *
+   * @see StorageChangeEvent
+   */
   public interface Handler extends EventHandler {
+    /**
+     * Invoked when a {@link StorageChangeEvent} is fired.
+     *
+     * @param event the fired StorageChangeEvent
+     */
     void onStorageChange(StorageChangeEvent event);
   }
 
@@ -65,26 +109,56 @@ public class StorageChangeEvent extends GwtEvent<StorageChangeEvent.Handler> {
     return TYPE;
   }
 
+  /**
+   * Returns the change type
+   *
+   * @return the change type
+   */
   public ChangeType getChangeType() {
     return changeType;
   }
 
+  /**
+   * Returns the new serialized string value of the key being changed.
+   *
+   * @return the new serialized string value of the key being changed
+   */
   public String getData() {
     return data;
   }
 
+  /**
+   *  Returns the key being changed.
+   *
+   * @return the key being changed
+   */
   public StorageKey<?> getKey() {
     return key;
   }
 
+  /**
+   * Returns the old serialized string value of the key being changed.
+   *
+   * @return the old serialized string value of the key being changed
+   */
   public String getOldData() {
     return oldData;
   }
 
+  /**
+   * Returns the old value of the key being changed.
+   *
+   * @return the old value of the key being changed
+   */
   public Object getOldValue() {
     return oldValue;
   }
 
+  /**
+   * Returns the new value of the key being changed.
+   *
+   * @return the new value of the key being changed
+   */
   public Object getValue() {
     return value;
   }

@@ -276,9 +276,9 @@ public final class StorageExt {
    * Set Event Level.
    *
    * <p>
-   * Note : set to <code>StorageChangeEvent.Level.STRING</code>,
+   * Note : set to {@link StorageChangeEvent.Level#STRING},
    * will prevent the deserialization process in event creation, <br/>
-   * This matters only if the real object type value is wanted in every storage change event.
+   * This matters only if the old value (object value) is wanted in every storage change event.
    * </p>
    *
    * @param eventLevel the event detail level
@@ -313,7 +313,7 @@ public final class StorageExt {
    * Fire {@link StorageChangeEvent}
    */
   private <T extends Serializable> void fireEvent(StorageChangeEvent.ChangeType changeType, StorageKey<T> key, T value, T oldVal, String data, String oldData) {
-    UncaughtExceptionHandler ueh = com.google.gwt.core.client.GWT.getUncaughtExceptionHandler();
+    UncaughtExceptionHandler ueh = GWT.getUncaughtExceptionHandler();
     if (handlers != null && !handlers.isEmpty()) {
       T oldValue = oldVal;
       if (oldValue == null && oldData != null && StorageChangeEvent.Level.OBJECT.equals(eventLevel)) {    
