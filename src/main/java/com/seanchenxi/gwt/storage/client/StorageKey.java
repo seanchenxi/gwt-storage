@@ -18,11 +18,22 @@ package com.seanchenxi.gwt.storage.client;
 
 import java.io.Serializable;
 
+/**
+ *
+ * @param <T> the associate value's type
+ */
 public class StorageKey<T extends Serializable> {
 
   private final Class<? super T> clazz;
   private final String name;
 
+  /**
+   * Create an StorageKey instance
+   *
+   * @param name the key's name, used to store value in storage, should be unique
+   * @param clazz the future associate value's class type
+   * @see StorageKeyFactory
+   */
   public StorageKey(String name, Class<? super T> clazz) {
     if(name == null || name.trim().length() < 1){
       throw new IllegalArgumentException("StorageKey's name can not be null or empty");
@@ -34,10 +45,20 @@ public class StorageKey<T extends Serializable> {
     this.clazz = clazz;
   }
 
+  /**
+   * Get associate value's class type
+   *
+   * @return the associate value's class type
+   */
   public Class<? super T> getClazz() {
     return clazz;
   }
 
+  /**
+   * Get the Storage Key's name
+   *
+   * @return the key's name
+   */
   public String name() {
     return this.name;
   }

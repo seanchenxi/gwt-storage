@@ -70,7 +70,7 @@ public final class StorageExt {
   private static final StorageSerializer TYPE_SERIALIZER = GWT.create(StorageSerializer.class);
 
   /**
-   * Get a Local Storage.
+   * Returns a Local Storage.
    *
    * @return the localStorage instance, or <code>null</code> if Web Storage is NOT supported.
    */
@@ -82,7 +82,7 @@ public final class StorageExt {
   }
 
   /**
-   * Get a Session Storage.
+   * Returns a Session Storage.
    *
    * @return the sessionStorage instance, or <code>null</code> if Web Storage is NOT supported.
    */
@@ -159,7 +159,7 @@ public final class StorageExt {
    * {@link StorageKeyFactory} is preferred to get a {@link StorageKey} instance for primitive types.
    * </p>
    *
-   * @param key the key whose presence in this map is to be tested
+   * @param key the key whose presence in this storage is to be tested
    * @param <T> the type of stored value
    * @return <tt>true</tt> if this storage contains a value for the specified key.
    */
@@ -168,8 +168,8 @@ public final class StorageExt {
   }
 
   /**
-   * Returns the value in the Storage associated with the specified key.
-   *
+   * Returns the value in the Storage associated with the specified key,
+   * or {@code null} if this Storage contains no mapping for the key.
    * <p>
    * Note : Deserialization will be performed to return a correct value type. <br/>
    * {@link StorageKeyFactory} is preferred to get a {@link StorageKey} instance for primitive types.
@@ -278,11 +278,11 @@ public final class StorageExt {
    * <p>
    * Note : set to <code>StorageChangeEvent.Level.STRING</code>,
    * will prevent the deserialization process in event creation, <br/>
-   * This matters only if the real object type value is wanted in every storage change event.<br/>
-   * Concerned methods: {@link StorageChangeEvent#getValue()}, {@link StorageChangeEvent#getOldValue()}.
+   * This matters only if the real object type value is wanted in every storage change event.
    * </p>
    *
    * @param eventLevel the event detail level
+   * @see StorageChangeEvent
    */
   public void setEventLevel(StorageChangeEvent.Level eventLevel) {
     this.eventLevel = eventLevel;
