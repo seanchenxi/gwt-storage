@@ -21,7 +21,10 @@ import java.util.HashMap;
 
 import com.seanchenxi.gwt.storage.client.StorageKey;
 
-public class StorageMemoryCache implements StorageCache {
+/**
+ * Default implementation of {@link StorageCache}
+ */
+class StorageMemoryCache implements StorageCache {
 
   private final HashMap<StorageKey<? extends Serializable>, Object> map;
 

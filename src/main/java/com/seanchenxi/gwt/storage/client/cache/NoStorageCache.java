@@ -20,7 +20,10 @@ import com.seanchenxi.gwt.storage.client.StorageKey;
 
 import java.io.Serializable;
 
-public class NoStorageCache implements StorageCache {
+/**
+ * Empty implementation of {@link StorageCache}
+ */
+class NoStorageCache implements StorageCache {
 
   @Override
   public void clear() {
