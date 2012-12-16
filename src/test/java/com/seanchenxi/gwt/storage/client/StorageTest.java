@@ -26,27 +26,23 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 public class StorageTest implements EntryPoint {
 
   public void onModuleLoad() {
-    //testStorage(StorageExt.getSessionStorage(), StorageChangeEvent.Level.STRING);
+    testStorage(StorageExt.getSessionStorage(), StorageChangeEvent.Level.STRING);
     //testStorage(StorageExt.getLocalStorage(), StorageChangeEvent.Level.STRING);
-    try{
-      //StorageExt.getLocalStorage().clear();
-      ArrayValueTest.putBooleanArrayValue(StorageExt.getLocalStorage(), 1);
-    }catch(Exception e){
-      GWT.log("error", e);
-    }
   }
 
   private void testStorage(final StorageExt storage, final StorageChangeEvent.Level level){
     assert storage != null;
     storage.clear();
     StorageTestUnit.assertEquals("storage size", 0, storage.size());
-    final HandlerRegistration hr1 = OtherTest.listenerTest(storage, level);
+    StorageTestUnit.trace("==");
 
+    final HandlerRegistration hr1 = OtherTest.listenerTest(storage, level);
     Scheduler.get().scheduleIncremental(new Scheduler.RepeatingCommand() {
       private int count = 0;
       @Override
       public boolean execute() {
         int storageLength = storage.size();
+        int before = StorageTestUnit.getLineNumber();
         try {
           switch(count){
             case 0:
@@ -85,9 +81,13 @@ public class StorageTest implements EntryPoint {
               return false;
           }
         } catch (Exception e) {
-          e.printStackTrace();
+          StorageTestUnit.trace("error " + e.getClass().getName() + ": " + e.getMessage());
+          GWT.log("error", e);
         }
         count++;
+        boolean isOK = (before == StorageTestUnit.getLineNumber() - 5);
+        StorageTestUnit.trace(isOK ? "<b>OK</b>" : "<b>KO</b>", !isOK);
+        StorageTestUnit.trace("==");
         return true;
       }
     });
@@ -104,6 +104,7 @@ public class StorageTest implements EntryPoint {
       @Override
       public boolean execute() {
         int storageLength = storage.size();
+        int before = StorageTestUnit.getLineNumber();
         try {
           switch (count){
             case 0:
@@ -141,9 +142,12 @@ public class StorageTest implements EntryPoint {
               return false;
           }
         } catch (Exception e){
-          e.printStackTrace();
+          GWT.log("error", e);
         }
         count++;
+        boolean isOK = (before == StorageTestUnit.getLineNumber() - 5);
+        StorageTestUnit.trace(isOK ? "<b>OK</b>" : "<b>KO</b>", !isOK);
+        StorageTestUnit.trace("==");
         return true;
       }
     });

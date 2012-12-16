@@ -31,7 +31,7 @@ public class ArrayValueTest extends StorageTestUnit {
     final int[] value2 = new int[]{39023948,234234};
     storage.put(key2, value2);
     assertEquals("putIntegerArrayValue(primitive) - storage size", expectedSize, storage.size());
-    assertEquals("putIntegerArrayValue(primitive) - stored value", value2, storage.get(key));
+    assertEquals("putIntegerArrayValue(primitive) - stored value", value2, storage.get(key2));
   }
 
   public static void putStringArrayValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
@@ -41,20 +41,26 @@ public class ArrayValueTest extends StorageTestUnit {
     assertEquals("putStringArrayValue - storage size", expectedSize, storage.size());
     assertTrue("putStringArrayValue - containsKey", storage.containsKey(key));
     assertEquals("putStringArrayValue - stored value", value, storage.get(key));
+
+    StorageKey<String[]> key2 = StorageKeyFactory.stringArrayKey("putStringArrayValue");
+    final String[] value2 = new String[]{"StringValue2", "StringValue2"};
+    storage.put(key2, value);
+    assertEquals("putStringArrayValue - storage size", expectedSize, storage.size());
+    assertEquals("putStringArrayValue - stored value", value2, storage.get(key2));
   }
 
   public static void putBooleanArrayValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
-//    StorageKey<Boolean[]> key = StorageKeyFactory.boxedBoolArrayKey("putBooleanArrayValue");
-//    final Boolean[] value = new Boolean[]{false, true};
-//    storage.put(key, value);
-//    assertEquals("putBooleanArrayValue - storage size", expectedSize, storage.size());
-//    assertTrue("putBooleanArrayValue - containsKey", storage.containsKey(key));
-//    assertEquals("putBooleanArrayValue - stored value", value, storage.get(key));
+    StorageKey<Boolean[]> key = StorageKeyFactory.boxedBoolArrayKey("putBooleanArrayValue");
+    final Boolean[] value = new Boolean[]{false, true};
+    storage.put(key, value);
+    assertEquals("putBooleanArrayValue - storage size", expectedSize, storage.size());
+    assertTrue("putBooleanArrayValue - containsKey", storage.containsKey(key));
+    assertEquals("putBooleanArrayValue - stored value", value, storage.get(key));
 
     StorageKey<boolean[]> key2 = StorageKeyFactory.boolArrayKey("putBooleanArrayValue");
     final boolean[] value2 = new boolean[]{true,false};
-    //storage.put(key2, value2);
-//    assertEquals("putBooleanArrayValue(primitive) - storage size", expectedSize, storage.size());
+    storage.put(key2, value2);
+    assertEquals("putBooleanArrayValue(primitive) - storage size", expectedSize, storage.size());
     assertEquals("putBooleanArrayValue(primitive) - stored value", value2, storage.get(key2));
   }
 
@@ -70,7 +76,7 @@ public class ArrayValueTest extends StorageTestUnit {
     final byte[] value2 = new byte[]{Byte.MIN_VALUE, Byte.MIN_VALUE};
     storage.put(key2, value2);
     assertEquals("putByteArrayValue(primitive) - storage size", expectedSize, storage.size());
-    assertEquals("putByteArrayValue(primitive) - stored value", value2, storage.get(key));
+    assertEquals("putByteArrayValue(primitive) - stored value", value2, storage.get(key2));
   }
 
   public static void putDoubleArrayValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
@@ -85,7 +91,7 @@ public class ArrayValueTest extends StorageTestUnit {
     final double[] value2 = new double[]{32.45d,43.345d};
     storage.put(key2, value2);
     assertEquals("putDoubleArraValue(primitive) - storage size", expectedSize, storage.size());
-    assertEquals("putDoubleArraValue(primitive) - stored value", value2, storage.get(key));
+    assertEquals("putDoubleArraValue(primitive) - stored value", value2, storage.get(key2));
   }
 
   public static void putCharacterArrayValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
@@ -100,7 +106,7 @@ public class ArrayValueTest extends StorageTestUnit {
     final char[] value2 = new char[]{Character.MIN_VALUE, Character.MIN_VALUE};
     storage.put(key2, value2);
     assertEquals("putCharacterArrayValue(primitive) - storage size", expectedSize, storage.size());
-    assertEquals("putCharacterArrayValue(primitive) - stored value", value2, storage.get(key));
+    assertEquals("putCharacterArrayValue(primitive) - stored value", value2, storage.get(key2));
   }
 
   public static void putFloatArrayValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
@@ -115,7 +121,7 @@ public class ArrayValueTest extends StorageTestUnit {
     final float[] value2 = new float[]{32.45f, 98.99f};
     storage.put(key2, value2);
     assertEquals("putFloatArrayValue(primitive) - storage size", expectedSize, storage.size());
-    assertEquals("putFloatArrayValue(primitive) - stored value", value2, storage.get(key));
+    assertEquals("putFloatArrayValue(primitive) - stored value", value2, storage.get(key2));
   }
 
   public static void putLongArrayValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
@@ -130,7 +136,7 @@ public class ArrayValueTest extends StorageTestUnit {
     final long[] value2 = new long[]{123412341234l, 9087098709798l};
     storage.put(key2, value2);
     assertEquals("putLongArrayValue(primitive) - storage size", expectedSize, storage.size());
-    assertEquals("putLongArrayValue(primitive) - stored value", value2, storage.get(key));
+    assertEquals("putLongArrayValue(primitive) - stored value", value2, storage.get(key2));
   }
 
   public static void putShortArrayValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
@@ -145,7 +151,7 @@ public class ArrayValueTest extends StorageTestUnit {
     final short[] value2 = new short[]{Short.MIN_VALUE, Short.MAX_VALUE};
     storage.put(key2, value2);
     assertEquals("putShortArrayValue(primitive) - storage size", expectedSize, storage.size());
-    assertEquals("putShortArrayValue(primitive) - stored value", value2, storage.get(key));
+    assertEquals("putShortArrayValue(primitive) - stored value", value2, storage.get(key2));
   }
 
 }

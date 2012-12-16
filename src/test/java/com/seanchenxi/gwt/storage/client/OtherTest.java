@@ -30,19 +30,14 @@ public class OtherTest extends StorageTestUnit {
     final Integer value2 = Integer.MIN_VALUE;
 
     storage.put(key, value1);
-    assertEquals("removeValue - storage size", initialSize + 1, storage.size());
-    assertTrue("removeValue - containsKey", storage.containsKey(key));
-
     storage.put(StorageKeyFactory.intKey("removeValue2"), value2);
-    assertEquals("removeValue - storage size", initialSize + 2, storage.size());
+    assertTrue("removeValue - containsKey", storage.containsKey(key));
     assertTrue("removeValue - containsKey", storage.containsKey(StorageKeyFactory.intKey("removeValue2")));
 
     storage.remove(key);
-    assertEquals("removeValue - storage size", initialSize + 1, storage.size());
-    assertTrue("removeValue - doesn't containsKey", !storage.containsKey(key));
-
     storage.remove(StorageKeyFactory.intKey("removeValue2"));
     assertEquals("removeValue - storage size", initialSize, storage.size());
+    assertTrue("removeValue - doesn't containsKey", !storage.containsKey(key));
     assertTrue("removeValue - doesn't containsKey", !storage.containsKey(StorageKeyFactory.intKey("removeValue2")));
   }
 
@@ -52,14 +47,21 @@ public class OtherTest extends StorageTestUnit {
     return storage.addStorageChangeHandler(new StorageChangeEvent.Handler() {
       @Override
       public void onStorageChange(StorageChangeEvent event) {
-        trace("onStorageChange - Type=" + event.getChangeType() + ", " +
-              "Key=" + event.getKey() + ", " +
-              "Data=" + event.getData() + ", " +
-              "OldData=" + event.getOldData() + ", " +
-              "Value=" + String.valueOf(event.getValue()) + ", " +
-              "OldValue=" + String.valueOf(event.getOldValue()));
-        if(event.getKey() != null)
-          assertEquals("onStorageChange", event.getData(), storage.getString(event.getKey().name()));
+        event("onStorageChange - Type=" + event.getChangeType() + ", " +
+          "Key=" + event.getKey() + ", " +
+          "Data=" + event.getData() + ", " +
+          "OldData=" + event.getOldData() + ", " +
+          "Value=" + String.valueOf(event.getValue()) + ", " +
+          "OldValue=" + String.valueOf(event.getOldValue()), false);
+        if(event.getKey() != null){
+          String value = storage.getString(event.getKey().name());
+          String expected = event.getData();
+          if ((expected == null && value == null) || (expected != null && expected.equals(value)))
+            event("onStorageChange - assertEquals succeed.", false);
+          else
+            event("onStorageChange -  assertEquals error: expected=" + event.getData() + ", but given=" + value, true);
+        }
+        event("==", false);
       }
     });
   }
