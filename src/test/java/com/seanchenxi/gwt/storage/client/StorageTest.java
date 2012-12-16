@@ -73,6 +73,9 @@ public class StorageTest implements EntryPoint {
               SimpleValueTest.putStringValue(storage, ++storageLength);
               break;
             case 9:
+              SimpleValueTest.putObjectValue(storage, ++storageLength);
+              break;
+            case 10:
               OtherTest.removeValue(storage);
               break;
             default:
@@ -133,6 +136,9 @@ public class StorageTest implements EntryPoint {
               break;
             case 8:
               ArrayValueTest.putStringArrayValue(storage, ++storageLength);
+              break;
+            case 9:
+              ArrayValueTest.putObjectArrayValue(storage, ++storageLength);
               break;
             default:
               hr1.removeHandler();

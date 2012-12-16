@@ -15,15 +15,7 @@
      limitations under the License.
   -->
 <!DOCTYPE StorageSerialization PUBLIC "-//seanchenxi.com//DTD Storage Serialization 1.0//EN"
-  "D:\GitRepo\gwt-storage\src\main\resources\storage-serialization.dtd">
+  "http://gwt-storage.googlecode.com/git/src/main/resources/storage-serialization.dtd">
 <StorageSerialization>
-  <class>java.lang.Boolean</class>
-  <class>java.lang.Byte</class>
-  <class>java.lang.Character</class>
-  <class>java.lang.Double</class>
-  <class>java.lang.Float</class>
-  <class>java.lang.Long</class>
-  <class>java.lang.Integer</class>
-  <class>java.lang.Short</class>
-  <class>java.lang.String</class>
+  <class>com.seanchenxi.gwt.storage.client.TestValue</class>
 </StorageSerialization>

@@ -154,4 +154,17 @@ public class ArrayValueTest extends StorageTestUnit {
     assertEquals("putShortArrayValue(primitive) - stored value", value2, storage.get(key2));
   }
 
+  public static void putObjectArrayValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
+    StorageKey<TestValue[]> key = StorageKeyFactory.objectKey("putObjectArrayValue");
+    final TestValue[] values = new TestValue[]{new TestValue("hello2"), new TestValue("hello2")};
+    storage.put(key, values);
+    assertEquals("putObjectArrayValue - storage size", expectedSize, storage.size());
+    assertTrue("putObjectArrayValue - containsKey", storage.containsKey(key));
+    assertEquals("putObjectArrayValue - stored value", values, storage.get(key));
+
+    final TestValue[] values2 = new TestValue[]{new TestValue("hello1"), new TestValue("hello2")};
+    storage.put(key, values2);
+    assertEquals("putObjectArrayValue - storage size", expectedSize, storage.size());
+    assertEquals("putObjectArrayValue - stored value", values2, storage.get(key));
+  }
 }
