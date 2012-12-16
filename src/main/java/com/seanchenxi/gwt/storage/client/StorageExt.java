@@ -29,12 +29,51 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Extends the GWT HTML5 Storage API, by adding <b>Object Value</b> Support.
+ *
+ *
+ * <p>
+ * You can obtain a Storage by either invoking
+ * {@link #getLocalStorage()} or
+ * {@link #getSessionStorage()}.
+ * </p>
+ *
+ *
+ * <p>
+ * If Web Storage is NOT supported in the browser, these methods return <code>
+ * null</code>.
+ * </p>
+ *
+ *
+ * <p>
+ * Note: Storage events into other windows are not supported.
+ * </p>
+ *
+ *
+ * <p>
+ * This may not be supported on all browsers.
+ * </p>
+ *
+ *
+ * @see <a href="http://www.w3.org/TR/webstorage/#storage-0">W3C Web Storage - Storage</a>
+ * @see <a href="http://caniuse.com/#feat=namevalue-storage">Can I use... - Web Storage</a>
+ * @see <a href="https://developers.google.com/web-toolkit/doc/latest/DevGuideHtml5Storage">GWT Developer's Guide - Client-side Storage (Web Storage)</a>
+ * @see <a href="
+ *      http://google-web-toolkit.googlecode.com/svn/javadoc/latest/com/google/gwt/storage/client/Storage.html">
+ *      com.google.gwt.storage.client.Storage</a>
+ */
 public final class StorageExt {
 
   private static StorageExt localStorage;
   private static StorageExt sessionStorage;
   private static final StorageSerializer TYPE_SERIALIZER = GWT.create(StorageSerializer.class);
 
+  /**
+   * Get a Local Storage.
+   *
+   * @return the localStorage instance, or <code>null</code> if Web Storage is NOT supported.
+   */
   public static StorageExt getLocalStorage() {
     if (localStorage == null && Storage.isLocalStorageSupported()) {
       localStorage = new StorageExt(Storage.getLocalStorageIfSupported());
@@ -42,6 +81,11 @@ public final class StorageExt {
     return localStorage;
   }
 
+  /**
+   * Get a Session Storage.
+   *
+   * @return the sessionStorage instance, or <code>null</code> if Web Storage is NOT supported.
+   */
   public static StorageExt getSessionStorage() {
     if (sessionStorage == null && Storage.isSessionStorageSupported()) {
       sessionStorage = new StorageExt(Storage.getSessionStorageIfSupported());
@@ -53,7 +97,12 @@ public final class StorageExt {
   private Set<StorageChangeEvent.Handler> handlers;
   private final StorageCache cache;
   private final Storage storage;
-  
+
+  /**
+   * This class can never be instantiated externally. Use
+   * {@link #getLocalStorage()} ()} or
+   * {@link #getSessionStorage()} ()} instead.
+   */
   private StorageExt(Storage storage) {
     assert storage != null : "Storage can not be null, check your browser's HTML 5 support state.";
     this.storage = storage;
@@ -61,12 +110,20 @@ public final class StorageExt {
     this.eventLevel = StorageChangeEvent.Level.STRING;
   }
 
+  /**
+   * Registers an event handler for {@link StorageChangeEvent}
+   *
+   * @param handler an event handler instance
+   * @return {@link HandlerRegistration} used to remove this handler
+   */
   public HandlerRegistration addStorageChangeHandler(final StorageChangeEvent.Handler handler) {
+    if(handler == null)
+      throw new IllegalArgumentException("Handler can not be null");
     ensureHandlerSet().add(handler);
     return new HandlerRegistration() {
       @Override
       public void removeHandler() {
-        if (handlers != null && handler != null) {
+        if (handlers != null) {
           handlers.remove(handler);
           if (handlers.isEmpty()) {
             handlers = null;
@@ -77,7 +134,7 @@ public final class StorageExt {
   }
 
   /**
-   * Removes all items in the Storage, and its cache it activated
+   * Removes all items in the Storage, and its cache if activated
    *
    * @see <a href="http://www.w3.org/TR/webstorage/#dom-storage-clear">W3C Web
    *      Storage - Storage.clear()</a>
@@ -88,14 +145,43 @@ public final class StorageExt {
     fireEvent(StorageChangeEvent.ChangeType.CLEAR, null, null, null, null, null);
   }
 
+  /**
+   * Clear all cached serialized object from configured {@link StorageCache}
+   */
   public void clearCache() {
     cache.clear();
   }
 
+  /**
+   * Test if this storage contains a value for the specified key.
+   *
+   * <p>
+   * {@link StorageKeyFactory} is preferred to get a {@link StorageKey} instance for primitive types.
+   * </p>
+   *
+   * @param key the key whose presence in this map is to be tested
+   * @param <T> the type of stored value
+   * @return <tt>true</tt> if this storage contains a value for the specified key.
+   */
   public <T extends Serializable> boolean containsKey(StorageKey<T> key) {
     return storage.getItem(key.name()) != null;
   }
-  
+
+  /**
+   * Returns the value in the Storage associated with the specified key.
+   *
+   * <p>
+   * Note : Deserialization will be performed to return a correct value type. <br/>
+   * {@link StorageKeyFactory} is preferred to get a {@link StorageKey} instance for primitive types.
+   * </p>
+   *
+   * @param key the key to a value in the Storage
+   * @param <T> the type of stored value
+   * @return the value associated with the given key
+   * @throws SerializationException
+   * @see <a href="http://www.w3.org/TR/webstorage/#dom-storage-getitem">W3C Web
+   *      Storage - Storage.getItem(k)</a>
+   */
   public <T extends Serializable> T get(StorageKey<T> key) throws SerializationException {
     T item = cache.get(key);
     if (item == null) {
@@ -105,26 +191,48 @@ public final class StorageExt {
     return item;
   }
 
+  /**
+   * Get directly the stored string value associated with the specified key.
+   *
+   * <p>
+   * Note : No deserialization will be performed
+   * </p>
+   *
+   * @param key the key to a value in the Storage
+   * @return the stored string value associated with the given key
+   * @see <a href="http://www.w3.org/TR/webstorage/#dom-storage-getitem">W3C Web
+   *      Storage - Storage.getItem(k)</a>
+   */
   public String getString(String key) {
     return storage.getItem(key);
   }
 
+  /**
+   * Returns the key at the specified index.
+   *
+   * @param index the index of the key
+   * @return the key at the specified index in this Storage
+   * @see <a href="http://www.w3.org/TR/webstorage/#dom-storage-key">W3C Web
+   *      Storage - Storage.key(n)</a>
+   */
   public String key(int index) {
     return storage.key(index);
   }
 
   /**
-   * Sets the value in the Storage associated with the specified key to the
-   * specified data.
+   * Store the specified value with the specified key in this storage.
    *
-   * Note: The empty string may not be used as a key. And NULL value is not allowed.
-   * 
-   * @param key the key to a value in the Storage
-   * @param value the value associated with the key
+   * <p>
+   * Note: <code>null</code> value is not allowed. <br/>
+   * If the storage previously contained a mapping for the key, the old
+   * value is replaced.<br/>
+   * {@link StorageKeyFactory} is preferred to get a {@link StorageKey} instance for primitive types.
+   * </p>
+   *
+   * @param key key with which the specified value is to be associated
+   * @param value value to be associated with the specified key
    * @throws SerializationException 
    * @throws StorageQuotaExceededException
-   * @see <a href="http://www.w3.org/TR/webstorage/#dom-storage-setitem">W3C Web
-   *      Storage - Storage.setItem(k,v)</a>
    */
   public <T extends Serializable> void put(StorageKey<T> key, T value) throws SerializationException,
       StorageQuotaExceededException {
@@ -147,6 +255,16 @@ public final class StorageExt {
     }
   }
 
+  /**
+   * Removes the record for the specified key from this storage if present.
+   *
+   * <p>
+   * {@link StorageKeyFactory} is preferred to get a {@link StorageKey} instance for primitive types
+   * </p>
+   *
+   * @param key key whose mapping is to be removed from the map
+   * @param <T> the type of stored value
+   */
   public <T extends Serializable> void remove(StorageKey<T> key) {
     String data = storage.getItem(key.name());
     storage.removeItem(key.name());
@@ -154,14 +272,36 @@ public final class StorageExt {
     fireEvent(StorageChangeEvent.ChangeType.REMOVE, key, null, value, null, data);
   }
 
+  /**
+   * Set Event Level.
+   *
+   * <p>
+   * Note : set to <code>StorageChangeEvent.Level.STRING</code>,
+   * will prevent the deserialization process in event creation, <br/>
+   * This matters only if the real object type value is wanted in every storage change event.<br/>
+   * Concerned methods: {@link StorageChangeEvent#getValue()}, {@link StorageChangeEvent#getOldValue()}.
+   * </p>
+   *
+   * @param eventLevel the event detail level
+   */
   public void setEventLevel(StorageChangeEvent.Level eventLevel) {
     this.eventLevel = eventLevel;
   }
 
+  /**
+   * Returns the number of items in this Storage.
+   *
+   * @return number of items in this Storage
+   * @see <a href="http://www.w3.org/TR/webstorage/#dom-storage-l">W3C Web
+   *      Storage - Storage.length()</a>
+   */
   public int size() {
     return storage.getLength();
   }
 
+  /**
+   * Ensure {@link StorageChangeEvent.Handler} registration set instance
+   */
   private Set<StorageChangeEvent.Handler> ensureHandlerSet() {
     if (handlers == null) {
       handlers = new HashSet<StorageChangeEvent.Handler>();
@@ -169,6 +309,9 @@ public final class StorageExt {
     return handlers;
   }
 
+  /**
+   * Fire {@link StorageChangeEvent}
+   */
   private <T extends Serializable> void fireEvent(StorageChangeEvent.ChangeType changeType, StorageKey<T> key, T value, T oldVal, String data, String oldData) {
     UncaughtExceptionHandler ueh = com.google.gwt.core.client.GWT.getUncaughtExceptionHandler();
     if (handlers != null && !handlers.isEmpty()) {

@@ -2,6 +2,7 @@
 /.settings/
 /gwt-unitCache/
 /gen/
+/javadoc/
 /out/
 /target/
 /*.project
