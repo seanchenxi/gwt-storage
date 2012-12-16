@@ -156,7 +156,9 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
         if (typeName == null || typeName.trim().isEmpty()){
           continue;
         }
-        addIfIsValidType(serializables, typeOracle.findType(typeName), logger);
+        JClassType jType = typeOracle.findType(typeName);
+        addIfIsValidType(serializables, jType, logger);
+        addIfIsValidType(serializables, typeOracle.getArrayType(jType), logger);
       }
     } catch (Exception e) {
       logger.log(Type.WARN, "Error reading XML Source: " + e.getMessage(), e);
