@@ -31,6 +31,8 @@ final class StorageRPCSerializerImpl implements StorageSerializer {
   public <T extends Serializable> T deserialize(Class<? super T> clazz, String encodedString) throws SerializationException {
     if (encodedString == null) {
       return null;
+    }else if(String.class.equals(clazz)){
+      return (T) encodedString;
     }
     ClientSerializationStreamReader reader = new ClientSerializationStreamReader(TYPE_SERIALIZER);
     reader.prepareToRead(encodedString);
@@ -42,16 +44,21 @@ final class StorageRPCSerializerImpl implements StorageSerializer {
   public <T extends Serializable> String serialize(Class<? super T> clazz, T instance) throws SerializationException {
     if (instance == null) {
       return null;
+    }else if(String.class.equals(clazz)){
+      return (String) instance;
     }
     StorageSerializationStreamWriter writer = new StorageSerializationStreamWriter(TYPE_SERIALIZER);
     writer.prepareToWrite();
+    if(clazz.isArray()){ // for array type, must write its type name at first
+      writer.writeString(TYPE_SERIALIZER.getSerializationSignature(clazz));
+    }
     findType(clazz).write(writer, instance);
     return writer.toString();
   }
 
   private StorageValueType findType(Class<?> clazz) {
     StorageValueType type = TYPE_MAP.get(clazz);
-    if (type == null) {
+    if (type == null) { // for primitive array, use object writer
       type = clazz.isArray() ? StorageValueType.OBJECT_VECTOR : StorageValueType.OBJECT;
     }
     return type;

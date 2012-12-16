@@ -36,15 +36,6 @@ public interface StorageSerializer {
       put(short[].class, StorageValueType.SHORT_VECTOR);
       put(String[].class, StorageValueType.STRING_VECTOR);
 
-      put(Boolean[].class, StorageValueType.BOOLEAN_VECTOR);
-      put(Byte[].class, StorageValueType.BYTE_VECTOR);
-      put(Character[].class, StorageValueType.CHAR_VECTOR);
-      put(Double[].class, StorageValueType.DOUBLE_VECTOR);
-      put(Float[].class, StorageValueType.FLOAT_VECTOR);
-      put(Integer[].class, StorageValueType.INT_VECTOR);
-      put(Long[].class, StorageValueType.LONG_VECTOR);
-      put(Short[].class, StorageValueType.SHORT_VECTOR);
-
       put(boolean.class, StorageValueType.BOOLEAN);
       put(byte.class, StorageValueType.BYTE);
       put(char.class, StorageValueType.CHAR);
@@ -54,15 +45,6 @@ public interface StorageSerializer {
       put(long.class, StorageValueType.LONG);
       put(short.class, StorageValueType.SHORT);
       put(String.class, StorageValueType.STRING);
-
-      put(Boolean.class, StorageValueType.BOOLEAN);
-      put(Byte.class, StorageValueType.BYTE);
-      put(Character.class, StorageValueType.CHAR);
-      put(Double.class, StorageValueType.DOUBLE);
-      put(Float.class, StorageValueType.FLOAT);
-      put(Integer.class, StorageValueType.INT);
-      put(Long.class, StorageValueType.LONG);
-      put(Short.class, StorageValueType.SHORT);
     }
 
   }

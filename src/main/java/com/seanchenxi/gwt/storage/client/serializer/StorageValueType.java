@@ -16,7 +16,6 @@
 
 package com.seanchenxi.gwt.storage.client.serializer;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
 
@@ -40,19 +39,10 @@ enum StorageValueType {
 
     @Override
     void write(StorageSerializationStreamWriter writer, Object instance) {
-      if (instance instanceof Boolean[]) {
-        Boolean[] vector = (Boolean[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeBoolean(vector[i]);
-        }
-      } else if (instance instanceof boolean[]) {
-        GWT.log("write boolean vector");
-        boolean[] vector = (boolean[]) instance;
-        writer.writeInt(vector.length);
-        for (boolean bool : vector) {
-          writer.writeBoolean(bool);
-        }
+      boolean[] vector = (boolean[]) instance;
+      writer.writeInt(vector.length);
+      for (int i = 0, n = vector.length; i < n; ++i) {
+        writer.writeBoolean(vector[i]);
       }
     }
   },
@@ -75,18 +65,10 @@ enum StorageValueType {
 
     @Override
     void write(StorageSerializationStreamWriter writer, Object instance) {
-      if (instance instanceof Byte[]) {
-        Byte[] vector = (Byte[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeByte(vector[i]);
-        }
-      } else if (instance instanceof byte[]) {
-        byte[] vector = (byte[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeByte(vector[i]);
-        }
+      byte[] vector = (byte[]) instance;
+      writer.writeInt(vector.length);
+      for (int i = 0, n = vector.length; i < n; ++i) {
+        writer.writeByte(vector[i]);
       }
     }
   },
@@ -109,18 +91,10 @@ enum StorageValueType {
 
     @Override
     void write(StorageSerializationStreamWriter writer, Object instance) {
-      if (instance instanceof Character[]) {
-        Character[] vector = (Character[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeChar(vector[i]);
-        }
-      } else if (instance instanceof char[]) {
-        char[] vector = (char[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeChar(vector[i]);
-        }
+      char[] vector = (char[]) instance;
+      writer.writeInt(vector.length);
+      for (int i = 0, n = vector.length; i < n; ++i) {
+        writer.writeChar(vector[i]);
       }
     }
   },
@@ -143,18 +117,10 @@ enum StorageValueType {
 
     @Override
     void write(StorageSerializationStreamWriter writer, Object instance) {
-      if (instance instanceof Double[]) {
-        Double[] vector = (Double[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeDouble(vector[i]);
-        }
-      } else if (instance instanceof double[]) {
-        double[] vector = (double[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeDouble(vector[i]);
-        }
+      double[] vector = (double[]) instance;
+      writer.writeInt(vector.length);
+      for (int i = 0, n = vector.length; i < n; ++i) {
+        writer.writeDouble(vector[i]);
       }
     }
   },
@@ -177,18 +143,10 @@ enum StorageValueType {
 
     @Override
     void write(StorageSerializationStreamWriter writer, Object instance) {
-      if (instance instanceof Float[]) {
-        Float[] vector = (Float[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeFloat(vector[i]);
-        }
-      } else if (instance instanceof float[]) {
-        float[] vector = (float[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeFloat(vector[i]);
-        }
+      float[] vector = (float[]) instance;
+      writer.writeInt(vector.length);
+      for (int i = 0, n = vector.length; i < n; ++i) {
+        writer.writeFloat(vector[i]);
       }
     }
   },
@@ -211,18 +169,10 @@ enum StorageValueType {
 
     @Override
     void write(StorageSerializationStreamWriter writer, Object instance) {
-      if (instance instanceof Integer[]) {
-        Integer[] vector = (Integer[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeInt(vector[i]);
-        }
-      } else if (instance instanceof int[]) {
-        int[] vector = (int[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeInt(vector[i]);
-        }
+      int[] vector = (int[]) instance;
+      writer.writeInt(vector.length);
+      for (int i = 0, n = vector.length; i < n; ++i) {
+        writer.writeInt(vector[i]);
       }
     }
   },
@@ -245,18 +195,10 @@ enum StorageValueType {
 
     @Override
     void write(StorageSerializationStreamWriter writer, Object instance) {
-      if (instance instanceof Long[]) {
-        Long[] vector = (Long[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeLong(vector[i]);
-        }
-      } else if (instance instanceof long[]) {
-        long[] vector = (long[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeLong(vector[i]);
-        }
+      long[] vector = (long[]) instance;
+      writer.writeInt(vector.length);
+      for (int i = 0, n = vector.length; i < n; ++i) {
+        writer.writeLong(vector[i]);
       }
     }
   },
@@ -307,18 +249,10 @@ enum StorageValueType {
 
     @Override
     void write(StorageSerializationStreamWriter writer, Object instance) {
-      if (instance instanceof Short[]) {
-        Short[] vector = (Short[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeShort(vector[i]);
-        }
-      } else if (instance instanceof short[]) {
-        short[] vector = (short[]) instance;
-        writer.writeInt(vector.length);
-        for (int i = 0, n = vector.length; i < n; ++i) {
-          writer.writeShort(vector[i]);
-        }
+      short[] vector = (short[]) instance;
+      writer.writeInt(vector.length);
+      for (int i = 0, n = vector.length; i < n; ++i) {
+        writer.writeShort(vector[i]);
       }
     }
   },
