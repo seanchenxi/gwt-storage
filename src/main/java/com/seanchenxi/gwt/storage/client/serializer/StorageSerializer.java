@@ -21,37 +21,45 @@ import com.google.gwt.user.client.rpc.SerializationException;
 import java.io.Serializable;
 import java.util.HashMap;
 
+/**
+ * Interface for deferred binding implementation.
+ * <p>
+ *   <b>Object</b> to <b>String</b> serialization
+ *   and <b>String</b> to <b>Object</b> deserialization
+ * </p>
+ */
 public interface StorageSerializer {
+  /**
+   * Deserialize string to object
+   *
+   * <p>
+   *   The <b>clazz</b> only used by serializer to distinguish primitive type and object typ.<br/>
+   *   For all primitive types, the <b>clazz</b> should equals to <b><T></b>.<br/>
+   *   Otherwise, use {@link Serializable} as <b>clazz</b>, and real class type for <b><T></b>.
+   * </p>
+   *
+   * @param clazz the type of the given value to deserialize with
+   * @param serializedString the serialized string which will be deserialize to its original class type
+   * @param <T> the real class type wanted to return
+   * @return the original class type value of the the given string
+   * @throws SerializationException
+   */
+  <T extends Serializable> T deserialize(Class<? super T> clazz, String serializedString) throws SerializationException;
 
-  static final class PrimitiveTypeMap extends HashMap<Class<?>, StorageValueType> {
-
-    private PrimitiveTypeMap() {
-      put(boolean[].class, StorageValueType.BOOLEAN_VECTOR);
-      put(byte[].class, StorageValueType.BYTE_VECTOR);
-      put(char[].class, StorageValueType.CHAR_VECTOR);
-      put(double[].class, StorageValueType.DOUBLE_VECTOR);
-      put(float[].class, StorageValueType.FLOAT_VECTOR);
-      put(int[].class, StorageValueType.INT_VECTOR);
-      put(long[].class, StorageValueType.LONG_VECTOR);
-      put(short[].class, StorageValueType.SHORT_VECTOR);
-      put(String[].class, StorageValueType.STRING_VECTOR);
-
-      put(boolean.class, StorageValueType.BOOLEAN);
-      put(byte.class, StorageValueType.BYTE);
-      put(char.class, StorageValueType.CHAR);
-      put(double.class, StorageValueType.DOUBLE);
-      put(float.class, StorageValueType.FLOAT);
-      put(int.class, StorageValueType.INT);
-      put(long.class, StorageValueType.LONG);
-      put(short.class, StorageValueType.SHORT);
-      put(String.class, StorageValueType.STRING);
-    }
-
-  }
-
-  static final PrimitiveTypeMap TYPE_MAP = new PrimitiveTypeMap();
-
-  <T extends Serializable> T deserialize(Class<? super T> clazz, String encodedString) throws SerializationException;
-
+  /**
+   * Serialize object to string
+   *
+   * <p>
+   *   The <b>clazz</b> only used to distinguish primitive type and object type.<br/>
+   *   For all primitive types, the <b>clazz</b> should equals to <b><T></b>.<br/>
+   *   Otherwise, use {@link Serializable} as <b>clazz</b>, and real class type for <b><T></b>
+   * </p>
+   *
+   * @param clazz the type of the given value to serialize with
+   * @param instance the value which will be serialized to string
+   * @param <T> the real class type of the given value
+   * @return the serialized string
+   * @throws SerializationException
+   */
   <T extends Serializable> String serialize(Class<? super T> clazz, T instance) throws SerializationException;
 }

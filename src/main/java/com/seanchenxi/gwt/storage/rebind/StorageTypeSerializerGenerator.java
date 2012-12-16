@@ -30,6 +30,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * Generator for {@link com.seanchenxi.gwt.storage.client.serializer.StorageSerializer}
+ */
 public class StorageTypeSerializerGenerator extends IncrementalGenerator {
 
   private static final long GENERATOR_VERSION_ID = 1L;
