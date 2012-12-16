@@ -22,7 +22,7 @@
 
     <groupId>com.seanchenxi.gwt.storage</groupId>
     <artifactId>gwt-storage</artifactId>
-    <version>0.9-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <name>GWT Storage</name>
     <url>http://code.google.com/p/gwt-storage</url>
     <description>GWT Client-side Storage API extension</description>
