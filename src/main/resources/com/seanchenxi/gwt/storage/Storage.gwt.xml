@@ -15,7 +15,7 @@
   -->
 <module>
 
-  <inherits name='com.google.gwt.user.User'/>
+  <inherits name="com.google.gwt.storage.Storage" />
 
   <!--
       Define if to use memory cache or not. default value is "true".
