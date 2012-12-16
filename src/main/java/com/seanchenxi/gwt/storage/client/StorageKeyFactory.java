@@ -18,10 +18,25 @@ package com.seanchenxi.gwt.storage.client;
 import java.io.Serializable;
 
 /**
- * Created by: Xi
+ * Storage Key Factory
+ *
+ * <p>
+ *   <span style="color:red;">
+ *     Choose type correspond method for all primitive type values' key, <br/>
+ *     Use {@link #objectKey(String)} for any other object type
+ *   </span>
+ * </p>
+ *
  */
 public class StorageKeyFactory {
 
+  /**
+   * Returns non-primitive type value's storage key.
+   *
+   * @param keyName name of storage key
+   * @param <T> type of value
+   * @return non-primitive type value's storage key
+   */
   public static <T extends Serializable> StorageKey<T> objectKey(String keyName){
     return new StorageKey<T>(keyName, Serializable.class);
   }
