@@ -1,0 +1,8 @@
+/.idea/
+/.settings/
+/gwt-unitCache/
+/gen/
+/out/
+/target/
+/*.project
+/*.classpath
