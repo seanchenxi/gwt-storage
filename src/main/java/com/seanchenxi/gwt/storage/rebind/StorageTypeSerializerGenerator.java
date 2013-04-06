@@ -43,13 +43,16 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
 
   private static final String TYPE_SERIALIZER_SUFFIX = "Impl";
 
-  private static void addIfIsValidType(HashSet<JType> serializables, JType jType, TreeLogger logger) {
+  private static boolean addIfIsValidType(HashSet<JType> serializables, JType jType, TreeLogger logger) {
+    boolean added;
     if (jType != null && jType.isInterface() == null){
-      serializables.add(jType);
-      logger.log(TreeLogger.TRACE, "Add " + jType + " as storage serializable.");
+      added = serializables.add(jType);
+      logger.log(TreeLogger.TRACE, "Add " + jType + " as storage serializable.");   
     } else{
+      added = false;
       logger.log(TreeLogger.WARN, "Failed to add " + jType + " as storage serializable.");
     }
+    return added;
   }
 
   @Override
@@ -157,8 +160,8 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
           continue;
         }
         JClassType jType = typeOracle.findType(typeName);
-        addIfIsValidType(serializables, jType, logger);
-        addIfIsValidType(serializables, typeOracle.getArrayType(jType), logger);
+        boolean added = addIfIsValidType(serializables, jType, logger);
+        if(added) addIfIsValidType(serializables, typeOracle.getArrayType(jType), logger);
       }
     } catch (Exception e) {
       logger.log(Type.WARN, "Error reading XML Source: " + e.getMessage(), e);
