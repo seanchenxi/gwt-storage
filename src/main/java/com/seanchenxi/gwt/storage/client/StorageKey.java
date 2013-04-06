@@ -23,10 +23,18 @@ import java.io.Serializable;
  *
  * @param <T> the associate value's type
  */
-public class StorageKey<T extends Serializable> {
+public class StorageKey<T extends Serializable> implements Serializable {
 
-  private final Class<? super T> clazz;
-  private final String name;
+  private Class<? super T> clazz;
+  private String name;
+
+  /**
+   * Protected class constructor for serialization requirements
+   */
+  protected StorageKey(){
+    name = "UNKNOWN_OBJECT";
+    clazz = Object.class;
+  }
 
   /**
    * Create an StorageKey instance

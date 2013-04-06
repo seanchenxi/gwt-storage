@@ -21,6 +21,11 @@ public class StorageQuotaExceededException extends Exception {
 
   private StorageKey<?> key;
 
+  /**
+   * Protected class constructor for serialization requirements
+   */
+  protected StorageQuotaExceededException(){}
+
   public StorageQuotaExceededException(StorageKey<?> key, Throwable cause) {
     super(cause);
     this.key = key;
