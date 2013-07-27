@@ -21,14 +21,23 @@ import com.google.gwt.core.ext.TreeLogger.Type;
 import com.google.gwt.core.ext.typeinfo.*;
 import com.google.gwt.dev.resource.Resource;
 import com.google.gwt.dev.resource.ResourceOracle;
+import com.google.gwt.dev.util.Util;
+import com.google.gwt.uibinder.rebind.W3cDomHelper;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.rebind.rpc.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Generator for {@link com.seanchenxi.gwt.storage.client.serializer.StorageSerializer}
@@ -67,9 +76,9 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
 
     int typeFinder = getTypeFinder(logger, context.getPropertyOracle());
     if (typeFinder != 1)
-      findRPCSerializableTypes(logger, typeOracle, serializables);
+      findRPCSerializableTypes(logger, context, typeOracle, serializables);
     if (typeFinder != 0)
-      findXMLSerializableTypes(logger, typeOracle, context.getResourcesOracle(), serializables);
+      findXMLSerializableTypes(logger, context, typeOracle, context.getResourcesOracle(), serializables);
 
     String typeSerializerClassName = serializerType.getQualifiedSourceName() + TYPE_SERIALIZER_SUFFIX;
     String typeSerializerSimpleName = serializerType.getSimpleSourceName() + TYPE_SERIALIZER_SUFFIX;
@@ -110,7 +119,7 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
     return builder.build(logger);
   }
 
-  private void findRPCSerializableTypes(TreeLogger logger, TypeOracle typeOracle, HashSet<JType> serializables) {
+  private void findRPCSerializableTypes(TreeLogger logger, GeneratorContext context, TypeOracle typeOracle, HashSet<JType> serializables) {
     JClassType remoteSvcIntf = typeOracle.findType(RemoteService.class.getName());
     JClassType[] remoteSvcTypes = remoteSvcIntf.getSubtypes();
     for (JClassType remoteSvcType : remoteSvcTypes) {
@@ -126,7 +135,7 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
     }
   }
 
-  private void findXMLSerializableTypes(TreeLogger logger, TypeOracle typeOracle, ResourceOracle resourceOracle, HashSet<JType> serializables) {
+  private void findXMLSerializableTypes(TreeLogger logger, GeneratorContext context, TypeOracle typeOracle, ResourceOracle resourceOracle, HashSet<JType> serializables) {
     // All primitive types and its array types will be considered as serializable
     for(JPrimitiveType jpt: JPrimitiveType.values()){
       if(JPrimitiveType.VOID.equals(jpt)){
@@ -150,24 +159,55 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
     if (null == resource){
       return;
     }
-
+    
     try {
-      JAXBContext jaxbContext = JAXBContext.newInstance(StorageSerialization.class);
-      Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-      StorageSerialization storageSerialization = (StorageSerialization) unmarshaller.unmarshal(resource.openContents());
-      for (String typeName : storageSerialization.getClasses()) {
+      if(context.isProdMode()){
+        unmarshallXml(resource.openContents(), logger, typeOracle, serializables);
+      }else{
+        parseXmlAsString(resource.openContents(), logger, typeOracle, serializables);
+      }
+    } catch (Exception e) {
+      logger.log(Type.WARN, "Error while reading XML Source: " + e.getMessage(), e);
+    }
+  }
+  
+  private void parseXmlAsString(InputStream input, TreeLogger logger, TypeOracle typeOracle, HashSet<JType> serializables){
+    String content = Util.readStreamAsString(input);
+    for (String _typeName : content.split("<class>")) {
+      if(!_typeName.contains("</class>")){
+        continue;
+      }
+      String typeName = _typeName.split("</class>")[0];
+      if (typeName == null || typeName.trim().isEmpty()){
+        continue;
+      }
+      JClassType jType = typeOracle.findType(typeName);
+      boolean added = addIfIsValidType(serializables, jType, logger);
+      if(added) addIfIsValidType(serializables, typeOracle.getArrayType(jType), logger);
+    }
+  }
+
+  private void unmarshallXml(InputStream input, TreeLogger logger, TypeOracle typeOracle, HashSet<JType> serializables){
+    StorageSerialization typeNames = null;
+    try {
+      Unmarshaller unmarshaller = JAXBContext.newInstance(StorageSerialization.class).createUnmarshaller();
+      typeNames = (StorageSerialization) unmarshaller.unmarshal(input);
+    } catch (JAXBException e) {
+      typeNames = null;
+      logger.log(Type.ERROR, "Error while unmarshalling XML Source: " + e.getMessage(), e);
+    }
+    if(typeNames != null){
+      for (String typeName : typeNames.getClasses()) {
         if (typeName == null || typeName.trim().isEmpty()){
           continue;
         }
         JClassType jType = typeOracle.findType(typeName);
         boolean added = addIfIsValidType(serializables, jType, logger);
         if(added) addIfIsValidType(serializables, typeOracle.getArrayType(jType), logger);
-      }
-    } catch (Exception e) {
-      logger.log(Type.WARN, "Error reading XML Source: " + e.getMessage(), e);
+      } 
     }
   }
-
+  
   private int getTypeFinder(TreeLogger logger, PropertyOracle propertyOracle) {
     try {
       ConfigurationProperty property = propertyOracle.getConfigurationProperty(TYPE_FINDER);
