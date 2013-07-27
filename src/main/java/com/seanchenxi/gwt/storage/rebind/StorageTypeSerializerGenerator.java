@@ -59,7 +59,7 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
       logger.log(TreeLogger.TRACE, "Add " + jType + " as storage serializable.");   
     } else{
       added = false;
-      logger.log(TreeLogger.WARN, "Failed to add " + jType + " as storage serializable.");
+      logger.log(TreeLogger.DEBUG, "Failed to add " + jType + " as storage serializable.");
     }
     return added;
   }
