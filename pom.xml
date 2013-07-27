@@ -22,9 +22,9 @@
 
     <groupId>com.seanchenxi.gwt.storage</groupId>
     <artifactId>gwt-storage</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <name>GWT Storage</name>
-    <url>http://code.google.com/p/gwt-storage</url>
+    <url>https://github.com/seanchenxi/gwt-storage</url>
     <description>GWT Client-side Storage API extension</description>
 
     <organization>
@@ -32,20 +32,9 @@
         <url>http://seanchenxi.com/</url>
     </organization>
 
-    <developers>
-        <developer>
-            <name>Xi Chen</name>
-            <organization>seanchenxi.com</organization>
-            <organizationUrl>http://seanchenxi.com/</organizationUrl>
-            <roles>
-                <role>Original Developer</role>
-            </roles>
-        </developer>
-    </developers>
-
     <issueManagement>
-        <system>Google Code</system>
-        <url>http://code.google.com/p/gwt-storage/issues/list</url>
+      <system>GitHub Issues</system>
+      <url>https://github.com/seanchenxi/gwt-storage/issues</url>
     </issueManagement>
 
     <licenses>
@@ -55,37 +44,55 @@
         </license>
     </licenses>
 
+    <developers>
+      <developer>
+        <id>seanchenxi</id>
+        <name>Xi Chen</name>
+        <email>xi@seanchenxi.com</email>
+        <organization>seanchenxi.com</organization>
+        <organizationUrl>http://seanchenxi.com/</organizationUrl>
+        <roles>
+          <role>Original Developer</role>
+        </roles>
+      </developer>
+    </developers>
+  
     <properties>
-        <gwt.version>2.5.0</gwt.version>
+        <gwt.version>2.5.1</gwt.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
+      
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <version>${gwt.version}</version>
             <scope>provided</scope>
         </dependency>
+      
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-dev</artifactId>
             <version>${gwt.version}</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency> 
+      
     </dependencies>
 
     <scm>
-        <connection>scm:git:http://gwt-storage.googlecode.com/git</connection>
-        <developerConnection>scm:git:https://gwt-storage.googlecode.com/git</developerConnection>
-        <url>http://gwt-storage.googlecode.com/git</url>
+        <url>https://github.com/seanchenxi/gwt-storage</url>
+        <connection>scm:git:git://github.com/seanchenxi/gwt-storage.git</connection>
+        <developerConnection>scm:git:seanchenxi@github.com:seanchenxi/gwt-storage.git</developerConnection>
     </scm>
 
     <build>
       <plugins>
+
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>gwt-maven-plugin</artifactId>
-          <version>2.5.0</version>
+          <version>2.5.1</version>
           <executions>
             <execution>
               <goals>
@@ -94,18 +101,63 @@
             </execution>
           </executions>
         </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>       
+          <configuration>
+            <source>1.6</source>
+            <target>1.6</target>
+          </configuration>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+              </manifest>
+            </archive>
+          </configuration>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <executions>
+            <execution>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <executions>
+            <execution>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.15</version>
+          <configuration>
+            <skipTests>true</skipTests>
+          </configuration>
+        </plugin>
+        
       </plugins>
-      <resources>
-        <resource>
-          <directory>src/main/resources</directory>
-        </resource>
-        <resource>
-          <directory>src/main/java</directory>
-            <includes>
-              <include>**/*.java</include>
-            </includes>
-          </resource>
-      </resources>
     </build>
 
 </project>
