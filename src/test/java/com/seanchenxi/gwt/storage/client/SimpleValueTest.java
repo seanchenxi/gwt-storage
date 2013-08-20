@@ -158,4 +158,19 @@ public class SimpleValueTest extends StorageTestUnit {
     assertEquals("putObjectValue - storage size", expectedSize, storage.size());
     assertEquals("putObjectValue - stored value", value2, storage.get(key));
   }
+
+  public static void putGenericObjectValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
+    StorageKey<GenericTestValue<TestValue>> key = StorageKeyFactory.objectKey("putGenericObjectValue");
+    final GenericTestValue<TestValue> value = new GenericTestValue<TestValue>(new TestValue("hello"));
+    storage.put(key, value);
+    assertEquals("putGenericObjectValue - storage size", expectedSize, storage.size());
+    assertTrue("putGenericObjectValue - containsKey", storage.containsKey(key));
+    assertEquals("putGenericObjectValue - stored value", value, storage.get(key));
+
+    final GenericTestValue<TestValue> value2 = new GenericTestValue<TestValue>(new TestValue("hello2"));
+    storage.put(key, value2);
+    assertEquals("putGenericObjectValue - storage size", expectedSize, storage.size());
+    assertEquals("putGenericObjectValue - stored value", value2, storage.get(key));
+  }
+
 }

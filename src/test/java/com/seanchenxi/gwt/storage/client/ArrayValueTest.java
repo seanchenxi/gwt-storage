@@ -167,4 +167,19 @@ public class ArrayValueTest extends StorageTestUnit {
     assertEquals("putObjectArrayValue - storage size", expectedSize, storage.size());
     assertEquals("putObjectArrayValue - stored value", values2, storage.get(key));
   }
+
+  public static void putGenericObjectArrayValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
+    StorageKey<GenericTestValue<TestValue>[]> key = StorageKeyFactory.objectKey("putGenericObjectArrayValue");
+    final GenericTestValue<TestValue>[] values = new GenericTestValue[]{new GenericTestValue<TestValue>(new TestValue("hello2")), new GenericTestValue<TestValue>(new TestValue("hello2"))};
+    storage.put(key, values);
+    assertEquals("putGenericObjectArrayValue - storage size", expectedSize, storage.size());
+    assertTrue("putGenericObjectArrayValue - containsKey", storage.containsKey(key));
+    assertEquals("putGenericObjectArrayValue - stored value", values, storage.get(key));
+
+    final GenericTestValue<TestValue>[] values2 = new GenericTestValue[]{new GenericTestValue<TestValue>(new TestValue("hello1")), new GenericTestValue<TestValue>(new TestValue("hello2"))};
+    storage.put(key, values2);
+    assertEquals("putGenericObjectArrayValue - storage size", expectedSize, storage.size());
+    assertEquals("putGenericObjectArrayValue - stored value", values2, storage.get(key));
+  }
+
 }

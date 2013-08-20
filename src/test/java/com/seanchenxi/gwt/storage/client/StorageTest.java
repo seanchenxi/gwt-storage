@@ -26,8 +26,8 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 public class StorageTest implements EntryPoint {
 
   public void onModuleLoad() {
-    testStorage(StorageExt.getSessionStorage(), StorageChangeEvent.Level.STRING);
-    //testStorage(StorageExt.getLocalStorage(), StorageChangeEvent.Level.STRING);
+    //testStorage(StorageExt.getSessionStorage(), StorageChangeEvent.Level.STRING);
+    testStorage(StorageExt.getLocalStorage(), StorageChangeEvent.Level.STRING);
   }
 
   private void testStorage(final StorageExt storage, final StorageChangeEvent.Level level){
@@ -76,6 +76,9 @@ public class StorageTest implements EntryPoint {
               SimpleValueTest.putObjectValue(storage, ++storageLength);
               break;
             case 10:
+              SimpleValueTest.putGenericObjectValue(storage, ++storageLength);
+              break;
+            case 11:
               OtherTest.removeValue(storage);
               break;
             default:
@@ -139,6 +142,9 @@ public class StorageTest implements EntryPoint {
               break;
             case 9:
               ArrayValueTest.putObjectArrayValue(storage, ++storageLength);
+              break;
+            case 10:
+              ArrayValueTest.putGenericObjectArrayValue(storage, ++storageLength);
               break;
             default:
               hr1.removeHandler();
