@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.seanchenxi.gwt.storage.client;
+package com.seanchenxi.gwt.storage.shared;
 
 import java.io.Serializable;
 
 /**
  * Created by: Xi
  */
-public class RpcTestValue implements Serializable {
-
+public class RpcTestMapKey implements Serializable{
 }

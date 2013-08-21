@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.seanchenxi.gwt.storage.client.RpcTestMapKey;
-import com.seanchenxi.gwt.storage.client.RpcTestMapValue;
-import com.seanchenxi.gwt.storage.client.RpcTestValue;
+import com.seanchenxi.gwt.storage.shared.RpcTestMapKey;
+import com.seanchenxi.gwt.storage.shared.RpcTestMapValue;
+import com.seanchenxi.gwt.storage.shared.RpcTestValue;
 import com.seanchenxi.gwt.storage.client.service.TestService;
 
 /**
