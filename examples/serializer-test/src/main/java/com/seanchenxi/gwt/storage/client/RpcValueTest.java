@@ -30,25 +30,26 @@ public class RpcValueTest extends StorageTestUnit {
 
   private final static TestServiceAsync testService = GWT.create(TestService.class);
 
-  public static void putRpcTestValue(final StorageExt storage, final int expectedSize) throws SerializationException, StorageQuotaExceededException {
-    final StorageKey<RpcTestValue> key = StorageKeyFactory.objectKey("putRpcTestValue");
+  public static void putRpcTestValue(final StorageExt storage, final int expectedSize, final AsyncCallback<Boolean> callback) {    
     final AsyncCallback<RpcTestValue> asyncCallback = new AsyncCallback<RpcTestValue>() {
       @Override
       public void onFailure(Throwable e){
         StorageTestUnit.trace("error " + e.getClass().getName() + ": " + e.getMessage());
         GWT.log("error", e);
+        callback.onFailure(e);
       }
 
       @Override
       public void onSuccess(RpcTestValue value){
         try{
+          final StorageKey<RpcTestValue> key = StorageKeyFactory.objectKey("putRpcTestValue");
           storage.put(key, value);
           assertEquals("putRpcTestValue - storage size", expectedSize, storage.size());
           assertTrue("putRpcTestValue - containsKey", storage.containsKey(key));
           assertEquals("putRpcTestValue - stored value", value, storage.get(key));
+          callback.onSuccess(true);
         }catch(Exception e){
-          StorageTestUnit.trace("error " + e.getClass().getName() + ": " + e.getMessage());
-          GWT.log("error", e);
+          onFailure(e);
         }
 
       }

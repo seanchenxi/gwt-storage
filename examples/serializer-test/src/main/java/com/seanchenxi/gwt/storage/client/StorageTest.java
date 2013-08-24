@@ -18,6 +18,7 @@ package com.seanchenxi.gwt.storage.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
 /**
@@ -26,7 +27,6 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 public class StorageTest implements EntryPoint {
 
   public void onModuleLoad() {
-    //testStorage(StorageExt.getSessionStorage(), StorageChangeEvent.Level.STRING);
     testStorage(StorageExt.getLocalStorage(), StorageChangeEvent.Level.STRING);
   }
 
@@ -78,15 +78,12 @@ public class StorageTest implements EntryPoint {
             case 10:
               SimpleValueTest.putGenericObjectValue(storage, ++storageLength);
               break;
-            case 11:
-              RpcValueTest.putRpcTestValue(storage, ++storageLength);
-              break;
             case 12:
               OtherTest.removeValue(storage);
               break;
             default:
               hr1.removeHandler();
-              testStorageArray(StorageExt.getSessionStorage(), level);
+              testStorageArray(storage, level);
               return false;
           }
         } catch (Exception e) {
@@ -151,9 +148,7 @@ public class StorageTest implements EntryPoint {
               break;
             default:
               hr1.removeHandler();
-              if(StorageChangeEvent.Level.STRING.equals(level)){
-                testStorage(storage, StorageChangeEvent.Level.OBJECT);
-              }
+              testStorageRpcValue(storage, level);
               return false;
           }
         } catch (Exception e){
@@ -168,6 +163,44 @@ public class StorageTest implements EntryPoint {
     });
 
 
+  }
+  
+  private void testStorageRpcValue(final StorageExt storage, final StorageChangeEvent.Level level){
+    assert storage != null;
+    storage.clear();
+    StorageTestUnit.assertEquals("testStorageRpcValue - storage size", 0, storage.size());
+    final HandlerRegistration hr1 = OtherTest.listenerTest(storage, level);
+
+    final AsyncCallback<Boolean> callback = new AsyncCallback<Boolean>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        StorageTestUnit.trace("<b>KO</b>", true);
+        StorageTestUnit.trace("==");
+        onRpcTesEnd(hr1, storage, level);
+      }
+
+      @Override
+      public void onSuccess(Boolean result) {
+        StorageTestUnit.trace("<b>OK</b>", false);
+        StorageTestUnit.trace("==");
+        onRpcTesEnd(hr1, storage, level);
+      }
+    };
+    
+    int storageLength = storage.size();
+    try {
+      RpcValueTest.putRpcTestValue(storage, ++storageLength, callback);
+    }catch (Exception e){
+      GWT.log("error", e);
+    }
+
+  }
+  
+  public void onRpcTesEnd(final HandlerRegistration hr1, final StorageExt storage, final StorageChangeEvent.Level level){
+    hr1.removeHandler();
+    if(StorageChangeEvent.Level.STRING.equals(level)){
+      testStorage(storage, StorageChangeEvent.Level.OBJECT);
+    }
   }
 
 }
