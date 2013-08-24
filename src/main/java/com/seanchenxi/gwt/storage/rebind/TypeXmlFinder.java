@@ -26,6 +26,8 @@ import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Source;
+import javax.xml.transform.sax.SAXSource;
 
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
@@ -33,111 +35,174 @@ import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.JType;
+import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
+import com.google.gwt.core.ext.typeinfo.TypeOracleException;
 import com.google.gwt.dev.resource.Resource;
 import com.google.gwt.dev.resource.ResourceOracle;
-import com.google.gwt.dev.util.Util;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import org.xml.sax.helpers.XMLReaderFactory;
 
 /**
  * Created by: Xi
  */
 final class TypeXmlFinder extends StorageTypeFinder {
 
+  private static final String FEATURE_NAMESPACES = "http://xml.org/sax/features/namespaces";
+  private static final String FEATURE_NAMESPACE_PREFIXES = "http://xml.org/sax/features/namespace-prefixes";
+  private static final String STORAGE_SERIALIZATION_DTD = "storage-serialization.dtd";
+
   private final TypeOracle typeOracle;
   private final ResourceOracle resourceOracle;
-  private final boolean isProdMode;
   private final TreeLogger logger;
+  private final JClassType[] collectionOrMap;
+
+  static Source createSAXSource(InputStream input) throws SAXException{
+    XMLReader xmlreader = XMLReaderFactory.createXMLReader();
+    xmlreader.setFeature(FEATURE_NAMESPACES, true);
+    xmlreader.setFeature(FEATURE_NAMESPACE_PREFIXES, true);
+    xmlreader.setEntityResolver(new EntityResolver() {
+      public InputSource resolveEntity(String publicId, String systemId) {
+        return new InputSource(StorageSerialization.class.getResourceAsStream(STORAGE_SERIALIZATION_DTD));
+      }
+    });
+    return new SAXSource(xmlreader, new InputSource(input));
+  }
 
   TypeXmlFinder(GeneratorContext context, TreeLogger logger){
     this.typeOracle = context.getTypeOracle();
     this.resourceOracle = context.getResourcesOracle();
-    this.isProdMode = context.isProdMode();
     this.logger = logger;
+
+    JClassType[] _collectionOrMap = new JClassType[2];
+    try{
+      _collectionOrMap[0] = typeOracle.getType(Collection.class.getName());
+      _collectionOrMap[1] = typeOracle.getType(Map.class.getName());
+    }catch(NotFoundException e){
+      _collectionOrMap = null;
+    }
+    collectionOrMap = _collectionOrMap;
   }
 
   @Override
   public Set<JType> findStorageTypes() throws UnableToCompleteException{
+    Set<JType> serializables = new HashSet<JType>();
+
     // Find all Serialization resource
-    Set<String> typeNames = new HashSet<String>();
-    for(Resource resource : findAllSerializationResources()){
-      Collection<String> subTypeNames = parseResource(resource);
-      if(subTypeNames != null) typeNames.addAll(subTypeNames);
+    List<StorageSerialization> storageSerializations = findAllStorageSerializations();
+    if(storageSerializations == null || storageSerializations.isEmpty()){
+      return serializables;
     }
 
-    Set<JType> serializables = new HashSet<JType>();
-    for(String typeName : typeNames){
-      JClassType jType = typeOracle.findType(typeName);
-      boolean added = addIfIsValidType(serializables, jType, logger);
-      if(added) addIfIsValidType(serializables, typeOracle.getArrayType(jType), logger);
+    boolean isIncludePrimitive = true, isAutoArrayType = true;
+    for(StorageSerialization storageSerial : storageSerializations){
+      if(isIncludePrimitive && !storageSerial.isIncludePrimitiveTypes()){
+        isIncludePrimitive = false;
+      }
+      if(isAutoArrayType && !storageSerial.isAutoArrayType()){
+        isAutoArrayType = false;
+      }
+      parseClassNameList(serializables, storageSerial, storageSerial.getClasses());
     }
+
+    if(isIncludePrimitive){
+      parsePrimitiveTypes(serializables, isAutoArrayType);
+    }
+    return serializables;
+  }
+
+  private void parseClassNameList(Set<JType> serializables, StorageSerialization storageSerial, List<String> classNames){
+    if(classNames != null){
+      logger.branch(TreeLogger.Type.DEBUG, "Parsing StorageSerialization at " + storageSerial.getPath());
+      for(String className : classNames){
+        try{
+          logger.branch(TreeLogger.Type.TRACE, "Parse className: " + className);
+          JType jType = typeOracle.parse(className);
+          boolean added;
+          if(storageSerial.isAutoArrayType() && jType.isArray() == null && !isCollectionOrMapType(jType)){
+            added = addIfIsValidType(serializables, typeOracle.getArrayType(jType), logger);
+          }else{
+            added = addIfIsValidType(serializables, jType, logger);
+          }
+          if(added) logger.branch(TreeLogger.Type.TRACE, "Added " + className);
+        }catch(TypeOracleException e){
+          logger.branch(TreeLogger.Type.WARN, "Failed to add " + className, e);
+        }
+      }
+    }else{
+      logger.branch(TreeLogger.Type.WARN, "No defined class in StorageSerialization at " + storageSerial.getPath());
+    }
+  }
+
+  private void parsePrimitiveTypes(Set<JType> serializables, boolean autoArrayType){
+    logger.branch(TreeLogger.Type.DEBUG, "Adding all primitive types");
     // All primitive types and its array types will be considered as serializable
     for(JPrimitiveType jpt : JPrimitiveType.values()){
       if(JPrimitiveType.VOID.equals(jpt)){
         continue;
       }
       JClassType jBoxedType = typeOracle.findType(jpt.getQualifiedBoxedSourceName());
-      boolean added = addIfIsValidType(serializables, jpt, logger);
-      if(added) {
-        addIfIsValidType(serializables, typeOracle.getArrayType(jpt), logger);
-        if(added) added = addIfIsValidType(serializables, jBoxedType, logger);
+      boolean added = false;
+      if(autoArrayType){
+        if(addIfIsValidType(serializables, typeOracle.getArrayType(jpt), logger))
+          added = addIfIsValidType(serializables, typeOracle.getArrayType(jBoxedType), logger);
+      }else{
+        if(addIfIsValidType(serializables, jpt, logger))
+          added = addIfIsValidType(serializables, jBoxedType, logger);
       }
-      if(added) addIfIsValidType(serializables, typeOracle.getArrayType(jBoxedType), logger);
+      if(added) logger.branch(TreeLogger.Type.TRACE, "Added " + jpt.getQualifiedSourceName());
     }
-
-    return serializables;
   }
 
-  private Collection<String> parseResource(Resource resource) throws UnableToCompleteException {
+  private List<StorageSerialization> findAllStorageSerializations() throws UnableToCompleteException{
+    logger.branch(TreeLogger.Type.DEBUG, "Find StorageSerialization XML");
+    List<StorageSerialization> storageSerializations = new ArrayList<StorageSerialization>();
+    Map<String,Resource> resourceMap = resourceOracle.getResourceMap();
+    for(String key : resourceMap.keySet()){
+      if(key.endsWith(SERIALIZATION_CONFIG)){
+        StorageSerialization storageSerialization = parseXmlResource(resourceMap.get(key));
+        if(storageSerialization != null){
+          storageSerializations.add(storageSerialization);
+        }
+      }
+    }
+    return storageSerializations;
+  }
+
+  private StorageSerialization parseXmlResource(Resource resource) throws UnableToCompleteException {
     InputStream input = null;
     try{
-      input = resource.openContents();
-      return isProdMode ? unmarshallXml(input) : parseXmlString(input);
+      JAXBContext jaxbContext = JAXBContext.newInstance(StorageSerialization.class);
+      Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+      Source source = createSAXSource(input = resource.openContents());
+      StorageSerialization storageSerialization = (StorageSerialization)unmarshaller.unmarshal(source);
+      storageSerialization.setPath(resource.getPath());
+      return storageSerialization;
     }catch(Exception e){
-      logger.log(TreeLogger.Type.WARN, "[isProdMode=" + isProdMode + "] Error while parsing resource(" + resource.getPath() + ")", e);
+      logger.branch(TreeLogger.Type.WARN, "Error while parsing xml resource at " + resource.getPath(), e);
       throw new UnableToCompleteException();
     } finally{
       try{
         if(input != null) input.close();
       }catch(Exception e){
-        //To Ignore
+        //To ignore
       }
     }
   }
 
-  private List<Resource> findAllSerializationResources(){
-    List<Resource> resources = new ArrayList<Resource>();
-    Map<String,Resource> resourceMap = resourceOracle.getResourceMap();
-    for(String key : resourceMap.keySet()){
-      if(key.endsWith(SERIALIZATION_CONFIG)){
-        Resource resource = resourceMap.get(key);
-        if(resource != null) resources.add(resource);
+  private boolean isCollectionOrMapType(JType jType){
+    if(jType == null) return false;
+    JClassType jClassType = jType.isClassOrInterface();
+    if(jClassType == null) return false;
+    for(JClassType possibleSuperType : collectionOrMap){
+      if(jClassType.isAssignableTo(possibleSuperType)){
+        return true;
       }
     }
-    return resources;
-  }
-
-  private Collection<String> unmarshallXml(InputStream input) throws Exception{
-    JAXBContext jaxbContext = JAXBContext.newInstance(StorageSerialization.class);
-    Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-    StorageSerialization storageSerialization = (StorageSerialization)unmarshaller.unmarshal(input);
-    return storageSerialization.getClasses();
-  }
-
-  private Collection<String> parseXmlString(InputStream input) throws Exception{
-    String content = Util.readStreamAsString(input);
-    String elBegin = "<class>";
-    String elEnd = "</class>";
-
-    Set<String> typeNames = new HashSet<String>();
-    for(String _typeName : content.split(elBegin)){
-      if(_typeName.contains(elEnd)){
-        String typeName = _typeName.split(elEnd)[0];
-        if(typeName != null || !typeName.trim().isEmpty()){
-          typeNames.add(typeName.trim());
-        }
-      }
-    }
-    return typeNames;
+    return false;
   }
 
 }

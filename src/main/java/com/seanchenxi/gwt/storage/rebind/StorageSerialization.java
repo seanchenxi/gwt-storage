@@ -15,21 +15,63 @@
  */
 package com.seanchenxi.gwt.storage.rebind;
 
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.List;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Created by: Xi
  */
 @XmlRootElement(name = "StorageSerialization")
-class StorageSerialization {
+@XmlAccessorType(XmlAccessType.FIELD)
+public class StorageSerialization {
 
   @XmlElement(required = true, name = "class")
   private List<String> classes;
 
+  @XmlElement(required = false, name = "autoArrayType", defaultValue = "true")
+  private boolean autoArrayType = true;
+
+  @XmlElement(required = false, name = "includePrimitiveTypes", defaultValue = "true")
+  private boolean includePrimitiveTypes = true;
+
+  @XmlTransient
+  private String path;
+
   public List<String> getClasses() {
     return classes;
+  }
+
+  public String getPath(){
+    return path;
+  }
+
+  public boolean isAutoArrayType(){
+    return this.autoArrayType;
+  }
+
+  public boolean isIncludePrimitiveTypes(){
+    return includePrimitiveTypes;
+  }
+
+  public void setClasses(List<String> classes){
+    this.classes = classes;
+  }
+
+  public void setAutoArrayType(boolean autoArrayType){
+    this.autoArrayType = autoArrayType;
+  }
+
+  public void setIncludePrimitiveTypes(boolean includePrimitiveTypes){
+    this.includePrimitiveTypes = includePrimitiveTypes;
+  }
+
+  public void setPath(String path){
+    this.path = path;
   }
 
 }

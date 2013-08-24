@@ -15,7 +15,13 @@
   limitations under the License.
   -->
 
+<!-- Version: 1.1 -->
+
 <!-- The StorageSerialization root element -->
-<!ELEMENT StorageSerialization (class)*>
-<!-- Specify the full qualified name of storage serializable type-->
+<!ELEMENT StorageSerialization (includePrimitiveTypes|autoArrayType|class)*>
+<!-- To define if generator should automatically add all primitive types as storage serializable type -->
+<!ELEMENT includePrimitiveTypes (#PCDATA)>
+<!-- To define if generator should automatically add specified class's array type as storage serializable type -->
+<!ELEMENT autoArrayType (#PCDATA)>
+<!-- Specify the full qualified name of storage serializable type -->
 <!ELEMENT class (#PCDATA)*>

@@ -41,7 +41,7 @@ abstract class StorageTypeFinder {
 
   public static final String SERIALIZATION_CONFIG = "storage-serialization.xml";
 
-  public static final StorageTypeFinder getInstance(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException{
+  public static StorageTypeFinder getInstance(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException{
     PropertyOracle propertyOracle = context.getPropertyOracle();
     try {
       ConfigurationProperty property = propertyOracle.getConfigurationProperty(PROP_TYPE_FINDER);
@@ -55,7 +55,7 @@ abstract class StorageTypeFinder {
           return new TypeRpcFinder(context, logger);
       }
     } catch (BadPropertyValueException e) {
-      logger.log(TreeLogger.DEBUG, "Could not find property " + PROP_TYPE_FINDER, e);
+      logger.branch(TreeLogger.DEBUG, "Could not find property " + PROP_TYPE_FINDER, e);
       return new TypeRpcFinder(context, logger);
     }
   }
@@ -66,13 +66,12 @@ abstract class StorageTypeFinder {
 
   protected static boolean addIfIsValidType(final Set<JType> serializables, JType jType, StorageTypeFilter filter, TreeLogger logger) {
     boolean added = false;
-    if(jType != null && jType.isInterface() == null){
-      if (filter == null || filter.isIncluded(logger, getBaseTypeName(jType.isClass()))){
-        serializables.add(jType);
-        added = true;
-      }
+    if(jType != null && (filter == null || filter.isIncluded(logger, getBaseTypeName(jType.isClass())))){
+      // we don't filter interface types here, GWT's SerializableTypeOracle will treat them
+      serializables.add(jType);
+      added = true;
     }
-    logger.log(added ? TreeLogger.TRACE : TreeLogger.DEBUG, (added ? "Add " : "Failed to add ")  + jType + " as storage serializable.");
+    logger.branch(added ? TreeLogger.TRACE : TreeLogger.DEBUG, (added ? "Add " : "Failed to add ")  + jType + " as storage serializable.");
     return added;
   }
 
