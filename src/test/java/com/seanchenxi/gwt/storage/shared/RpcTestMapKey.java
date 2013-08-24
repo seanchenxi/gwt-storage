@@ -22,4 +22,41 @@ import java.io.Serializable;
  * Created by: Xi
  */
 public class RpcTestMapKey implements Serializable{
+
+  public enum MapKey{
+    KEY_1, KEY_2, KEY_3, KEY_4, KEY_5
+  }
+
+  private MapKey key;
+
+  public RpcTestMapKey(){}
+
+  public RpcTestMapKey(MapKey key){
+    this.key = key;
+  }
+
+  public MapKey getKey(){
+    return key;
+  }
+
+  public void setKey(MapKey key){
+    this.key = key;
+  }
+
+  @Override
+  public boolean equals(Object o){
+    if(this == o) return true;
+    if(!(o instanceof RpcTestMapKey)) return false;
+
+    RpcTestMapKey that = (RpcTestMapKey)o;
+
+    if(key != that.key) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode(){
+    return key != null ? key.hashCode() : 0;
+  }
 }

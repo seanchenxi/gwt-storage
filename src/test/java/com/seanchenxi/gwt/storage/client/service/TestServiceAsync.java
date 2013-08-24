@@ -16,8 +16,8 @@
 
 package com.seanchenxi.gwt.storage.client.service;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapKey;
@@ -33,5 +33,5 @@ public interface TestServiceAsync {
 
   void getRpcTestValueList(AsyncCallback<List<RpcTestValue>> async);
 
-  void getRpcTestValueStringMap(AsyncCallback<HashMap<RpcTestMapKey, RpcTestMapValue>> async);
+  void getRpcTestValueStringMap(AsyncCallback<Map<RpcTestMapKey, RpcTestMapValue>> async);
 }

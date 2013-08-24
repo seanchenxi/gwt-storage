@@ -79,6 +79,9 @@ public class StorageTest implements EntryPoint {
               SimpleValueTest.putGenericObjectValue(storage, ++storageLength);
               break;
             case 11:
+              RpcValueTest.putRpcTestValue(storage, ++storageLength);
+              break;
+            case 12:
               OtherTest.removeValue(storage);
               break;
             default:

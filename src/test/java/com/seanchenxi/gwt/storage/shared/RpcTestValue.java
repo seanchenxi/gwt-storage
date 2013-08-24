@@ -23,4 +23,36 @@ import java.io.Serializable;
  */
 public class RpcTestValue implements Serializable {
 
+  private long id;
+
+  public RpcTestValue(){}
+
+  public RpcTestValue(long id){
+    this.id = id;
+  }
+
+  public long getId(){
+    return id;
+  }
+
+  public void setId(long id){
+    this.id = id;
+  }
+
+  @Override
+  public boolean equals(Object o){
+    if(this == o) return true;
+    if(!(o instanceof RpcTestValue)) return false;
+
+    RpcTestValue that = (RpcTestValue)o;
+
+    if(id != that.id) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode(){
+    return (int)(id ^ (id >>> 32));
+  }
 }

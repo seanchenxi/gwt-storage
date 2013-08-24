@@ -16,10 +16,11 @@
 
 package com.seanchenxi.gwt.storage.client.service;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapKey;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapValue;
 import com.seanchenxi.gwt.storage.shared.RpcTestValue;
@@ -27,12 +28,13 @@ import com.seanchenxi.gwt.storage.shared.RpcTestValue;
 /**
  * Created by: Xi
  */
+@RemoteServiceRelativePath("TestService")
 public interface TestService extends RemoteService {
 
   RpcTestValue getRpcTestValue();
 
   List<RpcTestValue> getRpcTestValueList();
 
-  HashMap<RpcTestMapKey, RpcTestMapValue> getRpcTestValueStringMap();
+  Map<RpcTestMapKey, RpcTestMapValue> getRpcTestValueStringMap();
 
 }

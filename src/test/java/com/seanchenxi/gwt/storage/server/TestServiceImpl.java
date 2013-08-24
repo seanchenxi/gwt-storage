@@ -16,14 +16,16 @@
 
 package com.seanchenxi.gwt.storage.server;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.seanchenxi.gwt.storage.client.service.TestService;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapKey;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapValue;
 import com.seanchenxi.gwt.storage.shared.RpcTestValue;
-import com.seanchenxi.gwt.storage.client.service.TestService;
 
 /**
  * Created by: Xi
@@ -32,16 +34,22 @@ public class TestServiceImpl extends RemoteServiceServlet implements TestService
 
   @Override
   public RpcTestValue getRpcTestValue(){
-    return null;
+    return new RpcTestValue(12345L);
   }
 
   @Override
   public List<RpcTestValue> getRpcTestValueList(){
-    return null;
+    LinkedList<RpcTestValue> rpcTestValues = new LinkedList<RpcTestValue>();
+    rpcTestValues.add(new RpcTestValue(234567L));
+    rpcTestValues.add(new RpcTestValue(456789L));
+    return rpcTestValues;
   }
 
   @Override
   public Map<RpcTestMapKey, RpcTestMapValue> getRpcTestValueStringMap(){
-    return null;
+    HashMap<RpcTestMapKey, RpcTestMapValue> rpcTestMapKeyRpcTestMapValueHashMap = new HashMap<RpcTestMapKey, RpcTestMapValue>();
+    rpcTestMapKeyRpcTestMapValueHashMap.put(new RpcTestMapKey(RpcTestMapKey.MapKey.KEY_1), new RpcTestMapValue(new RpcTestMapValue.MapValue("KEY_1_VALUE")));
+    rpcTestMapKeyRpcTestMapValueHashMap.put(new RpcTestMapKey(RpcTestMapKey.MapKey.KEY_2), new RpcTestMapValue(new RpcTestMapValue.MapValue("KEY_2_VALUE")));
+    return rpcTestMapKeyRpcTestMapValueHashMap;
   }
 }

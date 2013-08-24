@@ -23,4 +23,5 @@
   <set-configuration-property name="storage.type.finder" value="rpc_xml" />
   <entry-point class='com.seanchenxi.gwt.storage.client.StorageTest'/>
   <source path='client'/>
+  <source path="shared" />
 </module>

@@ -14,9 +14,10 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<!DOCTYPE StorageSerialization PUBLIC "-//seanchenxi.com//DTD Storage Serialization 1.0//EN"
-  "http://gwt-storage.googlecode.com/git/src/main/resources/storage-serialization.dtd">
+<!DOCTYPE StorageSerialization SYSTEM "storage-serialization.dtd">
 <StorageSerialization>
+  <class>java.util.List&lt;com.seanchenxi.gwt.storage.shared.RpcTestValue&gt;</class>
+  <class>java.util.Map&lt;com.seanchenxi.gwt.storage.shared.RpcTestMapKey,com.seanchenxi.gwt.storage.shared.RpcTestMapValue&gt;</class>
   <class>com.seanchenxi.gwt.storage.client.TestValue</class>
   <class>com.seanchenxi.gwt.storage.client.GenericTestValue</class>
 </StorageSerialization>
