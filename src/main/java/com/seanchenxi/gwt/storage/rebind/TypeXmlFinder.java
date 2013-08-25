@@ -115,25 +115,31 @@ final class TypeXmlFinder extends StorageTypeFinder {
   }
 
   private void parseClassNameList(Set<JType> serializables, StorageSerialization storageSerial, List<String> classNames){
-    if(classNames != null){
-      logger.branch(TreeLogger.Type.DEBUG, "Parsing StorageSerialization at " + storageSerial.getPath());
-      for(String className : classNames){
-        try{
-          logger.branch(TreeLogger.Type.TRACE, "Parse className: " + className);
-          JType jType = typeOracle.parse(className);
-          boolean added;
-          if(storageSerial.isAutoArrayType() && jType.isArray() == null && !isCollectionOrMapType(jType)){
-            added = addIfIsValidType(serializables, typeOracle.getArrayType(jType), logger);
-          }else{
-            added = addIfIsValidType(serializables, jType, logger);
-          }
-          if(added) logger.branch(TreeLogger.Type.TRACE, "Added " + className);
-        }catch(TypeOracleException e){
-          logger.branch(TreeLogger.Type.WARN, "Failed to add " + className, e);
-        }
+    if(classNames == null || classNames.isEmpty()){
+      logger.branch(TreeLogger.Type.DEBUG, "No defined class in StorageSerialization at " + storageSerial.getPath());
+      return;
+    }
+    
+    logger.branch(TreeLogger.Type.DEBUG, "Parsing StorageSerialization at " + storageSerial.getPath());
+    for(String className : classNames){
+      JType jType;
+      try{
+        logger.branch(TreeLogger.Type.TRACE, "Parse className: " + className);
+        jType = typeOracle.parse(className);
+      }catch(TypeOracleException e){
+        logger.branch(TreeLogger.Type.WARN, "Parse className " +  className + " error", e);
+        jType = null;
       }
-    }else{
-      logger.branch(TreeLogger.Type.WARN, "No defined class in StorageSerialization at " + storageSerial.getPath());
+
+      try{
+        if(storageSerial.isAutoArrayType() && jType != null && jType.isArray() == null && !isCollectionOrMapType(jType)){
+          addIfIsValidType(serializables, typeOracle.getArrayType(jType), logger);
+        }else{
+          addIfIsValidType(serializables, jType, logger);
+        }
+      }catch (Exception e){
+        logger.branch(TreeLogger.Type.WARN, "Add className " +  className + " error", e);
+      }
     }
   }
 

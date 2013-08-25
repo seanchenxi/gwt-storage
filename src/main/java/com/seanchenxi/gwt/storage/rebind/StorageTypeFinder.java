@@ -65,14 +65,16 @@ abstract class StorageTypeFinder {
   }
 
   protected static boolean addIfIsValidType(final Set<JType> serializables, JType jType, StorageTypeFilter filter, TreeLogger logger) {
-    boolean added = false;
-    if(jType != null && (filter == null || filter.isIncluded(logger, getBaseTypeName(jType.isClass())))){
-      // we don't filter interface types here, GWT's SerializableTypeOracle will treat them
+    if(jType == null) return false;
+    // we don't filter interface types here, GWT's SerializableTypeOracle will treat them
+    if(filter != null && !filter.isIncluded(logger, getBaseTypeName(jType.isClass()))){
+      logger.branch(TreeLogger.DEBUG, jType + " was filtered.");
+      return false;
+    }else{
       serializables.add(jType);
-      added = true;
+      logger.branch(TreeLogger.TRACE, "add " + jType + " as storage serializable.");
+      return true;
     }
-    logger.branch(added ? TreeLogger.TRACE : TreeLogger.DEBUG, (added ? "Add " : "Failed to add ")  + jType + " as storage serializable.");
-    return added;
   }
 
   /**
