@@ -24,7 +24,7 @@
   
   <groupId>com.seanchenxi.gwt</groupId>
   <artifactId>gwt-storage</artifactId>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   
   <url>https://github.com/seanchenxi/gwt-storage</url>
   <description>GWT Client-side Storage API extension</description>

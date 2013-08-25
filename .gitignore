@@ -1,9 +1,28 @@
-/.idea/
-/.settings/
-/gwt-unitCache/
-/gen/
-/javadoc/
-/out/
-/target/
-/*.project
-/*.classpath
+# Java  #
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# GWT.gitignore #
+gen/
+gwt-unitCache/
+war/WEB-INF/deploy/
+war/WEB-INF/classes/
+
+# Eclipse.gitignore #
+.project
+.metadata
+.classpath
+.settings/
+bin/**
+build/**
+
+# IntelliJ.gitignore #
+*.iml
+*.ipr
+*.iws
+.idea/
+target/

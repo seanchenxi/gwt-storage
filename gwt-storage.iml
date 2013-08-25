@@ -3,8 +3,13 @@
   <component name="FacetManager">
     <facet type="gwt" name="GWT">
       <configuration>
+        <setting name="compilerMaxHeapSize" value="256" />
+        <setting name="gwtScriptOutputStyle" value="DETAILED" />
         <setting name="gwtSdkUrl" value="file://$MAVEN_REPOSITORY$/com/google/gwt/gwt-dev/2.5.1/" />
         <setting name="gwtSdkType" value="maven" />
+        <packaging>
+          <module name="com.seanchenxi.gwt.storage.Storage" enabled="false" />
+        </packaging>
       </configuration>
     </facet>
   </component>
@@ -15,7 +20,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
