@@ -19,7 +19,8 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
 
 
 ## Downloads
-  * Releases: [https://github.com/seanchenxi/gwt-storage/releases](https://github.com/seanchenxi/gwt-storage/releases)
+  * Latest release: [gwt-storage-1.1.jar](https://github.com/seanchenxi/gwt-storage/releases/download/v1.1/gwt-storage-1.1.jar)
+  * All releases: [https://github.com/seanchenxi/gwt-storage/releases](https://github.com/seanchenxi/gwt-storage/releases)
 
 
 ## License
