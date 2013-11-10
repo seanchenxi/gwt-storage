@@ -7,9 +7,6 @@
         <setting name="gwtScriptOutputStyle" value="DETAILED" />
         <setting name="gwtSdkUrl" value="file://$MAVEN_REPOSITORY$/com/google/gwt/gwt-dev/2.5.1/" />
         <setting name="gwtSdkType" value="maven" />
-        <packaging>
-          <module name="com.seanchenxi.gwt.storage.Storage" enabled="false" />
-        </packaging>
       </configuration>
     </facet>
   </component>
@@ -19,7 +16,6 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

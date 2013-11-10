@@ -29,6 +29,7 @@ import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JRealClassType;
 import com.google.gwt.core.ext.typeinfo.JType;
+import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
 
 /**
  * Created by: Xi
@@ -42,17 +43,22 @@ abstract class StorageTypeFinder {
   public static final String SERIALIZATION_CONFIG = "storage-serialization.xml";
 
   public static StorageTypeFinder getInstance(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException{
+    JClassType keyProviderIntf = context.getTypeOracle().findType(StorageKeyProvider.class.getName());
+    if(keyProviderIntf.getSubtypes() != null && keyProviderIntf.getSubtypes().length > 0){
+      return new TypeProviderFinder(context, logger);
+    }
+
     PropertyOracle propertyOracle = context.getPropertyOracle();
     try {
       ConfigurationProperty property = propertyOracle.getConfigurationProperty(PROP_TYPE_FINDER);
       String value = property == null ? TYPE_FINDER_VALUES.get(0) : property.getValues().get(0).toLowerCase();
       switch(TYPE_FINDER_VALUES.indexOf(value)){
+        case 0:
+          return new TypeRpcFinder(context, logger);
         case 1:
           return new TypeXmlFinder(context, logger);
-        case 2:
-          return new TypeMixFinder(new TypeRpcFinder(context, logger), new TypeXmlFinder(context, logger));
         default:
-          return new TypeRpcFinder(context, logger);
+          return new TypeMixFinder(new TypeRpcFinder(context, logger), new TypeXmlFinder(context, logger));
       }
     } catch (BadPropertyValueException e) {
       logger.branch(TreeLogger.DEBUG, "Could not find property " + PROP_TYPE_FINDER, e);

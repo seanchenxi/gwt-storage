@@ -30,7 +30,11 @@
    -->
   <define-configuration-property name="storage.type.finder" is-multi-valued="false" />
   <set-configuration-property name="storage.type.finder" value="rpc"/>
-    
+
+  <generate-with class="com.seanchenxi.gwt.storage.rebind.StorageKeyProviderGenerator">
+    <when-type-assignable class="com.seanchenxi.gwt.storage.client.StorageKeyProvider"/>
+  </generate-with>
+
   <generate-with class="com.seanchenxi.gwt.storage.rebind.StorageTypeSerializerGenerator">
   	<when-type-is class="com.seanchenxi.gwt.storage.client.serializer.StorageTypeSerializer"/>
   </generate-with>
