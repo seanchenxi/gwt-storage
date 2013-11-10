@@ -32,7 +32,7 @@ import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
 /**
  * User: Xi
  */
-public class TypeProviderFinder extends StorageTypeFinder {
+final class TypeProviderFinder extends StorageTypeFinder {
 
   private final TypeOracle typeOracle;
   private final TreeLogger logger;
