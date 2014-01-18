@@ -61,7 +61,7 @@ public class StorageKeyProviderGenerator extends Generator {
     model = new StorageKeyProviderModel(logger, toGenerate);
 
     ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, simpleSourceName);
-    factory.addImport(StorageKeyProvider.Scope.class.getName().replace("$", "."));
+    factory.addImport(StorageKeyProvider.StorageScope.class.getName().replace("$", "."));
     factory.setSuperclass(AbstractStorageKeyProvider.class.getCanonicalName());
     factory.addImplementedInterface(typeName);
     SourceWriter sw = factory.createSourceWriter(context, pw);
@@ -80,9 +80,9 @@ public class StorageKeyProviderGenerator extends Generator {
         if (method.isDynamicKey()) {
           String varKeyValueName = "keyValue";
           sw.println("String %s = \"%s\" + String.valueOf(key) + \"%s\";", varKeyValueName, method.getKeyPrefix(), method.getKeySuffix());
-          sw.indentln("return createIfAbsent(%s, Scope.%s, %s.class);", varKeyValueName, keyScope.name(), keyClazz);
+          sw.indentln("return createIfAbsent(%s, StorageScope.%s, %s.class);", varKeyValueName, keyScope.name(), keyClazz);
         }else{
-          sw.indentln("return createIfAbsent(\"%s\", Scope.%s, %s.class);", method.getStaticKeyValue(), keyScope.name(), keyClazz);
+          sw.indentln("return createIfAbsent(\"%s\", StorageScope.%s, %s.class);", method.getStaticKeyValue(), keyScope.name(), keyClazz);
         }
         sw.outdent();
         sw.println("}");
