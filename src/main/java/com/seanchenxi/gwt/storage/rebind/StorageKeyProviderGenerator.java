@@ -16,8 +16,6 @@
 
 package com.seanchenxi.gwt.storage.rebind;
 
-import java.io.PrintWriter;
-
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
@@ -26,8 +24,11 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
+
 import com.seanchenxi.gwt.storage.client.AbstractStorageKeyProvider;
 import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
+
+import java.io.PrintWriter;
 
 /**
  * User: Xi
@@ -75,7 +76,7 @@ public class StorageKeyProviderGenerator extends Generator {
             method.getName(), (method.isDynamicKey() ? (method.getKeyValueType().getQualifiedSourceName() + " key") : ""));
         sw.indent();
         String keyClazz = method.getKeyClazz().getQualifiedSourceName();
-        StorageKeyProvider.Scope keyScope = method.getKeyScope();
+        StorageKeyProvider.StorageScope keyScope = method.getKeyScope();
         if (method.isDynamicKey()) {
           String varKeyValueName = "keyValue";
           sw.println("String %s = \"%s\" + String.valueOf(key) + \"%s\";", varKeyValueName, method.getKeyPrefix(), method.getKeySuffix());

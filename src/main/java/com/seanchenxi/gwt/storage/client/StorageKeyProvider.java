@@ -24,18 +24,29 @@ import java.lang.annotation.Target;
 
 public interface StorageKeyProvider {
 
-    public enum Scope{
-        ALL, SESSION, LOCAL
-    }
+  public enum StorageScope {
+    ALL, SESSION, LOCAL
+  }
 
-    @Documented
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.METHOD)
-    public @interface Key{
-        String value() default "";
-        String prefix() default "";
-        String suffix() default "";
-        Scope scope() default Scope.ALL;
-    }
+  @Documented
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target(ElementType.METHOD)
+  public @interface Key {
+
+    String value() default "";
+
+    String prefix() default "";
+
+    String suffix() default "";
+  }
+
+  @Documented
+  @Retention(RetentionPolicy.RUNTIME)
+  @Target({ElementType.TYPE,ElementType.METHOD})
+  public @interface Scope{
+
+    StorageScope value() default StorageScope.ALL;
+
+  }
 
 }

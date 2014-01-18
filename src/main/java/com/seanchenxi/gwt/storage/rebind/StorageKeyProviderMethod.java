@@ -16,13 +16,14 @@
 
 package com.seanchenxi.gwt.storage.rebind;
 
-import java.io.Serializable;
-
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.JType;
+
 import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
+
+import java.io.Serializable;
 
 /**
  * User: Xi
@@ -61,7 +62,6 @@ class StorageKeyProviderMethod {
         setStaticKeyValue(keyMeta.value());
         setKeyPrefix(keyMeta.prefix());
         setKeySuffix(keyMeta.suffix());
-        setKeyScope(keyMeta.scope());
       }
     }
 
@@ -89,7 +89,7 @@ class StorageKeyProviderMethod {
       toReturn.keySuffix = keySuffix;
     }
 
-    public void setKeyScope(StorageKeyProvider.Scope keyScope) {
+    public void setKeyScope(StorageKeyProvider.StorageScope keyScope) {
       toReturn.keyScope = keyScope;
     }
 
@@ -128,7 +128,7 @@ class StorageKeyProviderMethod {
   private String name;
   private boolean dynamic = false;
 
-  private StorageKeyProvider.Scope keyScope = StorageKeyProvider.Scope.ALL;
+  private StorageKeyProvider.StorageScope keyScope = StorageKeyProvider.StorageScope.ALL;
   private JClassType keyClazz;
   private JClassType keyValueType;
   private String staticKeyValue = "";
@@ -150,7 +150,7 @@ class StorageKeyProviderMethod {
     return dynamic;
   }
 
-  public StorageKeyProvider.Scope getKeyScope() {
+  public StorageKeyProvider.StorageScope getKeyScope() {
     return keyScope;
   }
 
