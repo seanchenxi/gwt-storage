@@ -30,7 +30,7 @@ import com.seanchenxi.gwt.storage.client.AbstractStorageKeyProvider;
 import java.io.PrintWriter;
 
 /**
- * User: Xi
+ * Created by: Xi
  */
 public class StorageKeyProviderGenerator extends Generator {
 

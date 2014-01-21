@@ -26,7 +26,7 @@ import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
 import java.io.Serializable;
 
 /**
- * User: Xi
+ * Created by: Xi
  */
 class StorageKeyProviderMethod {
 

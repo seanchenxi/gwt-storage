@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * User: Xi
+ * Provides base implementations of StorageKeyProvider methods.
  */
 public abstract class AbstractStorageKeyProvider implements StorageKeyProvider {
 
