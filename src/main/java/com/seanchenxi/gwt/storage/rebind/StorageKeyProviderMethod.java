@@ -51,9 +51,16 @@ class StorageKeyProviderMethod {
       JType returnType = method.getReturnType();
       setReturnType(returnType.isClassOrInterface());
       setKeyClazz(returnType.isParameterized().getTypeArgs()[0]);
-      if (method.getParameters().length == 1) {
-        setDynamic(true);
-        setKeyValueType(method.getParameters()[0].getType().isClassOrInterface());
+      int paramCount = method.getParameters().length;
+      switch (paramCount){
+        case 0:
+          setDynamic(false);
+          setStaticKeyValue(method.getName() + paramCount);
+          break;
+        case 1:
+          setDynamic(true);
+          setKeyValueType(method.getParameters()[0].getType().isClassOrInterface());
+          break;
       }
     }
 
@@ -87,10 +94,6 @@ class StorageKeyProviderMethod {
 
     public void setKeySuffix(String keySuffix) {
       toReturn.keySuffix = keySuffix;
-    }
-
-    public void setKeyScope(StorageKeyProvider.StorageScope keyScope) {
-      toReturn.keyScope = keyScope;
     }
 
     public void setDynamic(boolean dynamic) {
@@ -128,7 +131,6 @@ class StorageKeyProviderMethod {
   private String name;
   private boolean dynamic = false;
 
-  private StorageKeyProvider.StorageScope keyScope = StorageKeyProvider.StorageScope.ALL;
   private JClassType keyClazz;
   private JClassType keyValueType;
   private String staticKeyValue = "";
@@ -148,10 +150,6 @@ class StorageKeyProviderMethod {
 
   public boolean isDynamicKey() {
     return dynamic;
-  }
-
-  public StorageKeyProvider.StorageScope getKeyScope() {
-    return keyScope;
   }
 
   public JClassType getKeyClazz() {

@@ -26,7 +26,6 @@ import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
 import com.seanchenxi.gwt.storage.client.AbstractStorageKeyProvider;
-import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
 
 import java.io.PrintWriter;
 
@@ -59,9 +58,9 @@ public class StorageKeyProviderGenerator extends Generator {
     }
 
     model = new StorageKeyProviderModel(logger, toGenerate);
+    model.loadMethods();
 
     ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, simpleSourceName);
-    factory.addImport(StorageKeyProvider.StorageScope.class.getName().replace("$", "."));
     factory.setSuperclass(AbstractStorageKeyProvider.class.getCanonicalName());
     factory.addImplementedInterface(typeName);
     SourceWriter sw = factory.createSourceWriter(context, pw);
@@ -72,17 +71,17 @@ public class StorageKeyProviderGenerator extends Generator {
 
     private void writeMethods(SourceWriter sw) throws UnableToCompleteException {
       for (StorageKeyProviderMethod method : model.getMethods()) {
+        sw.println();
         sw.println("public %s %s(%s) {", method.getReturnType().getParameterizedQualifiedSourceName(),
             method.getName(), (method.isDynamicKey() ? (method.getKeyValueType().getQualifiedSourceName() + " key") : ""));
         sw.indent();
         String keyClazz = method.getKeyClazz().getQualifiedSourceName();
-        StorageKeyProvider.StorageScope keyScope = method.getKeyScope();
         if (method.isDynamicKey()) {
           String varKeyValueName = "keyValue";
           sw.println("String %s = \"%s\" + String.valueOf(key) + \"%s\";", varKeyValueName, method.getKeyPrefix(), method.getKeySuffix());
-          sw.indentln("return createIfAbsent(%s, StorageScope.%s, %s.class);", varKeyValueName, keyScope.name(), keyClazz);
+          sw.println("return createIfAbsent(%s, %s.class);", varKeyValueName, keyClazz);
         }else{
-          sw.indentln("return createIfAbsent(\"%s\", StorageScope.%s, %s.class);", method.getStaticKeyValue(), keyScope.name(), keyClazz);
+          sw.println("return createIfAbsent(\"%s\", %s.class);", method.getStaticKeyValue(), keyClazz);
         }
         sw.outdent();
         sw.println("}");

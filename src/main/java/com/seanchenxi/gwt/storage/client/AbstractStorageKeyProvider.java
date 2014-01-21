@@ -25,21 +25,17 @@ import java.util.Map;
  */
 public abstract class AbstractStorageKeyProvider implements StorageKeyProvider {
 
-  private static final Map<StorageScope, Map<String, StorageKey<? extends Serializable>>> KEY_MAP;
+  private static final Map<String, StorageKey<? extends Serializable>> KEY_MAP;
 
   static {
-    KEY_MAP = new HashMap<StorageScope, Map<String, StorageKey<? extends Serializable>>>();
-    for (StorageScope scope : StorageScope.values()) {
-      KEY_MAP.put(scope, new HashMap<String, StorageKey<? extends Serializable>>());
-    }
+    KEY_MAP = new HashMap<String, StorageKey<? extends Serializable>>();
   }
 
   @SuppressWarnings("unchecked")
-  protected static <T extends Serializable> StorageKey<T> createIfAbsent(String key, StorageScope scope, Class<? super T> clazz) {
-    final Map<String, StorageKey<? extends Serializable>> scopeKeyMap = KEY_MAP.get(scope);
+  public static <T extends Serializable> StorageKey<T> createIfAbsent(String key, Class<? super T> clazz) {
     StorageKey<? extends Serializable> storageKey;
-    if (null == (storageKey = scopeKeyMap.get(key))) {
-      scopeKeyMap.put(key, storageKey = new StorageKey<T>(key, clazz));
+    if (null == (storageKey = KEY_MAP.get(key))) {
+      KEY_MAP.put(key, storageKey = new StorageKey<T>(key, clazz));
     }
     try {
       return (StorageKey<T>) storageKey;

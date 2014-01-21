@@ -22,12 +22,25 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * A tag interface for the StorageKey generator. Instances of StorageKey are
+ * created by declaring factory methods on a subtype of this interface.
+ *
+ * <pre>
+ * interface MyStorageKeyProvider extends StorageKeyProvider {
+ *   // A factory method for a ArrayList type StorageKey
+ *   StorageKey&lt;ArrayList&lt;String>> strListKey();
+ *   // A factory method for a wrapper bean
+ *   &#64;Key(prefix= "pre-", suffix="-suf")
+ *   StorageKey&lt;Boolean> boolKey(String keyName);
+ * }
+ * </pre>
+ */
 public interface StorageKeyProvider {
 
-  public enum StorageScope {
-    ALL, SESSION, LOCAL
-  }
-
+  /**
+   * Used for adding additional and generic information to generated key
+   */
   @Documented
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.METHOD)
@@ -38,14 +51,6 @@ public interface StorageKeyProvider {
     String prefix() default "";
 
     String suffix() default "";
-  }
-
-  @Documented
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target({ElementType.TYPE,ElementType.METHOD})
-  public @interface Scope{
-
-    StorageScope value() default StorageScope.ALL;
 
   }
 

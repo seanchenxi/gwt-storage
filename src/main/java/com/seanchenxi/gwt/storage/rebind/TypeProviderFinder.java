@@ -16,9 +16,6 @@
 
 package com.seanchenxi.gwt.storage.rebind;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
@@ -27,7 +24,11 @@ import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JParameterizedType;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
+
 import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * User: Xi
@@ -50,7 +51,7 @@ final class TypeProviderFinder extends StorageTypeFinder {
     JClassType[] keyProviderTypes = keyProviderIntf.getSubtypes();
     for (JClassType keyProviderType : keyProviderTypes) {
       for (JMethod method : keyProviderType.getMethods()) {
-        if(method.isStatic()){
+        if(method.isStatic() || method.getParameters().length > 1){
           continue;
         }
         JParameterizedType storageKeyType = method.getReturnType().isParameterized();
