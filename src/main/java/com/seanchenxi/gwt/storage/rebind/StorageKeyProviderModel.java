@@ -19,12 +19,14 @@ package com.seanchenxi.gwt.storage.rebind;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
+import com.google.gwt.core.ext.typeinfo.JGenericType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JParameterizedType;
 
 import com.seanchenxi.gwt.storage.client.StorageKey;
 import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,44 +41,58 @@ class StorageKeyProviderModel {
   private final TreeLogger logger;
   private final List<StorageKeyProviderMethod> methods;
   private final JClassType providerType;
+  private final JGenericType storageKeyGenericType;
+  private final JClassType serializableIntf;
 
   public StorageKeyProviderModel(TreeLogger logger, JClassType providerType) {
     this.providerType = providerType;
+    this.storageKeyGenericType = providerType.getOracle().findType(StorageKey.class.getCanonicalName()).isGenericType();
+    this.serializableIntf = providerType.getOracle().findType(Serializable.class.getCanonicalName()).isInterface();
     this.methods = new ArrayList<StorageKeyProviderMethod>();
     this.logger = logger;
   }
 
   public void loadMethods() throws UnableToCompleteException {
-    for (JMethod method : providerType.getMethods()) {
-      JParameterizedType returnType = method.getReturnType().isParameterized();
-      if(returnType == null || !returnType.getBaseType().getQualifiedSourceName().equals(StorageKey.class.getName())){
-        logger.branch(TreeLogger.Type.INFO, "method "+ method.getReadableDeclaration() +" will be ignored.");
+    for (JMethod method : providerType.getOverridableMethods()) {
+      if(!validateMethodDef(method)){
         continue;
       }
-
       StorageKeyProviderMethod keyMethod = buildKeyMethod(method);
       methods.add(keyMethod);
     }
   }
 
+  List<StorageKeyProviderMethod> getMethods() {
+    return Collections.unmodifiableList(methods);
+  }
+
   private StorageKeyProviderMethod buildKeyMethod(JMethod method) throws UnableToCompleteException {
     logger.branch(TreeLogger.Type.DEBUG, "buildKeyMethod with method=" + method.getReadableDeclaration());
-    if(method.getParameters().length > 1){
-      logger.branch(TreeLogger.Type.ERROR, "key creation method can only have one parameter");
-      throw new UnableToCompleteException();
-    }
-
     StorageKeyProviderMethod.Builder builder = new StorageKeyProviderMethod.Builder();
     builder.setMethod(method);
-
     if(method.isAnnotationPresent(KEY_ANNOTATION)) {
       builder.setKeyAnnotation(method.getAnnotation(KEY_ANNOTATION));
     }
-
     return builder.build();
   }
 
-  List<StorageKeyProviderMethod> getMethods() {
-    return Collections.unmodifiableList(methods);
+  private boolean validateMethodDef(JMethod method) throws UnableToCompleteException {
+    if(!method.getEnclosingType().equals(providerType)){
+      return false;
+    }
+    JParameterizedType returnType = method.getReturnType().isParameterized();
+    boolean isCorrectReturnType = returnType != null  && returnType.isAssignableTo(storageKeyGenericType);
+    JClassType valueType = isCorrectReturnType ? returnType.getTypeArgs()[0].isClass() : null;
+    if(valueType == null || !valueType.isAssignableTo(serializableIntf)){
+      logger.branch(TreeLogger.Type.ERROR, "method "+ method.getReadableDeclaration() +"'s return type is not StorageKey<? extends Serializable>");
+      throw new UnableToCompleteException();
+    }
+
+    int length = method.getParameters().length;
+    if(length > 1){
+      logger.branch(TreeLogger.Type.WARN, "method "+ method.getReadableDeclaration() +" should only have one or zero parameter");
+      throw new UnableToCompleteException();
+    }
+    return true;
   }
 }

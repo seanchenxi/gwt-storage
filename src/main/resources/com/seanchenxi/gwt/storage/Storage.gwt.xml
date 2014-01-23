@@ -26,7 +26,7 @@
   
   <!--
    - Configuration property define how to find types that will persist in web storage
-   - Valid values are (case insensitive): rpc/xml/rpc_xml(others are treated as rpc).
+   - Valid values are (case insensitive): rpc/xml/mix(others are treated as mix).
    -->
   <define-configuration-property name="storage.type.finder" is-multi-valued="false" />
   <set-configuration-property name="storage.type.finder" value="rpc"/>

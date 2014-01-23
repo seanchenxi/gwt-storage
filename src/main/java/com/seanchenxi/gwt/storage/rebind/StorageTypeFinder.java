@@ -16,10 +16,6 @@
 
 package com.seanchenxi.gwt.storage.rebind;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
 import com.google.gwt.core.ext.BadPropertyValueException;
 import com.google.gwt.core.ext.ConfigurationProperty;
 import com.google.gwt.core.ext.GeneratorContext;
@@ -29,7 +25,13 @@ import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JRealClassType;
 import com.google.gwt.core.ext.typeinfo.JType;
+
 import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by: Xi
@@ -38,14 +40,28 @@ abstract class StorageTypeFinder {
 
   public static final String PROP_STORAGE_BLACKLIST = "storage.blacklist";
   public static final String PROP_TYPE_FINDER = "storage.type.finder";
-  public static final List<String> TYPE_FINDER_VALUES = Arrays.asList("rpc", "xml", "rpc_xml");
+  public static final List<String> TYPE_FINDER_VALUES = Arrays.asList("rpc", "xml", "mix");
 
   public static final String SERIALIZATION_CONFIG = "storage-serialization.xml";
 
   public static StorageTypeFinder getInstance(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException{
+    final List<StorageTypeFinder> typeFinders = getStorageTypeFinders(context, logger);
+    switch (typeFinders.size()){
+      case 0:
+        return new TypeRpcFinder(context, logger);
+      case 1:
+        return typeFinders.get(0);
+      default:
+        return new TypeMixFinder(typeFinders);
+    }
+  }
+
+  protected static List<StorageTypeFinder> getStorageTypeFinders(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException {
+    final List<StorageTypeFinder> typeFinders = new ArrayList<StorageTypeFinder>();
+
     JClassType keyProviderIntf = context.getTypeOracle().findType(StorageKeyProvider.class.getName());
-    if(keyProviderIntf.getSubtypes() != null && keyProviderIntf.getSubtypes().length > 0){
-      return new TypeProviderFinder(context, logger);
+    if(keyProviderIntf.getSubtypes() != null && keyProviderIntf.getSubtypes().length > 1){
+      typeFinders.add(new TypeProviderFinder(context, logger));
     }
 
     PropertyOracle propertyOracle = context.getPropertyOracle();
@@ -54,16 +70,20 @@ abstract class StorageTypeFinder {
       String value = property == null ? TYPE_FINDER_VALUES.get(0) : property.getValues().get(0).toLowerCase();
       switch(TYPE_FINDER_VALUES.indexOf(value)){
         case 0:
-          return new TypeRpcFinder(context, logger);
+          typeFinders.add(new TypeRpcFinder(context, logger));
+          break;
         case 1:
-          return new TypeXmlFinder(context, logger);
+          typeFinders.add(new TypeXmlFinder(context, logger));
+          break;
         default:
-          return new TypeMixFinder(new TypeRpcFinder(context, logger), new TypeXmlFinder(context, logger));
+          typeFinders.add(new TypeRpcFinder(context, logger));
+          typeFinders.add(new TypeXmlFinder(context, logger));
+          break;
       }
     } catch (BadPropertyValueException e) {
       logger.branch(TreeLogger.DEBUG, "Could not find property " + PROP_TYPE_FINDER, e);
-      return new TypeRpcFinder(context, logger);
     }
+    return typeFinders;
   }
 
   protected static boolean addIfIsValidType(Set<JType> serializables, JType jType, TreeLogger logger) {

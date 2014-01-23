@@ -40,7 +40,6 @@ public class StorageKeyProviderGenerator extends Generator {
 
   @Override
   public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
-
     TypeOracle oracle = context.getTypeOracle();
     JClassType keyProviderIntf = oracle.findType(typeName);
     JClassType toGenerate = keyProviderIntf.isInterface();
@@ -69,23 +68,43 @@ public class StorageKeyProviderGenerator extends Generator {
     return factory.getCreatedClassName();
   }
 
-    private void writeMethods(SourceWriter sw) throws UnableToCompleteException {
-      for (StorageKeyProviderMethod method : model.getMethods()) {
-        sw.println();
-        sw.println("public %s %s(%s) {", method.getReturnType().getParameterizedQualifiedSourceName(),
-            method.getName(), (method.isDynamicKey() ? (method.getKeyValueType().getQualifiedSourceName() + " key") : ""));
-        sw.indent();
-        String keyClazz = method.getKeyClazz().getQualifiedSourceName();
-        if (method.isDynamicKey()) {
-          String varKeyValueName = "keyValue";
-          sw.println("String %s = \"%s\" + String.valueOf(key) + \"%s\";", varKeyValueName, method.getKeyPrefix(), method.getKeySuffix());
-          sw.println("return createIfAbsent(%s, %s.class);", varKeyValueName, keyClazz);
-        }else{
-          sw.println("return createIfAbsent(\"%s\", %s.class);", method.getStaticKeyValue(), keyClazz);
+  private void writeMethods(SourceWriter sw) throws UnableToCompleteException {
+    final String keyParamName = "key";
+    final String varKeyValueName = "keyValue";
+    for (StorageKeyProviderMethod method : model.getMethods()) {
+      final String returnName = method.getReturnType().getParameterizedQualifiedSourceName();
+      final String parameters = method.isDynamicKey() ? (method.getKeyValueType().getQualifiedSourceName() + " " + keyParamName) : "";
+      final String keyPrefix = method.getKeyPrefix();
+      final String keySuffix = method.getKeySuffix();
+
+      sw.println();
+      sw.println("public %s %s(%s) {", returnName, method.getName(), parameters);
+      sw.indent();
+      String keyClazz = method.getKeyClazz().getQualifiedSourceName();
+      if (method.isDynamicKey()) {
+        String keyPrefixStr = "";
+        String keySuffixStr = "";
+        if(keyPrefix != null && !keyPrefix.trim().isEmpty()) {
+          keyPrefixStr = "\"" + keyPrefix + "\" + ";
         }
-        sw.outdent();
-        sw.println("}");
+        if(keySuffix != null && !keySuffix.trim().isEmpty()){
+          keySuffixStr = " + \"" + keySuffix + "\"";
+        }
+        sw.println("String %s = %sString.valueOf(key)%s;", varKeyValueName, keyPrefixStr, keySuffixStr);
+        sw.println("return createIfAbsent(%s, %s.class);", varKeyValueName, keyClazz);
+      }else{
+        String staticKeyValue = method.getStaticKeyValue();
+        if(keyPrefix != null && !keyPrefix.trim().isEmpty()){
+          staticKeyValue = keyPrefix + staticKeyValue;
+        }
+        if(keySuffix != null && !keySuffix.trim().isEmpty()){
+          staticKeyValue += keySuffix;
+        }
+        sw.println("return createIfAbsent(\"%s\", %s.class);", staticKeyValue, keyClazz);
       }
+      sw.outdent();
+      sw.println("}");
     }
+  }
 
 }

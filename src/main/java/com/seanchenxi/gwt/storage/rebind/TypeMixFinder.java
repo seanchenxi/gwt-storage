@@ -16,13 +16,12 @@
 
 package com.seanchenxi.gwt.storage.rebind;
 
-import java.util.Arrays;
+import com.google.gwt.core.ext.UnableToCompleteException;
+import com.google.gwt.core.ext.typeinfo.JType;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.google.gwt.core.ext.UnableToCompleteException;
-import com.google.gwt.core.ext.typeinfo.JType;
 
 /**
  * Created by: Xi
@@ -31,8 +30,8 @@ final class TypeMixFinder extends StorageTypeFinder {
 
   private final List<StorageTypeFinder> typeFinders;
 
-  TypeMixFinder(StorageTypeFinder... typeFinders){
-    this.typeFinders = Arrays.asList(typeFinders);
+  TypeMixFinder(List<StorageTypeFinder> typeFinders){
+    this.typeFinders = typeFinders;
   }
 
   @Override

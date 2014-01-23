@@ -66,7 +66,10 @@ class StorageKeyProviderMethod {
 
     public void setKeyAnnotation(StorageKeyProvider.Key keyMeta){
       if(keyMeta != null){
-        setStaticKeyValue(keyMeta.value());
+        String staticValue = keyMeta.value();
+        if(staticValue != null && !staticValue.trim().isEmpty()){
+          setStaticKeyValue(staticValue);
+        }
         setKeyPrefix(keyMeta.prefix());
         setKeySuffix(keyMeta.suffix());
       }
