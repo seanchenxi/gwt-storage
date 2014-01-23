@@ -18,19 +18,47 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-  <name>GWT Storage::Examples</name>
+    <modelVersion>4.0.0</modelVersion>
+    <name>GWT Storage::Examples</name>
 
-  <artifactId>gwt-storage</artifactId>
-  <groupId>com.seanchenxi.gwt</groupId>
+    <artifactId>gwt-storage-examples</artifactId>
+    <groupId>com.seanchenxi.gwt</groupId>
+    <version>1.2-SNAPSHOT</version>
 
-  <description>
-    A grouping of all the examples included with the gwt-storage framework.
-  </description>
-  <packaging>pom</packaging>
-  
-  <modules>
-    <module>serializer-test</module>
-  </modules>
-  
+    <description>
+        A grouping of all the examples included with the gwt-storage framework.
+    </description>
+
+    <packaging>pom</packaging>
+
+    <properties>
+        <gwt.version>2.5.1</gwt.version>
+        <gwt.storage.version>1.2-SNAPSHOT</gwt.storage.version>
+    </properties>
+
+    <modules>
+        <module>serializer-test</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.seanchenxi.gwt</groupId>
+            <artifactId>gwt-storage</artifactId>
+            <version>${gwt.storage.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <version>${gwt.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

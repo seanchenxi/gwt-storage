@@ -21,13 +21,84 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
+import com.seanchenxi.gwt.storage.client.keyprovider.SimpleTypeKeys;
+
 /**
  * Created by: Xi
  */
 public class StorageTest implements EntryPoint {
 
   public void onModuleLoad() {
-    testStorage(StorageExt.getLocalStorage(), StorageChangeEvent.Level.STRING);
+    testStorageWithKeyProvider(StorageExt.getLocalStorage(), StorageChangeEvent.Level.STRING);
+  }
+
+  private void testStorageWithKeyProvider(final StorageExt storage, final StorageChangeEvent.Level level){
+    assert storage != null;
+    storage.clear();
+    StorageTestUnit.assertEquals("storage size", 0, storage.size());
+    StorageTestUnit.trace("==");
+
+    final HandlerRegistration hr1 = OtherTest.listenerTest(storage, level);
+    Scheduler.get().scheduleIncremental(new Scheduler.RepeatingCommand() {
+      private int count = 0;
+      @Override
+      public boolean execute() {
+        int storageLength = storage.size();
+        int before = StorageTestUnit.getLineNumber();
+        try {
+          switch(count){
+            case 0:
+              SimpleTypeKeys.putBooleanValue(storage, ++storageLength);
+              break;
+            case 1:
+              SimpleTypeKeys.putByteValue(storage, ++storageLength);
+              break;
+            case 2:
+              SimpleTypeKeys.putCharacterValue(storage, ++storageLength);
+              break;
+            case 3:
+              SimpleTypeKeys.putDoubleValue(storage, ++storageLength);
+              break;
+            case 4:
+              SimpleTypeKeys.putFloatValue(storage, ++storageLength);
+              break;
+            case 5:
+              SimpleTypeKeys.putIntegerValue(storage, ++storageLength);
+              break;
+            case 6:
+              SimpleTypeKeys.putLongValue(storage, ++storageLength);
+              break;
+            case 7:
+              SimpleTypeKeys.putShortValue(storage, ++storageLength);
+              break;
+            case 8:
+              SimpleTypeKeys.putStringValue(storage, ++storageLength);
+              break;
+            case 9:
+              SimpleTypeKeys.putObjectValue(storage, ++storageLength);
+              break;
+            case 10:
+              SimpleTypeKeys.putGenericObjectValue(storage, ++storageLength);
+              break;
+            case 12:
+              OtherTest.removeValue(storage);
+              break;
+            default:
+              hr1.removeHandler();
+              testStorageArray(storage, level);
+              return false;
+          }
+        } catch (Exception e) {
+          StorageTestUnit.trace("error " + e.getClass().getName() + ": " + e.getMessage());
+          GWT.log("error", e);
+        }
+        count++;
+        boolean isOK = (before == StorageTestUnit.getLineNumber() - 5);
+        StorageTestUnit.trace(isOK ? "<b>OK</b>" : "<b>KO</b>", !isOK);
+        StorageTestUnit.trace("==");
+        return true;
+      }
+    });
   }
 
   private void testStorage(final StorageExt storage, final StorageChangeEvent.Level level){
