@@ -17,6 +17,9 @@ package com.seanchenxi.gwt.storage.client;
 
 import com.google.gwt.user.client.rpc.SerializationException;
 
+import com.seanchenxi.gwt.storage.client.value.GenericTestValue;
+import com.seanchenxi.gwt.storage.client.value.TestValue;
+
 public class SimpleValueTest extends StorageTestUnit {
 
   public static void putIntegerValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
@@ -49,7 +52,7 @@ public class SimpleValueTest extends StorageTestUnit {
 
   public static void putBooleanValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
     StorageKey<Boolean> key = StorageKeyFactory.boolKey("putBooleanValue");
-    final Boolean value = false;
+    final Boolean value = Boolean.FALSE;
     storage.put(key, value);
     assertEquals("putBooleanValue - storage size", expectedSize, storage.size());
     assertTrue("putBooleanValue - containsKey", storage.containsKey(key));

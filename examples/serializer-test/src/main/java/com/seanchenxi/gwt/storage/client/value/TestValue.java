@@ -13,48 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.seanchenxi.gwt.storage.client;
+package com.seanchenxi.gwt.storage.client.value;
 
 import java.io.Serializable;
 
 /**
  * Created by: Xi
  */
-public class GenericTestValue<T extends TestValue> implements Serializable{
+public class TestValue implements Serializable {
 
-  private T testValue;
+  private String value;
 
-  public GenericTestValue(){
+  public TestValue(){}
 
-  }
-
-  public GenericTestValue(T testValue){
-    this.testValue = testValue;
-  }
-
-  public T getTestValue(){
-    return testValue;
-  }
-
-  public void setTestValue(T testValue){
-    this.testValue = testValue;
+  public TestValue(String value){
+    this.value = value;
   }
 
   @Override
-  public boolean equals(Object o){
-    if(this == o) return true;
-    if(!(o instanceof GenericTestValue)) return false;
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof TestValue)) return false;
 
-    GenericTestValue that = (GenericTestValue)o;
+    TestValue testValue = (TestValue) o;
 
-    if(!testValue.equals(that.testValue)) return false;
-
-    return true;
+    return value == null ? (testValue.value == null) : value.equals(testValue.value);
   }
 
   @Override
-  public int hashCode(){
-    return testValue.hashCode();
+  public int hashCode() {
+    return value.hashCode();
   }
 }

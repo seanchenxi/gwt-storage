@@ -17,6 +17,9 @@ package com.seanchenxi.gwt.storage.client;
 
 import com.google.gwt.user.client.rpc.SerializationException;
 
+import com.seanchenxi.gwt.storage.client.value.GenericTestValue;
+import com.seanchenxi.gwt.storage.client.value.TestValue;
+
 public class ArrayValueTest extends StorageTestUnit {
 
   public static void putIntegerArrayValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {

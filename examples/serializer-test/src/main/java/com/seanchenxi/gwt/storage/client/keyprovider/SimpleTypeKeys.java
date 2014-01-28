@@ -18,18 +18,32 @@ package com.seanchenxi.gwt.storage.client.keyprovider;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.SerializationException;
 
-import com.seanchenxi.gwt.storage.client.GenericTestValue;
+import com.seanchenxi.gwt.storage.client.value.GenericTestValue;
 import com.seanchenxi.gwt.storage.client.StorageExt;
 import com.seanchenxi.gwt.storage.client.StorageKey;
 import com.seanchenxi.gwt.storage.client.StorageQuotaExceededException;
 import com.seanchenxi.gwt.storage.client.StorageTestUnit;
-import com.seanchenxi.gwt.storage.client.TestValue;
+import com.seanchenxi.gwt.storage.client.value.TestValue;
 
 public class SimpleTypeKeys extends StorageTestUnit {
 
   private final static SimpleTypeKeyProvider KEY_PROVIDER = GWT.create(SimpleTypeKeyProvider.class);
 
   public static void putIntegerValue(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
+    StorageKey<Integer> key = KEY_PROVIDER.intKey();
+    final Integer value = Integer.MAX_VALUE;
+    storage.put(key, value);
+    assertEquals("putIntegerValue - storage size", expectedSize, storage.size());
+    assertTrue("putIntegerValue - containsKey", storage.containsKey(key));
+    assertEquals("putIntegerValue - stored value", value, storage.get(key));
+
+    final int value2 = 39023948;
+    storage.put(key, value2);
+    assertEquals("putIntegerValue(primitive) - storage size", expectedSize, storage.size());
+    assertEquals("putIntegerValue(primitive) - stored value", value2, storage.get(key));
+  }
+
+  public static void putIntegerValue2(StorageExt storage, int expectedSize) throws SerializationException, StorageQuotaExceededException {
     StorageKey<Integer> key = KEY_PROVIDER.intKey("putIntegerValue");
     final Integer value = Integer.MAX_VALUE;
     storage.put(key, value);

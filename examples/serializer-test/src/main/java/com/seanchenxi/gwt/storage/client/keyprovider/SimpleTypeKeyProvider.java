@@ -1,10 +1,10 @@
 package com.seanchenxi.gwt.storage.client.keyprovider;
 
 
-import com.seanchenxi.gwt.storage.client.GenericTestValue;
+import com.seanchenxi.gwt.storage.client.value.GenericTestValue;
 import com.seanchenxi.gwt.storage.client.StorageKey;
 import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
-import com.seanchenxi.gwt.storage.client.TestValue;
+import com.seanchenxi.gwt.storage.client.value.TestValue;
 
 public interface SimpleTypeKeyProvider extends StorageKeyProvider {
 

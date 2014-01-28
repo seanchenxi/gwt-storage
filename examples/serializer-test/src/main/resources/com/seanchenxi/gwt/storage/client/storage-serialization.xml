@@ -16,6 +16,6 @@
   -->
 <!DOCTYPE StorageSerialization SYSTEM "storage-serialization.dtd">
 <StorageSerialization>
-  <class>com.seanchenxi.gwt.storage.client.TestValue</class>
-  <class>com.seanchenxi.gwt.storage.client.GenericTestValue</class>
+  <class>com.seanchenxi.gwt.storage.client.value.TestValue</class>
+  <class>com.seanchenxi.gwt.storage.client.value.GenericTestValue</class>
 </StorageSerialization>

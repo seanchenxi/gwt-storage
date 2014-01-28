@@ -43,7 +43,7 @@ public class OtherTest extends StorageTestUnit {
 
   public static HandlerRegistration listenerTest(final StorageExt storage, StorageChangeEvent.Level level){
     storage.setEventLevel(level);
-    trace("Storage Event Level set to " + level);
+    trace("Storage Event Level set to " + level, false);
     return storage.addStorageChangeHandler(new StorageChangeEvent.Handler() {
       @Override
       public void onStorageChange(StorageChangeEvent event) {

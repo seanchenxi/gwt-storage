@@ -18,7 +18,7 @@ package com.seanchenxi.gwt.storage.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.SerializationException;
+
 import com.seanchenxi.gwt.storage.client.service.TestService;
 import com.seanchenxi.gwt.storage.client.service.TestServiceAsync;
 import com.seanchenxi.gwt.storage.shared.RpcTestValue;
@@ -34,7 +34,7 @@ public class RpcValueTest extends StorageTestUnit {
     final AsyncCallback<RpcTestValue> asyncCallback = new AsyncCallback<RpcTestValue>() {
       @Override
       public void onFailure(Throwable e){
-        StorageTestUnit.trace("error " + e.getClass().getName() + ": " + e.getMessage());
+        StorageTestUnit.trace("error " + e.getClass().getName() + ": " + e.getMessage(), false);
         GWT.log("error", e);
         callback.onFailure(e);
       }

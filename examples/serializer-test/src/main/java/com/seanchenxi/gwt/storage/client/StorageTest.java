@@ -36,7 +36,7 @@ public class StorageTest implements EntryPoint {
     assert storage != null;
     storage.clear();
     StorageTestUnit.assertEquals("storage size", 0, storage.size());
-    StorageTestUnit.trace("==");
+    StorageTestUnit.traceEmptyLine();
 
     final HandlerRegistration hr1 = OtherTest.listenerTest(storage, level);
     Scheduler.get().scheduleIncremental(new Scheduler.RepeatingCommand() {
@@ -89,13 +89,13 @@ public class StorageTest implements EntryPoint {
               return false;
           }
         } catch (Exception e) {
-          StorageTestUnit.trace("error " + e.getClass().getName() + ": " + e.getMessage());
+          StorageTestUnit.trace("error " + e.getClass().getName() + ": " + e.getMessage(), false);
           GWT.log("error", e);
         }
         count++;
         boolean isOK = (before == StorageTestUnit.getLineNumber() - 5);
         StorageTestUnit.trace(isOK ? "<b>OK</b>" : "<b>KO</b>", !isOK);
-        StorageTestUnit.trace("==");
+        StorageTestUnit.traceEmptyLine();
         return true;
       }
     });
@@ -105,7 +105,7 @@ public class StorageTest implements EntryPoint {
     assert storage != null;
     storage.clear();
     StorageTestUnit.assertEquals("storage size", 0, storage.size());
-    StorageTestUnit.trace("==");
+    StorageTestUnit.traceEmptyLine();
 
     final HandlerRegistration hr1 = OtherTest.listenerTest(storage, level);
     Scheduler.get().scheduleIncremental(new Scheduler.RepeatingCommand() {
@@ -158,13 +158,13 @@ public class StorageTest implements EntryPoint {
               return false;
           }
         } catch (Exception e) {
-          StorageTestUnit.trace("error " + e.getClass().getName() + ": " + e.getMessage());
+          StorageTestUnit.trace("error " + e.getClass().getName() + ": " + e.getMessage(), false);
           GWT.log("error", e);
         }
         count++;
         boolean isOK = (before == StorageTestUnit.getLineNumber() - 5);
         StorageTestUnit.trace(isOK ? "<b>OK</b>" : "<b>KO</b>", !isOK);
-        StorageTestUnit.trace("==");
+        StorageTestUnit.traceEmptyLine();
         return true;
       }
     });
@@ -228,7 +228,7 @@ public class StorageTest implements EntryPoint {
         count++;
         boolean isOK = (before == StorageTestUnit.getLineNumber() - 5);
         StorageTestUnit.trace(isOK ? "<b>OK</b>" : "<b>KO</b>", !isOK);
-        StorageTestUnit.trace("==");
+        StorageTestUnit.getLineNumber();
         return true;
       }
     });
@@ -246,14 +246,14 @@ public class StorageTest implements EntryPoint {
       @Override
       public void onFailure(Throwable caught) {
         StorageTestUnit.trace("<b>KO</b>", true);
-        StorageTestUnit.trace("==");
+        StorageTestUnit.traceEmptyLine();
         onRpcTesEnd(hr1, storage, level);
       }
 
       @Override
       public void onSuccess(Boolean result) {
         StorageTestUnit.trace("<b>OK</b>", false);
-        StorageTestUnit.trace("==");
+        StorageTestUnit.traceEmptyLine();
         onRpcTesEnd(hr1, storage, level);
       }
     };
