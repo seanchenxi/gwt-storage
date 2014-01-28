@@ -18,17 +18,27 @@ package com.seanchenxi.gwt.storage.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 
 import com.seanchenxi.gwt.storage.client.keyprovider.SimpleTypeKeys;
+import com.seanchenxi.gwt.storage.client.serializer.StorageSerializer;
 
 /**
  * Created by: Xi
  */
 public class StorageTest implements EntryPoint {
 
+  StorageSerializer serializer = GWT.create(StorageSerializer.class);
+
   public void onModuleLoad() {
+    try {
+      Window.alert(serializer.serialize(int.class, 255));
+    } catch (SerializationException e) {
+      e.printStackTrace();
+    }
     testStorageWithKeyProvider(StorageExt.getLocalStorage(), StorageChangeEvent.Level.STRING);
   }
 
