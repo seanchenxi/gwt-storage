@@ -15,14 +15,22 @@
  */
 package com.seanchenxi.gwt.storage.client;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.SerializationException;
-import com.google.gwt.user.client.ui.*;
-
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Date;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Created by: Xi
@@ -46,25 +54,120 @@ public class StorageTestUnit {
     RootLayoutPanel.get().add(dlp);
   }
 
-  public static <T extends Serializable, V> void testPutValue(StorageExt storage, String name, StorageKey<T> key, final V value1, final V value2) throws StorageQuotaExceededException, SerializationException {
-    final int expectedSize = storage.size();
-    storage.put(key, (T)value1);
-    assertEquals(name + " - storage size", expectedSize, storage.size());
-    assertTrue(name + " - contains key(" + key.name() + ")", storage.containsKey(key));
-    assertEquals(name + " - stored value with key(" + key.name() + ")", value1, storage.get(key));
+  private static StorageExt CURRENT_STORAGE;
+  private static List<Scheduler.RepeatingCommand> TESTS;
 
-    storage.put(key, (T)value2);
-    assertEquals(name + " - storage size", expectedSize, storage.size());
-    assertEquals(name + " - stored value with key(" + key.name() + ")", value2, storage.get(key));
+  public static void start(StorageExt storage) {
+    traceEmptyLine();
+    storage.clear();
+    assertEquals("storage size", 0, storage.size());
+    traceEmptyLine();
+    CURRENT_STORAGE = storage;
+    TESTS = new ArrayList<Scheduler.RepeatingCommand>();
+  }
+
+  public static List<Scheduler.RepeatingCommand> getTests() {
+    return TESTS;
+  }
+
+  public static <T1 extends Serializable, T2 extends Serializable, V1 extends T1, V2 extends T2> void testPutValue(final StorageKey<T1> key1, final StorageKey<T2> key2, final V1 value1, final V2 value2) {
+    TESTS.add(new Scheduler.RepeatingCommand() {
+      @Override
+      public boolean execute() {
+        final String name1 = "testPut_" + key1.name() + "_Value";
+        boolean isOK;
+        try{
+          int expectedSize = CURRENT_STORAGE.size() + 1;
+          CURRENT_STORAGE.put(key1, value1);
+          firstAssertGroup(name1, expectedSize, key1, value1);
+          isOK = true;
+        }catch (Exception e){
+          trace(name1 + " error " + e.getClass().getName() + ": " + e.getMessage(), false);
+          GWT.log("error", e);
+          isOK = false;
+        }
+
+        if(isOK){
+          final String name2 = "testPut_" + key2.name() + "_Value";
+          try{
+            int expectedSize = CURRENT_STORAGE.size() + 1;
+            CURRENT_STORAGE.put(key2, value2);
+            secondAssertGroup(name2, expectedSize, key2, value2);
+            isOK = true;
+          }catch (Exception e){
+            trace(name2 + " error " + e.getClass().getName() + ": " + e.getMessage(), false);
+            GWT.log("error", e);
+            isOK = false;
+          }
+        }
+
+        traceEmptyLine();
+        return isOK;
+      }
+    });
+  }
+
+  public static <T extends Serializable, V, E> void testPutValue(final StorageKey<T> key, final V value1, final E value2) {
+    TESTS.add(new Scheduler.RepeatingCommand() {
+      @Override
+      public boolean execute() {
+        final String name = "testPut_" + key.name() + "_Value";
+        try{
+          final int expectedSize = CURRENT_STORAGE.size() + 1;
+          CURRENT_STORAGE.put(key, (T) value1);
+          firstAssertGroup(name, expectedSize, key, value1);
+
+          CURRENT_STORAGE.put(key, (T) value2);
+          secondAssertGroup(name, expectedSize, key, value2);
+
+          return true;
+        }catch (Exception e){
+          trace(name + " error " + e.getClass().getName() + ": " + e.getMessage(), false);
+          GWT.log("error", e);
+          return false;
+        }finally {
+          traceEmptyLine();
+        }
+      }
+    });
+  }
+
+  public static <T extends Serializable, V> void firstAssertGroup(String name, int expectedSize, StorageKey<T> key, V value) throws SerializationException {
+    assertEquals(name + " - storage size", expectedSize, CURRENT_STORAGE.size());
+    assertTrue(name + " - containsKey", CURRENT_STORAGE.containsKey(key));
+    assertEquals(name + " - stored value", value, CURRENT_STORAGE.get(key));
+  }
+
+  public static <T extends Serializable, V> void secondAssertGroup(String name, int expectedSize, StorageKey<T> key, V value) throws SerializationException {
+    assertEquals(name + " - storage size", expectedSize, CURRENT_STORAGE.size());
+    assertEquals(name + " - stored value", value, CURRENT_STORAGE.get(key));
   }
 
   public static void assertEquals(String name, Object expected, Object value) {
     if ((expected == null || value == null) || expected == value || expected.equals(value)) {
       traceSucceed(name);
-    } else if(expected.getClass().isArray() && value.getClass().isArray() && Arrays.equals((Object[])expected, (Object[])value)){
-      traceSucceed(name);
-    }else if(expected.getClass().isArray() && value.getClass().isArray()) {
-      traceError(name, Arrays.asList((Object[])expected), Arrays.asList((Object[])value));
+    } else if(expected.getClass().isArray() && value.getClass().isArray()){
+      if(expected instanceof int[]){
+        assertEquals(name, (int[])expected, (int[])value);
+      }else if(expected instanceof boolean[]){
+        assertEquals(name, (boolean[])expected, (boolean[])value);
+      }else if(expected instanceof float[]){
+        assertEquals(name, (float[])expected, (float[])value);
+      }else if(expected instanceof short[]){
+        assertEquals(name, (short[])expected, (short[])value);
+      }else if(expected instanceof double[]){
+        assertEquals(name, (double[])expected, (double[])value);
+      }else if(expected instanceof long[]){
+        assertEquals(name, (long[])expected, (long[])value);
+      }else if(expected instanceof char[]){
+        assertEquals(name, (char[])expected, (char[])value);
+      }else if(expected instanceof byte[]){
+        assertEquals(name, (byte[])expected, (byte[])value);
+      }else if(expected instanceof Object[] && Arrays.equals((Object[])expected, (Object[])value)){
+        traceSucceed(name);
+      }else{
+        traceError(name, Arrays.asList((Object[])expected), Arrays.asList((Object[])value));
+      }
     }else {
       traceError(name, expected, value);
     }
@@ -182,4 +285,12 @@ public class StorageTestUnit {
     return StorageTestUnit.line++;
   }
 
+  public static boolean end() {
+    boolean isOK = (StorageTestUnit.TESTS.size() * 5 + 2 == StorageTestUnit.line);
+    trace(isOK ? "<b>OK</b>" : "<b>KO</b>", !isOK);
+    StorageTestUnit.CURRENT_STORAGE = null;
+    StorageTestUnit.TESTS.clear();
+    StorageTestUnit.line = 0;
+    return isOK;
+  }
 }

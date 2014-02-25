@@ -15,16 +15,17 @@
  */
 package com.seanchenxi.gwt.storage.client;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-
-import com.seanchenxi.gwt.storage.client.keyprovider.SimpleTypeKeys;
 import com.seanchenxi.gwt.storage.client.serializer.StorageSerializer;
+import com.seanchenxi.gwt.storage.client.value.GenericTestValue;
+import com.seanchenxi.gwt.storage.client.value.TestValue;
 
 /**
  * Created by: Xi
@@ -32,220 +33,93 @@ import com.seanchenxi.gwt.storage.client.serializer.StorageSerializer;
 public class StorageTest implements EntryPoint {
 
   StorageSerializer serializer = GWT.create(StorageSerializer.class);
+  StorageKeyGetter KEY_GETTER = GWT.create(StorageKeyGetter.class);
 
   public void onModuleLoad() {
-    try {
-      Window.alert(serializer.serialize(int.class, 255));
-    } catch (SerializationException e) {
-      e.printStackTrace();
-    }
-    testStorageWithKeyProvider(StorageExt.getLocalStorage(), StorageChangeEvent.Level.STRING);
-  }
-
-  private void testStorageWithKeyProvider(final StorageExt storage, final StorageChangeEvent.Level level){
-    assert storage != null;
-    storage.clear();
-    StorageTestUnit.assertEquals("storage size", 0, storage.size());
-    StorageTestUnit.traceEmptyLine();
-
-    final HandlerRegistration hr1 = OtherTest.listenerTest(storage, level);
-    Scheduler.get().scheduleIncremental(new Scheduler.RepeatingCommand() {
-      private int count = 0;
+    testStorage(StorageExt.getLocalStorage(), new AsyncCallback<Boolean>() {
       @Override
-      public boolean execute() {
-        int storageLength = storage.size();
-        int before = StorageTestUnit.getLineNumber();
-        try {
-          switch(count){
-            case 0:
-              SimpleTypeKeys.putBooleanValue(storage, ++storageLength);
-              break;
-            case 1:
-              SimpleTypeKeys.putByteValue(storage, ++storageLength);
-              break;
-            case 2:
-              SimpleTypeKeys.putCharacterValue(storage, ++storageLength);
-              break;
-            case 3:
-              SimpleTypeKeys.putDoubleValue(storage, ++storageLength);
-              break;
-            case 4:
-              SimpleTypeKeys.putFloatValue(storage, ++storageLength);
-              break;
-            case 5:
-              SimpleTypeKeys.putIntegerValue(storage, ++storageLength);
-              break;
-            case 6:
-              SimpleTypeKeys.putLongValue(storage, ++storageLength);
-              break;
-            case 7:
-              SimpleTypeKeys.putShortValue(storage, ++storageLength);
-              break;
-            case 8:
-              SimpleTypeKeys.putStringValue(storage, ++storageLength);
-              break;
-            case 9:
-              SimpleTypeKeys.putObjectValue(storage, ++storageLength);
-              break;
-            case 10:
-              SimpleTypeKeys.putGenericObjectValue(storage, ++storageLength);
-              break;
-            case 12:
-              OtherTest.removeValue(storage);
-              break;
-            default:
-              hr1.removeHandler();
-              testStorageArray(storage, level);
-              return false;
-          }
-        } catch (Exception e) {
-          StorageTestUnit.trace("error " + e.getClass().getName() + ": " + e.getMessage(), false);
-          GWT.log("error", e);
-        }
-        count++;
-        boolean isOK = (before == StorageTestUnit.getLineNumber() - 5);
-        StorageTestUnit.trace(isOK ? "<b>OK</b>" : "<b>KO</b>", !isOK);
-        StorageTestUnit.traceEmptyLine();
-        return true;
+      public void onSuccess(Boolean result) {
+        if(result)
+          testStorage(StorageExt.getSessionStorage(), null);
+      }
+
+      @Override
+      public void onFailure(Throwable caught) {
       }
     });
   }
 
-  private void testStorage(final StorageExt storage, final StorageChangeEvent.Level level){
-    assert storage != null;
-    storage.clear();
-    StorageTestUnit.assertEquals("storage size", 0, storage.size());
-    StorageTestUnit.traceEmptyLine();
+  private void testStorage(final StorageExt storage, final AsyncCallback<Boolean> callback) {
+    StorageTestUnit.start(storage);
+    scheduleSimpleValueTests();
+    scheduleArrayValueTests();
 
-    final HandlerRegistration hr1 = OtherTest.listenerTest(storage, level);
+    final HandlerRegistration hr1 = OtherTest.listenerTest(storage, StorageChangeEvent.Level.STRING);
+    final Iterator<Scheduler.RepeatingCommand> iterator = new ArrayList<Scheduler.RepeatingCommand>(StorageTestUnit.getTests()).iterator();
     Scheduler.get().scheduleIncremental(new Scheduler.RepeatingCommand() {
-      private int count = 0;
       @Override
       public boolean execute() {
-        int storageLength = storage.size();
-        int before = StorageTestUnit.getLineNumber();
+        Scheduler.RepeatingCommand next = iterator.next();
         try {
-          switch(count){
-            case 0:
-              SimpleValueTest.putBooleanValue(storage, ++storageLength);
-              break;
-            case 1:
-              SimpleValueTest.putByteValue(storage, ++storageLength);
-              break;
-            case 2:
-              SimpleValueTest.putCharacterValue(storage, ++storageLength);
-              break;
-            case 3:
-              SimpleValueTest.putDoubleValue(storage, ++storageLength);
-              break;
-            case 4:
-              SimpleValueTest.putFloatValue(storage, ++storageLength);
-              break;
-            case 5:
-              SimpleValueTest.putIntegerValue(storage, ++storageLength);
-              break;
-            case 6:
-              SimpleValueTest.putLongValue(storage, ++storageLength);
-              break;
-            case 7:
-              SimpleValueTest.putShortValue(storage, ++storageLength);
-              break;
-            case 8:
-              SimpleValueTest.putStringValue(storage, ++storageLength);
-              break;
-            case 9:
-              SimpleValueTest.putObjectValue(storage, ++storageLength);
-              break;
-            case 10:
-              SimpleValueTest.putGenericObjectValue(storage, ++storageLength);
-              break;
-            case 12:
-              OtherTest.removeValue(storage);
-              break;
-            default:
-              hr1.removeHandler();
-              testStorageArray(storage, level);
-              return false;
+          boolean isOK = next != null && next.execute();
+          if(!isOK){
+            callback.onSuccess(false);
           }
-        } catch (Exception e) {
-          StorageTestUnit.trace("error " + e.getClass().getName() + ": " + e.getMessage(), false);
-          GWT.log("error", e);
-        }
-        count++;
-        boolean isOK = (before == StorageTestUnit.getLineNumber() - 5);
-        StorageTestUnit.trace(isOK ? "<b>OK</b>" : "<b>KO</b>", !isOK);
-        StorageTestUnit.traceEmptyLine();
-        return true;
-      }
-    });
-  }
-
-  private void testStorageArray(final StorageExt storage, final StorageChangeEvent.Level level){
-    assert storage != null;
-    storage.clear();
-    StorageTestUnit.assertEquals("storageArray - storage size", 0, storage.size());
-    final HandlerRegistration hr1 = OtherTest.listenerTest(storage, level);
-
-    Scheduler.get().scheduleIncremental(new Scheduler.RepeatingCommand() {
-      private int count = 0;
-      @Override
-      public boolean execute() {
-        int storageLength = storage.size();
-        int before = StorageTestUnit.getLineNumber();
-        try {
-          switch (count){
-            case 0:
-              ArrayValueTest.putBooleanArrayValue(storage, ++storageLength);
-              break;
-            case 1:
-              ArrayValueTest.putByteArrayValue(storage, ++storageLength);
-              break;
-            case 2:
-              ArrayValueTest.putCharacterArrayValue(storage, ++storageLength);
-              break;
-            case 3:
-              ArrayValueTest.putDoubleArrayValue(storage, ++storageLength);
-              break;
-            case 4:
-              ArrayValueTest.putFloatArrayValue(storage, ++storageLength);
-              break;
-            case 5:
-              ArrayValueTest.putIntegerArrayValue(storage, ++storageLength);
-              break;
-            case 6:
-              ArrayValueTest.putLongArrayValue(storage, ++storageLength);
-              break;
-            case 7:
-              ArrayValueTest.putShortArrayValue(storage, ++storageLength);
-              break;
-            case 8:
-              ArrayValueTest.putStringArrayValue(storage, ++storageLength);
-              break;
-            case 9:
-              ArrayValueTest.putObjectArrayValue(storage, ++storageLength);
-              break;
-            case 10:
-              ArrayValueTest.putGenericObjectArrayValue(storage, ++storageLength);
-              break;
-            default:
-              hr1.removeHandler();
-              testStorageRpcValue(storage, level);
-              return false;
-          }
+          return isOK && iterator.hasNext();
         } catch (Exception e){
-          GWT.log("error", e);
+          callback.onFailure(e);
+          return false;
+        } finally {
+          if(next != null)
+            iterator.remove();
+          if(!iterator.hasNext()){
+            boolean isOK = StorageTestUnit.end();
+            hr1.removeHandler();
+            if(callback != null) callback.onSuccess(isOK);
+          }
         }
-        count++;
-        boolean isOK = (before == StorageTestUnit.getLineNumber() - 5);
-        StorageTestUnit.trace(isOK ? "<b>OK</b>" : "<b>KO</b>", !isOK);
-        StorageTestUnit.getLineNumber();
-        return true;
       }
     });
-
-
   }
-  
+
+  private void scheduleSimpleValueTests() {
+    StorageTestUnit.testPutValue(KEY_GETTER.intKey(), Integer.MAX_VALUE, 25);
+    StorageTestUnit.testPutValue(KEY_GETTER.stringKey(), "StringValue", "");
+    StorageTestUnit.testPutValue(KEY_GETTER.boolKey(), Boolean.FALSE, true);
+    StorageTestUnit.testPutValue(KEY_GETTER.byteKey(), Byte.MAX_VALUE, Byte.parseByte("01"));
+    StorageTestUnit.testPutValue(KEY_GETTER.doubleKey(), 25.58D, 32.45d);
+    StorageTestUnit.testPutValue(KEY_GETTER.charKey(), Character.MAX_VALUE, Character.MIN_VALUE);
+    StorageTestUnit.testPutValue(KEY_GETTER.floatKey(), 25.58F, 32.45f);
+    StorageTestUnit.testPutValue(KEY_GETTER.longKey(), 12345L, 23456l);
+    StorageTestUnit.testPutValue(KEY_GETTER.shortKey(), Short.MAX_VALUE, Short.MIN_VALUE);
+
+    TestValue test1 = new TestValue("hello");
+    TestValue test2 = new TestValue("hello2");
+    StorageTestUnit.testPutValue(KEY_GETTER.objectKey("objectKey"), test1, test2);
+    StorageTestUnit.testPutValue(KEY_GETTER.objectKey("genericObjectKey"), new GenericTestValue<TestValue>(test1), new GenericTestValue<TestValue>(test2));
+  }
+
+  private void scheduleArrayValueTests() {
+    StorageTestUnit.testPutValue(KEY_GETTER.boxedIntArrayKey(), KEY_GETTER.intArrayKey(), new Integer[]{Integer.MAX_VALUE,Integer.MIN_VALUE}, new int[]{39023948,234234});
+    StorageTestUnit.testPutValue(KEY_GETTER.stringArrayKey(), new String[]{"StringValue", "StringValue"}, new String[]{"StringValue2", "StringValue2"});
+    StorageTestUnit.testPutValue(KEY_GETTER.boxedBoolArrayKey(), KEY_GETTER.boolArrayKey(), new Boolean[]{Boolean.FALSE, Boolean.TRUE}, new boolean[]{true,false});
+    StorageTestUnit.testPutValue(KEY_GETTER.boxedByteArrayKey(), KEY_GETTER.byteArrayKey(), new Byte[]{Byte.MAX_VALUE, Byte.MIN_VALUE}, new byte[]{Byte.MIN_VALUE, Byte.MIN_VALUE});
+    StorageTestUnit.testPutValue(KEY_GETTER.boxedDoubleArrayKey(), KEY_GETTER.doubleArrayKey(),new Double[]{25.58D,32.466d}, new double[]{32.45d,43.345d});
+    StorageTestUnit.testPutValue(KEY_GETTER.boxedCharArrayKey(), KEY_GETTER.charArrayKey(), new Character[]{Character.MAX_VALUE, Character.MAX_VALUE}, new char[]{Character.MIN_VALUE, Character.MIN_VALUE});
+    StorageTestUnit.testPutValue(KEY_GETTER.boxedFloatArrayKey(), KEY_GETTER.floatArrayKey(), new Float[]{25.58F, 65.45F}, new float[]{32.45f, 98.99f});
+    StorageTestUnit.testPutValue(KEY_GETTER.boxedLongArrayKey(), KEY_GETTER.longArrayKey(), new Long[]{12345L,35234523453245L}, new long[]{123412341234l, 9087098709798l});
+    StorageTestUnit.testPutValue(KEY_GETTER.boxedShortArrayKey(), KEY_GETTER.shortArrayKey(), new Short[]{Short.MAX_VALUE, Short.MIN_VALUE}, new short[]{Short.MIN_VALUE, Short.MAX_VALUE});
+
+    TestValue hello1 = new TestValue("hello1");
+    TestValue hello2 = new TestValue("hello2");
+    final TestValue[] values = new TestValue[]{hello2, hello1};
+    final TestValue[] values2 = new TestValue[]{hello1, hello2};
+    StorageTestUnit.testPutValue(KEY_GETTER.objectKey("objectArrayKey"), values, values2);
+    final GenericTestValue<TestValue>[] genericValues = new GenericTestValue[]{new GenericTestValue<TestValue>(hello2), new GenericTestValue<TestValue>(hello1)};
+    final GenericTestValue<TestValue>[] genericValues2 = new GenericTestValue[]{new GenericTestValue<TestValue>(hello1), new GenericTestValue<TestValue>(hello2)};
+    StorageTestUnit.testPutValue(KEY_GETTER.objectKey("genericObjectArrayKey"), genericValues, genericValues2);
+  }
+
   private void testStorageRpcValue(final StorageExt storage, final StorageChangeEvent.Level level){
     assert storage != null;
     storage.clear();
@@ -280,7 +154,7 @@ public class StorageTest implements EntryPoint {
   public void onRpcTesEnd(final HandlerRegistration hr1, final StorageExt storage, final StorageChangeEvent.Level level){
     hr1.removeHandler();
     if(StorageChangeEvent.Level.STRING.equals(level)){
-      testStorage(storage, StorageChangeEvent.Level.OBJECT);
+      //testStorage(storage, StorageChangeEvent.Level.OBJECT);
     }
   }
 
