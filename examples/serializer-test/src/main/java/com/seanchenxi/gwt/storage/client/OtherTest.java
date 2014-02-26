@@ -21,7 +21,7 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 /**
  * Created by: Xi
  */
-public class OtherTest extends StorageTestUnit {
+public class OtherTest {
 
   public static void removeValue(StorageExt storage) throws StorageQuotaExceededException, SerializationException {
     final int initialSize = storage.size();
@@ -31,37 +31,37 @@ public class OtherTest extends StorageTestUnit {
 
     storage.put(key, value1);
     storage.put(StorageKeyFactory.intKey("removeValue2"), value2);
-    assertTrue("removeValue - containsKey", storage.containsKey(key));
-    assertTrue("removeValue - containsKey", storage.containsKey(StorageKeyFactory.intKey("removeValue2")));
+    StorageTestUtil.assertTrue("removeValue - containsKey", storage.containsKey(key));
+    StorageTestUtil.assertTrue("removeValue - containsKey", storage.containsKey(StorageKeyFactory.intKey("removeValue2")));
 
     storage.remove(key);
     storage.remove(StorageKeyFactory.intKey("removeValue2"));
-    assertEquals("removeValue - storage size", initialSize, storage.size());
-    assertTrue("removeValue - doesn't containsKey", !storage.containsKey(key));
-    assertTrue("removeValue - doesn't containsKey", !storage.containsKey(StorageKeyFactory.intKey("removeValue2")));
+    StorageTestUtil.assertEquals("removeValue - storage size", initialSize, storage.size());
+    StorageTestUtil.assertTrue("removeValue - doesn't containsKey", !storage.containsKey(key));
+    StorageTestUtil.assertTrue("removeValue - doesn't containsKey", !storage.containsKey(StorageKeyFactory.intKey("removeValue2")));
   }
 
   public static HandlerRegistration listenerTest(final StorageExt storage, StorageChangeEvent.Level level){
     storage.setEventLevel(level);
-    trace("Storage Event Level set to " + level, false);
+    StorageTestUtil.trace("Storage Event Level set to " + level, false);
     return storage.addStorageChangeHandler(new StorageChangeEvent.Handler() {
       @Override
       public void onStorageChange(StorageChangeEvent event) {
-        event("onStorageChange - Type=" + event.getChangeType() + ", " +
-          "Key=" + event.getKey() + ", " +
-          "Data=" + event.getData() + ", " +
-          "OldData=" + event.getOldData() + ", " +
-          "Value=" + String.valueOf(event.getValue()) + ", " +
-          "OldValue=" + String.valueOf(event.getOldValue()), false);
+        StorageTestUtil.event("onStorageChange - Type=" + event.getChangeType() + ", " +
+                              "Key=" + event.getKey() + ", " +
+                              "Data=" + event.getData() + ", " +
+                              "OldData=" + event.getOldData() + ", " +
+                              "Value=" + String.valueOf(event.getValue()) + ", " +
+                              "OldValue=" + String.valueOf(event.getOldValue()), false);
         if(event.getKey() != null){
           String value = storage.getString(event.getKey().name());
           String expected = event.getData();
           if ((expected == null && value == null) || (expected != null && expected.equals(value)))
-            event("onStorageChange - assertEquals succeed.", false);
+            StorageTestUtil.event("onStorageChange - assertEquals succeed.", false);
           else
-            event("onStorageChange -  assertEquals error: expected=" + event.getData() + ", but given=" + value, true);
+            StorageTestUtil.event("onStorageChange -  assertEquals error: expected=" + event.getData() + ", but given=" + value, true);
         }
-        event("==", false);
+        StorageTestUtil.event("==", false);
       }
     });
   }

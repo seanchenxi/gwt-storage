@@ -1,133 +1,64 @@
-/*
- * Copyright 2014 Xi CHEN
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.seanchenxi.gwt.storage.client;
 
 import java.io.Serializable;
 
 /**
  * @author <a href="mailto:chenxifr@gmail.com">Xi CHEN</a>
- * @since 25 February 2014
+ * @since 26 February 2014
  */
-public class StorageKeyGetter extends StorageTestUnit {
+public interface StorageKeyGetter {
 
-  public <T extends Serializable> StorageKey<T> objectKey(String keyName) {
-    return StorageKeyFactory.objectKey(keyName);
-  }
+  <T extends Serializable> StorageKey<T> objectKey(String keyName);
 
-  public StorageKey<short[]> shortArrayKey() {
-    return StorageKeyFactory.shortArrayKey("shortArrayKey");
-  }
+  StorageKey<short[]> shortArrayKey();
 
-  public StorageKey<Integer> intKey() {
-    return StorageKeyFactory.intKey("intKey");
-  }
+  StorageKey<Integer> intKey();
 
-  public StorageKey<boolean[]> boolArrayKey() {
-    return StorageKeyFactory.boolArrayKey("boolArrayKey");
-  }
+  StorageKey<boolean[]> boolArrayKey();
 
-  public StorageKey<byte[]> byteArrayKey() {
-    return StorageKeyFactory.byteArrayKey("byteArrayKey");
-  }
+  StorageKey<byte[]> byteArrayKey();
 
-  public StorageKey<String[]> stringArrayKey() {
-    return StorageKeyFactory.stringArrayKey("stringArrayKey");
-  }
+  StorageKey<String[]> stringArrayKey();
 
-  public StorageKey<String> stringKey() {
-    return StorageKeyFactory.stringKey("stringKey");
-  }
+  StorageKey<String> stringKey();
 
-  public StorageKey<char[]> charArrayKey() {
-    return StorageKeyFactory.charArrayKey("charArrayKey");
-  }
+  StorageKey<char[]> charArrayKey();
 
-  public StorageKey<Float> floatKey() {
-    return StorageKeyFactory.floatKey("floatKey");
-  }
+  StorageKey<Float> floatKey();
 
-  public StorageKey<Integer[]> boxedIntArrayKey() {
-    return StorageKeyFactory.boxedIntArrayKey("boxedIntArrayKey");
-  }
+  StorageKey<Integer[]> boxedIntArrayKey();
 
-  public StorageKey<Short[]> boxedShortArrayKey() {
-    return StorageKeyFactory.boxedShortArrayKey("boxedShortArrayKey");
-  }
+  StorageKey<Short[]> boxedShortArrayKey();
 
-  public StorageKey<Float[]> boxedFloatArrayKey() {
-    return StorageKeyFactory.boxedFloatArrayKey("boxedFloatArrayKey");
-  }
+  StorageKey<Float[]> boxedFloatArrayKey();
 
-  public StorageKey<Long[]> boxedLongArrayKey() {
-    return StorageKeyFactory.boxedLongArrayKey("boxedLongArrayKey");
-  }
+  StorageKey<Long[]> boxedLongArrayKey();
 
-  public StorageKey<Character[]> boxedCharArrayKey() {
-    return StorageKeyFactory.boxedCharArrayKey("boxedCharArrayKey");
-  }
+  StorageKey<Character[]> boxedCharArrayKey();
 
-  public StorageKey<float[]> floatArrayKey() {
-    return StorageKeyFactory.floatArrayKey("floatArrayKey");
-  }
+  StorageKey<float[]> floatArrayKey();
 
-  public StorageKey<int[]> intArrayKey() {
-    return StorageKeyFactory.intArrayKey("intArrayKey");
-  }
+  StorageKey<int[]> intArrayKey();
 
-  public StorageKey<Boolean> boolKey() {
-    return StorageKeyFactory.boolKey("boolKey");
-  }
+  StorageKey<Boolean> boolKey();
 
-  public StorageKey<long[]> longArrayKey() {
-    return StorageKeyFactory.longArrayKey("longArrayKey");
-  }
+  StorageKey<long[]> longArrayKey();
 
-  public StorageKey<Byte> byteKey() {
-    return StorageKeyFactory.byteKey("byteKey");
-  }
+  StorageKey<Byte> byteKey();
 
-  public StorageKey<Double> doubleKey() {
-    return StorageKeyFactory.doubleKey("doubleKey");
-  }
+  StorageKey<Double> doubleKey();
 
-  public StorageKey<Short> shortKey() {
-    return StorageKeyFactory.shortKey("shortKey");
-  }
+  StorageKey<Short> shortKey();
 
-  public StorageKey<Long> longKey() {
-    return StorageKeyFactory.longKey("longKey");
-  }
+  StorageKey<Long> longKey();
 
-  public StorageKey<double[]> doubleArrayKey() {
-    return StorageKeyFactory.doubleArrayKey("doubleArrayKey");
-  }
+  StorageKey<double[]> doubleArrayKey();
 
-  public StorageKey<Boolean[]> boxedBoolArrayKey() {
-    return StorageKeyFactory.boxedBoolArrayKey("boxedBoolArrayKey");
-  }
+  StorageKey<Boolean[]> boxedBoolArrayKey();
 
-  public StorageKey<Double[]> boxedDoubleArrayKey() {
-    return StorageKeyFactory.boxedDoubleArrayKey("boxedDoubleArrayKey");
-  }
+  StorageKey<Double[]> boxedDoubleArrayKey();
 
-  public StorageKey<Byte[]> boxedByteArrayKey() {
-    return StorageKeyFactory.boxedByteArrayKey("boxedByteArrayKey");
-  }
+  StorageKey<Byte[]> boxedByteArrayKey();
 
-  public StorageKey<Character> charKey() {
-    return StorageKeyFactory.charKey("charKey");
-  }
+  StorageKey<Character> charKey();
 }

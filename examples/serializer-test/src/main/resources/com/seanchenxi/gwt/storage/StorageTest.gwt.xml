@@ -20,7 +20,7 @@
   <inherits name='com.google.gwt.user.User'/>
   <inherits name="com.seanchenxi.gwt.storage.Storage"/>
   <set-property name="storage.cache" value="false" />
-  <set-configuration-property name="storage.type.finder" value="rpc_xml" />
+  <set-configuration-property name="storage.type.finder" value="mix" />
   <entry-point class='com.seanchenxi.gwt.storage.client.StorageTest'/>
   <source path='client'/>
   <source path="shared" />

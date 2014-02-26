@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 /**
  * Created by: Xi
  */
-public class StorageTestUnit {
+public class StorageTestUtil {
 
   private static final DateTimeFormat FORMAT = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
   private static int line = 0;
@@ -57,13 +57,19 @@ public class StorageTestUnit {
   private static StorageExt CURRENT_STORAGE;
   private static List<Scheduler.RepeatingCommand> TESTS;
 
-  public static void start(StorageExt storage) {
+  public static void prepare(StorageExt storage) {
     traceEmptyLine();
     storage.clear();
     assertEquals("storage size", 0, storage.size());
     traceEmptyLine();
+    trace("Preparing test tasks...", false);
     CURRENT_STORAGE = storage;
     TESTS = new ArrayList<Scheduler.RepeatingCommand>();
+  }
+
+  public static void start() {
+    StorageTestUtil.trace("Test prepare.", false);
+    StorageTestUtil.traceEmptyLine();
   }
 
   public static List<Scheduler.RepeatingCommand> getTests() {
@@ -282,15 +288,16 @@ public class StorageTestUnit {
   }
 
   private static int incrementLineCounter() {
-    return StorageTestUnit.line++;
+    return StorageTestUtil.line++;
   }
 
   public static boolean end() {
-    boolean isOK = (StorageTestUnit.TESTS.size() * 5 + 2 == StorageTestUnit.line);
+    boolean isOK = (StorageTestUtil.TESTS.size() * 5 + 4 == StorageTestUtil.line);
     trace(isOK ? "<b>OK</b>" : "<b>KO</b>", !isOK);
-    StorageTestUnit.CURRENT_STORAGE = null;
-    StorageTestUnit.TESTS.clear();
-    StorageTestUnit.line = 0;
+    StorageTestUtil.CURRENT_STORAGE = null;
+    StorageTestUtil.TESTS.clear();
+    StorageTestUtil.line = 0;
     return isOK;
   }
+
 }
