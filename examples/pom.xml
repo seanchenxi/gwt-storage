@@ -23,7 +23,7 @@
 
     <artifactId>gwt-storage-examples</artifactId>
     <groupId>com.seanchenxi.gwt</groupId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
 
     <description>
         A grouping of all the examples included with the gwt-storage framework.
@@ -33,7 +33,7 @@
 
     <properties>
         <gwt.version>2.5.1</gwt.version>
-        <gwt.storage.version>1.2-SNAPSHOT</gwt.storage.version>
+        <gwt.storage.version>1.2</gwt.storage.version>
     </properties>
 
     <modules>
