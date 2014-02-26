@@ -16,20 +16,21 @@
 
 package com.seanchenxi.gwt.storage.rebind;
 
-import com.google.gwt.core.ext.TreeLogger;
-import com.google.gwt.core.ext.UnableToCompleteException;
-import com.google.gwt.core.ext.typeinfo.JClassType;
-import com.google.gwt.core.ext.typeinfo.JGenericType;
-import com.google.gwt.core.ext.typeinfo.JMethod;
-import com.google.gwt.core.ext.typeinfo.JParameterizedType;
-
-import com.seanchenxi.gwt.storage.client.StorageKey;
-import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.google.gwt.core.ext.TreeLogger;
+import com.google.gwt.core.ext.UnableToCompleteException;
+import com.google.gwt.core.ext.typeinfo.JArrayType;
+import com.google.gwt.core.ext.typeinfo.JClassType;
+import com.google.gwt.core.ext.typeinfo.JGenericType;
+import com.google.gwt.core.ext.typeinfo.JMethod;
+import com.google.gwt.core.ext.typeinfo.JParameterizedType;
+import com.google.gwt.core.ext.typeinfo.JType;
+import com.seanchenxi.gwt.storage.client.StorageKey;
+import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
 
 /**
  * Created by: Xi
@@ -82,8 +83,8 @@ class StorageKeyProviderModel {
     }
     JParameterizedType returnType = method.getReturnType().isParameterized();
     boolean isCorrectReturnType = returnType != null  && returnType.isAssignableTo(storageKeyGenericType);
-    JClassType valueType = isCorrectReturnType ? returnType.getTypeArgs()[0].isClass() : null;
-    if(valueType == null || !valueType.isAssignableTo(serializableIntf)){
+    JClassType valueType = isCorrectReturnType ? returnType.getTypeArgs()[0] : null;
+    if(!isValideType(valueType)){
       logger.branch(TreeLogger.Type.ERROR, "method "+ method.getReadableDeclaration() +"'s return type is not StorageKey<? extends Serializable>");
       throw new UnableToCompleteException();
     }
@@ -94,5 +95,25 @@ class StorageKeyProviderModel {
       throw new UnableToCompleteException();
     }
     return true;
+  }
+
+  private boolean isValideType(JType type){
+    if(type == null)
+      return false;
+
+    if(type.isInterface() != null)
+      return false;
+
+    if(type.isPrimitive() != null)
+      return true;
+
+    JClassType aClass = type.isClass();
+    if(aClass != null && aClass.isAssignableTo(serializableIntf)){
+      return true;
+    }
+
+    JArrayType array = type.isArray();
+    if(array == null) return false;
+    return isValideType(array.getComponentType());
   }
 }
