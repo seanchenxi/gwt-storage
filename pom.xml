@@ -55,8 +55,8 @@
 
   <scm>
     <url>https://github.com/seanchenxi/gwt-storage</url>
-    <connection>scm:git:git://github.com/seanchenxi/gwt-storage.git</connection>
-    <developerConnection>scm:git:seanchenxi@github.com:seanchenxi/gwt-storage.git</developerConnection>
+    <connection>scm:git:git@github.com:seanchenxi/gwt-storage.git</connection>
+    <developerConnection>scm:git:git@github.com:seanchenxi/gwt-storage.git</developerConnection>
   </scm>
 
   <developers>
