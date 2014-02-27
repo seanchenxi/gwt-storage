@@ -20,14 +20,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   
   <modelVersion>4.0.0</modelVersion>
-  <name>GWT Storage</name>
-  
+
   <groupId>com.seanchenxi.gwt</groupId>
   <artifactId>gwt-storage</artifactId>
   <version>1.2</version>
-  
+
+  <packaging>jar</packaging>
+
+  <name>GWT Storage</name>
+  <description>GWT Client-side Web Storage extension</description>
   <url>https://github.com/seanchenxi/gwt-storage</url>
-  <description>GWT Client-side Storage API extension</description>
 
   <organization>
     <name>seanchenxi.com</name>
@@ -47,25 +49,33 @@
     </license>
   </licenses>
 
+  <scm>
+    <url>https://github.com/seanchenxi/gwt-storage</url>
+    <connection>scm:git:git://github.com/seanchenxi/gwt-storage.git</connection>
+    <developerConnection>scm:git:seanchenxi@github.com:seanchenxi/gwt-storage.git</developerConnection>
+  </scm>
+
   <developers>
     <developer>
       <id>seanchenxi</id>
-      <name>Xi Chen</name>
+      <name>Xi CHEN</name>
       <email>xi@seanchenxi.com</email>
+      <url>http://seanchenxi.com/about</url>
     </developer>
   </developers>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <gwt.version>2.5.1</gwt.version>
-    <gwt.maven.version>2.5.1</gwt.maven.version>        
+    <gwt.maven.version>2.5.1</gwt.maven.version>
     <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>  
+    <maven.compiler.target>1.6</maven.compiler.target>
     <plugin.maven.compiler.version>3.0</plugin.maven.compiler.version>
     <plugin.maven.surefire.version>2.15</plugin.maven.surefire.version>
-    <plugin.maven.source.version>2.1.2</plugin.maven.source.version>    
+    <plugin.maven.source.version>2.1.2</plugin.maven.source.version>
     <plugin.maven.jar.version>2.4</plugin.maven.jar.version>
     <plugin.maven.javadoc.version>2.9</plugin.maven.javadoc.version>
+    <plugin.maven.gpg.version>1.4</plugin.maven.gpg.version>
   </properties>
 
   <dependencies>
@@ -85,12 +95,7 @@
     </dependency>
 
   </dependencies>
-  
-  <scm>
-    <url>https://github.com/seanchenxi/gwt-storage</url>
-    <connection>scm:git:git://github.com/seanchenxi/gwt-storage.git</connection>
-    <developerConnection>scm:git:seanchenxi@github.com:seanchenxi/gwt-storage.git</developerConnection>
-  </scm>
+
 
   <build>
 
@@ -104,19 +109,6 @@
     </resources>
     
     <plugins>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
-        <version>${gwt.maven.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>resources</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -177,7 +169,23 @@
         </configuration>
       </plugin>
 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>${plugin.maven.gpg.version}</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
     </plugins>
+
   </build>
 
 </project>
