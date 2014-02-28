@@ -22,8 +22,8 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
 
 ## Use gwt-storage in your project
   * GettingStarted: <a target="_blank" href="https://code.google.com/p/gwt-storage/wiki/GettingStarted">GettingStarted</a>
-  * Javadoc: 
-      <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.2.0/">version 1.2.0</a>
+  * Javadoc: <br/>
+      <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.2.0/">version 1.2.0</a><br/>
       <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.1/">version 1.1</a>
 
 
