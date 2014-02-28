@@ -15,14 +15,16 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
 
 
 ## Downloads
-  * Latest release: [gwt-storage-1.1.jar](https://github.com/seanchenxi/gwt-storage/releases/download/v1.1/gwt-storage-1.1.jar)
+  * Latest release: [gwt-storage-1.2.0.jar](https://github.com/seanchenxi/gwt-storage/releases/download/v1.1/gwt-storage-1.2.0.jar)
   * All releases: [https://github.com/seanchenxi/gwt-storage/releases](https://github.com/seanchenxi/gwt-storage/releases)
 
 
 
 ## Use gwt-storage in your project
   * GettingStarted: <a target="_blank" href="https://code.google.com/p/gwt-storage/wiki/GettingStarted">GettingStarted</a>
-  * Javadoc: <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.1/">version 1.1</a>
+  * Javadoc: 
+      <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.2.0/">version 1.2.0</a>
+      <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.1/">version 1.1</a>
 
 
 ## License
