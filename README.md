@@ -13,11 +13,44 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
   * Customizing the list of web storage persistable type with XML file.
   * **Extensible caching** possiblility to avoid repeating serialization/deserialization
 
+## Stable version
+  * [gwt-storage releases](https://github.com/seanchenxi/gwt-storage/releases/) 
+  * [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt)
 
-## Downloads
-  * Latest release: [gwt-storage-1.2.0.jar](https://github.com/seanchenxi/gwt-storage/releases/download/v1.1/gwt-storage-1.2.0.jar)
-  * All releases: [https://github.com/seanchenxi/gwt-storage/releases](https://github.com/seanchenxi/gwt-storage/releases)
+## Maven Configuration
+Find the the available jars in [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt)
 
+### Release:
+```xml
+<dependency>
+    <groupId>com.seanchenxi.gwt</groupId>
+    <artifactId>gwt-storage</artifactId>
+    <version>1.2.0</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+### Snapshot:
+```xml
+<repositories>
+    <repository>
+        <id>sonatype.snapshots</id>
+        <name>Sonatype snapshot repository</name>
+        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        <layout>default</layout>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>com.seanchenxi.gwt</groupId>
+    <artifactId>gwt-storage</artifactId>
+    <version>1.2.1-SNAPSHOT</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+## Previous Versions
+  [gwt-storage v1.1](https://github.com/seanchenxi/gwt-storage/releases/tag/v1.1)
 
 
 ## Use gwt-storage in your project
