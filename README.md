@@ -17,6 +17,10 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
   * [gwt-storage releases](https://github.com/seanchenxi/gwt-storage/releases/) 
   * [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt)
 
+## Previous Versions
+  * [gwt-storage v1.1](https://github.com/seanchenxi/gwt-storage/releases/tag/v1.1)
+  
+
 ## Maven Configuration
 Find the the available jars in [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt)
 
@@ -49,9 +53,6 @@ Find the the available jars in [Maven Central](http://search.maven.org/#search%7
 </dependency>
 ```
 
-## Previous Versions
-  [gwt-storage v1.1](https://github.com/seanchenxi/gwt-storage/releases/tag/v1.1)
-
 
 ## Use gwt-storage in your project
   * GettingStarted: <a target="_blank" href="https://code.google.com/p/gwt-storage/wiki/GettingStarted">GettingStarted</a>
@@ -62,7 +63,6 @@ Find the the available jars in [Maven Central](http://search.maven.org/#search%7
 
 ## License
   [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
-
 
 
 ## Feedback
