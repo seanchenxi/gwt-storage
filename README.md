@@ -21,10 +21,14 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
   * [gwt-storage v1.1](https://github.com/seanchenxi/gwt-storage/releases/tag/v1.1)
   
 
-## Maven Configuration
+## Use gwt-storage in your project
+  * GettingStarted: <a target="_blank" href="https://code.google.com/p/gwt-storage/wiki/GettingStarted">GettingStarted</a>
+  * Javadoc: <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.2.0/">v1.2.0</a><br/>
+
+### Maven Configuration
 Find the the available jars in [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt)
 
-### Release:
+#### Release:
 ```xml
 <dependency>
     <groupId>com.seanchenxi.gwt</groupId>
@@ -34,7 +38,7 @@ Find the the available jars in [Maven Central](http://search.maven.org/#search%7
 </dependency>
 ```
 
-### Snapshot:
+#### Snapshot:
 ```xml
 <repositories>
     <repository>
@@ -52,13 +56,6 @@ Find the the available jars in [Maven Central](http://search.maven.org/#search%7
     <scope>provided</scope>
 </dependency>
 ```
-
-
-## Use gwt-storage in your project
-  * GettingStarted: <a target="_blank" href="https://code.google.com/p/gwt-storage/wiki/GettingStarted">GettingStarted</a>
-  * Javadoc: <br/>
-      <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.2.0/">version 1.2.0</a><br/>
-      <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.1/">version 1.1</a>
 
 
 ## License
