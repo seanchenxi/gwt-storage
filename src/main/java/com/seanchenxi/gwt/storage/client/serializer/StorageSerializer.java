@@ -16,6 +16,7 @@
 
 package com.seanchenxi.gwt.storage.client.serializer;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.rpc.SerializationException;
 
 import java.io.Serializable;
@@ -45,7 +46,7 @@ public interface StorageSerializer {
    * @return the original class type value of the the given string
    * @throws SerializationException
    */
-  <T extends Serializable> T deserialize(Class<? super T> clazz, String serializedString) throws SerializationException;
+  <T> T deserialize(Class<? super T> clazz, String serializedString) throws SerializationException;
 
   /**
    * Serialize object to string
@@ -62,5 +63,5 @@ public interface StorageSerializer {
    * @return the serialized string
    * @throws SerializationException
    */
-  <T extends Serializable> String serialize(Class<? super T> clazz, T instance) throws SerializationException;
+  <T> String serialize(Class<? super T> clazz, T instance) throws SerializationException;
 }

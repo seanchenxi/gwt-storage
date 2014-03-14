@@ -57,7 +57,7 @@ final class StorageRPCSerializerImpl implements StorageSerializer {
   }
 
   @Override @SuppressWarnings("unchecked")
-  public <T extends Serializable> T deserialize(Class<? super T> clazz, String serializedString) throws SerializationException {
+  public <T> T deserialize(Class<? super T> clazz, String serializedString) throws SerializationException {
     if (serializedString == null) {
       return null;
     }else if(String.class.equals(clazz)){
@@ -70,7 +70,7 @@ final class StorageRPCSerializerImpl implements StorageSerializer {
   }
 
   @Override
-  public <T extends Serializable> String serialize(Class<? super T> clazz, T instance) throws SerializationException {
+  public <T> String serialize(Class<? super T> clazz, T instance) throws SerializationException {
     if (instance == null) {
       return null;
     }else if(String.class.equals(clazz)){
