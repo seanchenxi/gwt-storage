@@ -70,7 +70,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <gwt.version>2.6.0</gwt.version>
+    <gwt.version>2.6.1</gwt.version>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
     <plugin.maven.compiler.version>3.0</plugin.maven.compiler.version>
@@ -145,7 +145,6 @@
         <executions>
           <execution>
             <id>attach-javadoc</id>
-            <phase>verify</phase>
             <goals>
               <goal>jar</goal>
             </goals>
@@ -160,7 +159,6 @@
         <executions>
           <execution>
             <id>attach-sources</id>
-            <phase>verify</phase>
             <goals>
               <goal>jar-no-fork</goal>
             </goals>
