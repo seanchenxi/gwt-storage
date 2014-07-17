@@ -16,7 +16,6 @@
 
 package com.seanchenxi.gwt.storage.client.cache;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
 import com.seanchenxi.gwt.storage.client.StorageKey;
@@ -26,10 +25,10 @@ import com.seanchenxi.gwt.storage.client.StorageKey;
  */
 class StorageMemoryCache implements StorageCache {
 
-  private final HashMap<StorageKey<? extends Serializable>, Object> map;
+  private final HashMap<StorageKey<?>, Object> map;
 
   public StorageMemoryCache() {
-    map = new HashMap<StorageKey<? extends Serializable>, Object>();
+    map = new HashMap<>();
   }
 
   @Override
@@ -38,27 +37,27 @@ class StorageMemoryCache implements StorageCache {
   }
 
   @Override
-  public <T extends Serializable> boolean containsValue(T value) {
+  public <T> boolean containsValue(T value) {
     return map.containsValue(value);
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public <T extends Serializable> T get(StorageKey<T> key) {
+  public <T> T get(StorageKey<T> key) {
     Object val = map.get(key);
     return val != null ? (T) val : null;
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public <T extends Serializable> T put(StorageKey<T> key, T value) {
+  public <T> T put(StorageKey<T> key, T value) {
     Object old = map.put(key, value);
     return old != null ? (T) old : null;
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public <T extends Serializable> T remove(StorageKey<T> key) {
+  public <T> T remove(StorageKey<T> key) {
     Object val = map.remove(key);
     return val != null ? (T) val : null;
   }

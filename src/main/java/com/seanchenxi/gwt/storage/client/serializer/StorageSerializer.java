@@ -18,9 +18,6 @@ package com.seanchenxi.gwt.storage.client.serializer;
 
 import com.google.gwt.user.client.rpc.SerializationException;
 
-import java.io.Serializable;
-import java.util.HashMap;
-
 /**
  * Interface for deferred binding implementation.
  * <p>
@@ -34,9 +31,9 @@ public interface StorageSerializer {
    * Deserialize string to object
    *
    * <p>
-   *   The <b>clazz</b> only used by serializer to distinguish primitive type and object typ.<br/>
+   *   The <b>clazz</b> only used by serializer to distinguish primitive type and object type.<br/>
    *   For all primitive types, the <b>clazz</b> should equals to <b><T></b>.<br/>
-   *   Otherwise, use {@link Serializable} as <b>clazz</b>, and real class type for <b><T></b>.
+   *   Otherwise, use {@link java.io.Serializable} as <b>clazz</b>, and real class type for <b><T></b>.
    * </p>
    *
    * @param clazz the type of the given value to deserialize with
@@ -45,7 +42,7 @@ public interface StorageSerializer {
    * @return the original class type value of the the given string
    * @throws SerializationException
    */
-  <T extends Serializable> T deserialize(Class<? super T> clazz, String serializedString) throws SerializationException;
+  <T> T deserialize(Class<? super T> clazz, String serializedString) throws SerializationException;
 
   /**
    * Serialize object to string
@@ -53,7 +50,7 @@ public interface StorageSerializer {
    * <p>
    *   The <b>clazz</b> only used to distinguish primitive type and object type.<br/>
    *   For all primitive types, the <b>clazz</b> should equals to <b><T></b>.<br/>
-   *   Otherwise, use {@link Serializable} as <b>clazz</b>, and real class type for <b><T></b>
+   *   Otherwise, use {@link java.io.Serializable} as <b>clazz</b>, and real class type for <b><T></b>
    * </p>
    *
    * @param clazz the type of the given value to serialize with
@@ -62,5 +59,5 @@ public interface StorageSerializer {
    * @return the serialized string
    * @throws SerializationException
    */
-  <T extends Serializable> String serialize(Class<? super T> clazz, T instance) throws SerializationException;
+  <T> String serialize(Class<? super T> clazz, T instance) throws SerializationException;
 }

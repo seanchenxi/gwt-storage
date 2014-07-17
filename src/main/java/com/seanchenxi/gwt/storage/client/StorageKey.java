@@ -16,14 +16,12 @@
 
 package com.seanchenxi.gwt.storage.client;
 
-import java.io.Serializable;
-
 /**
  * The Storage Key
  *
  * @param <T> the associate value's type
  */
-public class StorageKey<T extends Serializable> implements Serializable {
+public class StorageKey<T> {
 
   private Class<? super T> clazz;
   private String name;
@@ -42,7 +40,7 @@ public class StorageKey<T extends Serializable> implements Serializable {
    * <p>
    *   The <b>clazz</b> only used to distinguish primitive type and object type.<br/>
    *   For all primitive types, the <b>clazz</b> should equals to <b><T></b>.<br/>
-   *   Otherwise, use {@link Serializable} as <b>clazz</b>, and real class type for <b><T></b>
+   *   Otherwise, use {@link java.lang.Object} as <b>clazz</b>, and real class type for <b><T></b>
    * </p>
    *
    * @param name the key's name, used to store value in storage, should be unique

@@ -49,7 +49,7 @@ final class StorageSerializationStreamWriter extends AbstractSerializationStream
   @Override
   public void prepareToWrite() {
     super.prepareToWrite();
-    tokenList = new ArrayList<String>();
+    tokenList = new ArrayList<>();
   }
 
   @Override
@@ -88,8 +88,7 @@ final class StorageSerializationStreamWriter extends AbstractSerializationStream
   }
 
   private String escapeString(String toEscape) {
-    if (toEscape == null)
-      return toEscape;
+    if (toEscape == null) return null;
     return JsonUtils.escapeValue(toEscape);
   }
 

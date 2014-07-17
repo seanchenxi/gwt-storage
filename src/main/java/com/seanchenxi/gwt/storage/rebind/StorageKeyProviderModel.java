@@ -29,6 +29,7 @@ import com.google.gwt.core.ext.typeinfo.JGenericType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JParameterizedType;
 import com.google.gwt.core.ext.typeinfo.JType;
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.seanchenxi.gwt.storage.client.StorageKey;
 import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
 
@@ -44,12 +45,14 @@ class StorageKeyProviderModel {
   private final JClassType providerType;
   private final JGenericType storageKeyGenericType;
   private final JClassType serializableIntf;
+  private final JClassType isSerializableIntf;
 
   public StorageKeyProviderModel(TreeLogger logger, JClassType providerType) {
     this.providerType = providerType;
     this.storageKeyGenericType = providerType.getOracle().findType(StorageKey.class.getCanonicalName()).isGenericType();
     this.serializableIntf = providerType.getOracle().findType(Serializable.class.getCanonicalName()).isInterface();
-    this.methods = new ArrayList<StorageKeyProviderMethod>();
+    this.isSerializableIntf = providerType.getOracle().findType(IsSerializable.class.getCanonicalName()).isInterface();
+    this.methods = new ArrayList<>();
     this.logger = logger;
   }
 
@@ -85,7 +88,7 @@ class StorageKeyProviderModel {
     boolean isCorrectReturnType = returnType != null  && returnType.isAssignableTo(storageKeyGenericType);
     JClassType valueType = isCorrectReturnType ? returnType.getTypeArgs()[0] : null;
     if(!isValideType(valueType)){
-      logger.branch(TreeLogger.Type.ERROR, "method "+ method.getReadableDeclaration() +"'s return type is not StorageKey<? extends Serializable>");
+      logger.branch(TreeLogger.Type.ERROR, "method "+ method.getReadableDeclaration() +"'s returned store type is not extends to IsSerializable nor Serializable");
       throw new UnableToCompleteException();
     }
 
@@ -108,7 +111,7 @@ class StorageKeyProviderModel {
       return true;
 
     JClassType aClass = type.isClass();
-    if(aClass != null && aClass.isAssignableTo(serializableIntf)){
+    if(aClass != null && (aClass.isAssignableTo(serializableIntf) || aClass.isAssignableTo(isSerializableIntf))){
       return true;
     }
 

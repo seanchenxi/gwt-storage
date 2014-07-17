@@ -18,8 +18,6 @@ package com.seanchenxi.gwt.storage.client.cache;
 
 import com.seanchenxi.gwt.storage.client.StorageKey;
 
-import java.io.Serializable;
-
 /**
  * Interface for deferred binding implementation.
  *
@@ -51,7 +49,7 @@ public interface StorageCache {
    * @param <T> type of the given value
    * @return <tt>true</tt> if this Cache contains a cached value for the specified key.
    */
-  <T extends Serializable> boolean containsValue(T value);
+  <T> boolean containsValue(T value);
 
   /**
    * Returns the value in this Cache associated with the specified key.
@@ -61,7 +59,7 @@ public interface StorageCache {
    * @param <T> type of value which will be returned
    * @return the cached value for the given key
    */
-  <T extends Serializable> T get(StorageKey<T> key);
+  <T> T get(StorageKey<T> key);
 
   /**
    * Cache the specified value with the specified key.
@@ -74,7 +72,7 @@ public interface StorageCache {
    * @return the previous value cached with <tt>key</tt>, or
    *         <tt>null</tt> if there was no cache value for <tt>key</tt>.
    */
-  <T extends Serializable> T put(StorageKey<T> key, T value);
+  <T> T put(StorageKey<T> key, T value);
 
   /**
    * Removes the cached value for the specified key from this cache if present.
@@ -84,6 +82,6 @@ public interface StorageCache {
    * @return the previous value cached with <tt>key</tt>, or
    *         <tt>null</tt> if there was no cache value for <tt>key</tt>.
    */
-  <T extends Serializable> T remove(StorageKey<T> key);
+  <T> T remove(StorageKey<T> key);
 
 }

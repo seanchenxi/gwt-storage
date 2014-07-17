@@ -17,13 +17,16 @@ package com.seanchenxi.gwt.storage.client;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * Storage Key Factory
  *
  * <p>
  *   <span style="color:red;">
  *     Choose type correspond method for all primitive type values' key, <br/>
- *     Use {@link #objectKey(String)} for any other object type
+ *     Use {@link #serializableKey(String)} for Serializable object type
+ *     Use {@link #isSerializableKey(String)} for IsSerializable object type
  *   </span>
  * </p>
  *
@@ -36,77 +39,101 @@ public class StorageKeyFactory {
    * @param keyName name of storage key
    * @param <T> type of value
    * @return non-primitive type value's storage key
+   * @deprecated use {@link #isSerializableKey(String)} or {@link #serializableKey(String)} instead
    */
-  public static <T extends Serializable> StorageKey<T> objectKey(String keyName){
-    return new StorageKey<T>(keyName, Serializable.class);
+  @Deprecated
+  public static <T> StorageKey<T> objectKey(String keyName){
+    return new StorageKey<>(keyName, Object.class);
+  }
+
+  /**
+   * Returns IsSerializable type value's storage key.
+   *
+   * @param keyName name of storage key
+   * @param <T> type of value
+   * @return IsSerializable type value's storage key
+   */
+  public static <T extends IsSerializable> StorageKey<T> isSerializableKey(String keyName){
+      return new StorageKey<>(keyName, IsSerializable.class);
+  }
+
+  /**
+   * Returns Serializable type value's storage key.
+   *
+   * @param keyName name of storage key
+   * @param <T> type of value
+   * @return Serializable type value's storage key
+   */
+  public static <T extends Serializable> StorageKey<T> serializableKey(String keyName){
+      return new StorageKey<>(keyName, Serializable.class);
   }
 
   public static StorageKey<Boolean> boolKey(String keyName){
-    return new StorageKey<Boolean>(keyName, Boolean.class);
+    return new StorageKey<>(keyName, Boolean.class);
   }
 
   public static StorageKey<Byte> byteKey(String keyName){
-    return new StorageKey<Byte>(keyName, Byte.class);
+    return new StorageKey<>(keyName, Byte.class);
   }
 
   public static StorageKey<Character> charKey(String keyName){
-    return new StorageKey<Character>(keyName, Character.class);
+    return new StorageKey<>(keyName, Character.class);
   }
 
   public static StorageKey<Double> doubleKey(String keyName){
-    return new StorageKey<Double>(keyName, Double.class);
+    return new StorageKey<>(keyName, Double.class);
   }
 
   public static StorageKey<Float> floatKey(String keyName){
-    return new StorageKey<Float>(keyName, Float.class);
+    return new StorageKey<>(keyName, Float.class);
   }
 
   public static StorageKey<Integer> intKey(String keyName){
-    return new StorageKey<Integer>(keyName, Integer.class);
+    return new StorageKey<>(keyName, Integer.class);
   }
 
   public static StorageKey<Long> longKey(String keyName){
-    return new StorageKey<Long>(keyName, Long.class);
+    return new StorageKey<>(keyName, Long.class);
   }
 
   public static StorageKey<Short> shortKey(String keyName){
-    return new StorageKey<Short>(keyName, Short.class);
+    return new StorageKey<>(keyName, Short.class);
   }
 
   public static StorageKey<String> stringKey(String keyName){
-    return new StorageKey<String>(keyName, String.class);
+    return new StorageKey<>(keyName, String.class);
   }
 
   public static StorageKey<Boolean[]> boxedBoolArrayKey(String keyName){
-    return new StorageKey<Boolean[]>(keyName, Boolean[].class);
+    return new StorageKey<>(keyName, Boolean[].class);
   }
 
   public static StorageKey<Byte[]> boxedByteArrayKey(String keyName){
-    return new StorageKey<Byte[]>(keyName, Byte[].class);
+    return new StorageKey<>(keyName, Byte[].class);
   }
 
   public static StorageKey<Character[]> boxedCharArrayKey(String keyName){
-    return new StorageKey<Character[]>(keyName, Character[].class);
+    return new StorageKey<>(keyName, Character[].class);
   }
 
   public static StorageKey<Double[]> boxedDoubleArrayKey(String keyName){
-    return new StorageKey<Double[]>(keyName, Double[].class);
+    return new StorageKey<>(keyName, Double[].class);
   }
 
   public static StorageKey<Float[]> boxedFloatArrayKey(String keyName){
-    return new StorageKey<Float[]>(keyName, Float[].class);
+    return new StorageKey<>(keyName, Float[].class);
   }
 
   public static StorageKey<Integer[]> boxedIntArrayKey(String keyName){
-    return new StorageKey<Integer[]>(keyName, Integer[].class);
+    return new StorageKey<>(keyName, Integer[].class);
   }
 
   public static StorageKey<Long[]> boxedLongArrayKey(String keyName){
-    return new StorageKey<Long[]>(keyName, Long[].class);
+    return new StorageKey<>(keyName, Long[].class);
   }
 
   public static StorageKey<Short[]> boxedShortArrayKey(String keyName){
-    return new StorageKey<Short[]>(keyName, Short[].class);
+    return new StorageKey<>(keyName, Short[].class);
   }
 
   public static StorageKey<String[]> stringArrayKey(String keyName){
@@ -114,35 +141,35 @@ public class StorageKeyFactory {
   }
 
   public static StorageKey<boolean[]> boolArrayKey(String keyName){
-    return new StorageKey<boolean[]>(keyName, boolean[].class);
+    return new StorageKey<>(keyName, boolean[].class);
   }
 
   public static StorageKey<byte[]> byteArrayKey(String keyName){
-    return new StorageKey<byte[]>(keyName, byte[].class);
+    return new StorageKey<>(keyName, byte[].class);
   }
 
   public static StorageKey<char[]> charArrayKey(String keyName){
-    return new StorageKey<char[]>(keyName, char[].class);
+    return new StorageKey<>(keyName, char[].class);
   }
 
   public static StorageKey<double[]> doubleArrayKey(String keyName){
-    return new StorageKey<double[]>(keyName, double[].class);
+    return new StorageKey<>(keyName, double[].class);
   }
 
   public static StorageKey<float[]> floatArrayKey(String keyName){
-    return new StorageKey<float[]>(keyName, float[].class);
+    return new StorageKey<>(keyName, float[].class);
   }
 
   public static StorageKey<int[]> intArrayKey(String keyName){
-    return new StorageKey<int[]>(keyName, int[].class);
+    return new StorageKey<>(keyName, int[].class);
   }
 
   public static StorageKey<long[]> longArrayKey(String keyName){
-    return new StorageKey<long[]>(keyName, long[].class);
+    return new StorageKey<>(keyName, long[].class);
   }
 
   public static StorageKey<short[]> shortArrayKey(String keyName){
-    return new StorageKey<short[]>(keyName, short[].class);
+    return new StorageKey<>(keyName, short[].class);
   }
 
 

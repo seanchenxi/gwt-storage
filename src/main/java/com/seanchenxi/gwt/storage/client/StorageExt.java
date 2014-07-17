@@ -16,6 +16,10 @@
 
 package com.seanchenxi.gwt.storage.client;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.core.client.JavaScriptException;
@@ -24,10 +28,6 @@ import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.seanchenxi.gwt.storage.client.cache.StorageCache;
 import com.seanchenxi.gwt.storage.client.serializer.StorageSerializer;
-
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Extends the GWT HTML5 Storage API, by adding <b>Object Value</b> Support.
@@ -182,7 +182,7 @@ public final class StorageExt {
    * @see <a href="http://www.w3.org/TR/webstorage/#dom-storage-getitem">W3C Web
    *      Storage - Storage.getItem(k)</a>
    */
-  public <T extends Serializable> T get(StorageKey<T> key) throws SerializationException {
+  public <T> T get(StorageKey<T> key) throws SerializationException {
     T item = cache.get(key);
     if (item == null) {
       item = TYPE_SERIALIZER.deserialize(key.getClazz(), storage.getItem(key.name()));
@@ -234,8 +234,7 @@ public final class StorageExt {
    * @throws SerializationException 
    * @throws StorageQuotaExceededException
    */
-  public <T extends Serializable> void put(StorageKey<T> key, T value) throws SerializationException,
-      StorageQuotaExceededException {
+  public <T> void put(StorageKey<T> key, T value) throws SerializationException, StorageQuotaExceededException {
     if(value == null){
       throw new NullPointerException();
     }
@@ -304,7 +303,7 @@ public final class StorageExt {
    */
   private Set<StorageChangeEvent.Handler> ensureHandlerSet() {
     if (handlers == null) {
-      handlers = new HashSet<StorageChangeEvent.Handler>();
+      handlers = new HashSet<>();
     }
     return handlers;
   }
@@ -312,7 +311,7 @@ public final class StorageExt {
   /**
    * Fire {@link StorageChangeEvent}
    */
-  private <T extends Serializable> void fireEvent(StorageChangeEvent.ChangeType changeType, StorageKey<T> key, T value, T oldVal, String data, String oldData) {
+  private <T> void fireEvent(StorageChangeEvent.ChangeType changeType, StorageKey<T> key, T value, T oldVal, String data, String oldData) {
     UncaughtExceptionHandler ueh = GWT.getUncaughtExceptionHandler();
     if (handlers != null && !handlers.isEmpty()) {
       T oldValue = oldVal;

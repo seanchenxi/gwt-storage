@@ -17,6 +17,7 @@
 package com.seanchenxi.gwt.storage.client.serializer;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
 import com.google.gwt.user.client.rpc.impl.Serializer;
@@ -33,7 +34,7 @@ import java.util.HashMap;
 final class StorageRPCSerializerImpl implements StorageSerializer {
 
   private final static Serializer TYPE_SERIALIZER = GWT.create(StorageTypeSerializer.class);
-  private final static HashMap<Class<?>, StorageValueType> TYPE_MAP = new HashMap<Class<?>, StorageValueType>();
+  private final static HashMap<Class<?>, StorageValueType> TYPE_MAP = new HashMap<>();
   static{
     TYPE_MAP.put(boolean[].class, StorageValueType.BOOLEAN_VECTOR);
     TYPE_MAP.put(byte[].class, StorageValueType.BYTE_VECTOR);
@@ -56,8 +57,9 @@ final class StorageRPCSerializerImpl implements StorageSerializer {
     TYPE_MAP.put(String.class, StorageValueType.STRING);
   }
 
-  @Override @SuppressWarnings("unchecked")
-  public <T extends Serializable> T deserialize(Class<? super T> clazz, String serializedString) throws SerializationException {
+  @Override
+  @SuppressWarnings("unchecked")
+  public <T> T deserialize(Class<? super T> clazz, String serializedString) throws SerializationException {
     if (serializedString == null) {
       return null;
     }else if(String.class.equals(clazz)){
@@ -70,7 +72,7 @@ final class StorageRPCSerializerImpl implements StorageSerializer {
   }
 
   @Override
-  public <T extends Serializable> String serialize(Class<? super T> clazz, T instance) throws SerializationException {
+  public <T> String serialize(Class<? super T> clazz, T instance) throws SerializationException {
     if (instance == null) {
       return null;
     }else if(String.class.equals(clazz)){

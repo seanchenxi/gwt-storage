@@ -18,8 +18,6 @@ package com.seanchenxi.gwt.storage.client.cache;
 
 import com.seanchenxi.gwt.storage.client.StorageKey;
 
-import java.io.Serializable;
-
 /**
  * Empty implementation of {@link StorageCache}
  */
@@ -30,22 +28,22 @@ class NoStorageCache implements StorageCache {
   }
 
   @Override
-  public <T extends Serializable> boolean containsValue(T value) {
+  public <T> boolean containsValue(T value) {
     return false;
   }
 
   @Override
-  public <T extends Serializable> T get(StorageKey<T> key) {
+  public <T> T get(StorageKey<T> key) {
     return null;
   }
 
   @Override
-  public <T extends Serializable> T put(StorageKey<T> key, T value) {
+  public <T> T put(StorageKey<T> key, T value) {
     return null;
   }
 
   @Override
-  public <T extends Serializable> T remove(StorageKey<T> key) {
+  public <T> T remove(StorageKey<T> key) {
     return null;
   }
 

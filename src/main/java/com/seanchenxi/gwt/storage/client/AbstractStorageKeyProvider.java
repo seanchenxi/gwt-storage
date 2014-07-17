@@ -16,7 +16,6 @@
 
 package com.seanchenxi.gwt.storage.client;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,17 +24,17 @@ import java.util.Map;
  */
 public abstract class AbstractStorageKeyProvider implements StorageKeyProvider {
 
-  private static final Map<String, StorageKey<? extends Serializable>> KEY_MAP;
+  private static final Map<String, StorageKey<?>> KEY_MAP;
 
   static {
-    KEY_MAP = new HashMap<String, StorageKey<? extends Serializable>>();
+    KEY_MAP = new HashMap<>();
   }
 
   @SuppressWarnings("unchecked")
-  public static <T extends Serializable> StorageKey<T> createIfAbsent(String key, Class<? super T> clazz) {
-    StorageKey<? extends Serializable> storageKey;
-    if (null == (storageKey = KEY_MAP.get(key))) {
-      KEY_MAP.put(key, storageKey = new StorageKey<T>(key, clazz));
+  public static <T> StorageKey<T> createIfAbsent(String key, Class<T> clazz) {
+    StorageKey<?> storageKey = KEY_MAP.get(key);
+    if (null == storageKey) {
+      KEY_MAP.put(key, storageKey = new StorageKey<>(key, clazz));
     }
     try {
       return (StorageKey<T>) storageKey;
