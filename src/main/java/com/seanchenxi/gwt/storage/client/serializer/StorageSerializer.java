@@ -16,6 +16,7 @@
 
 package com.seanchenxi.gwt.storage.client.serializer;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
 import com.google.gwt.user.client.rpc.SerializationException;
 
 /**
