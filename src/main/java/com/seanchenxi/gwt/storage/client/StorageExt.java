@@ -76,7 +76,7 @@ public final class StorageExt {
    */
   public static StorageExt getLocalStorage() {
     if (localStorage == null && Storage.isLocalStorageSupported()) {
-      localStorage = new StorageExt(Storage.getLocalStorageIfSupported());
+      localStorage = new StorageExt(new PriorityStorage(Storage.getLocalStorageIfSupported()));
     }
     return localStorage;
   }
@@ -88,7 +88,7 @@ public final class StorageExt {
    */
   public static StorageExt getSessionStorage() {
     if (sessionStorage == null && Storage.isSessionStorageSupported()) {
-      sessionStorage = new StorageExt(Storage.getSessionStorageIfSupported());
+      sessionStorage = new StorageExt(new PriorityStorage(Storage.getSessionStorageIfSupported()));
     }
     return sessionStorage;
   }
@@ -96,14 +96,14 @@ public final class StorageExt {
   private StorageChangeEvent.Level eventLevel;
   private Set<StorageChangeEvent.Handler> handlers;
   private final StorageCache cache;
-  private final Storage storage;
+  private final PriorityStorage storage;
 
   /**
    * This class can never be instantiated externally. Use
    * {@link #getLocalStorage()} ()} or
    * {@link #getSessionStorage()} ()} instead.
    */
-  private StorageExt(Storage storage) {
+  private StorageExt(PriorityStorage storage) {
     assert storage != null : "Storage can not be null, check your browser's HTML 5 support state.";
     this.storage = storage;
     this.cache = GWT.create(StorageCache.class);
@@ -235,6 +235,28 @@ public final class StorageExt {
    * @throws StorageQuotaExceededException
    */
   public <T> void put(StorageKey<T> key, T value) throws SerializationException, StorageQuotaExceededException {
+    put(key, value, -1);
+  }
+  
+  /**
+   * Store the specified value with the specified key in this storage.
+   *
+   * <p>
+   * Note: <code>null</code> value is not allowed. <br/>
+   * If the storage previously contained a mapping for the key, the old
+   * value is replaced.<br/>
+   * {@link StorageKeyFactory} is preferred to get a {@link StorageKey} instance for primitive types.
+   * </p>
+   *
+   * @param key key with which the specified value is to be associated
+   * @param value value to be associated with the specified key
+   * @param priority - if storage runs out of space it will be automatically cleared in order of priority.
+   * items stored with a higher priority value are deleted first.  Items with a negative priority  will not be 
+   * deleted and a StorageQuotaExceededException will fire.
+   * @throws SerializationException 
+   * @throws StorageQuotaExceededException
+   */
+  public <T> void put(StorageKey<T> key, T value, int priority) throws SerializationException, StorageQuotaExceededException {
     if(value == null){
       throw new NullPointerException();
     }
@@ -242,7 +264,7 @@ public final class StorageExt {
       String data = TYPE_SERIALIZER.serialize(key.getClazz(), value);
       // Update store and cache
       String oldData = storage.getItem(key.name());
-      storage.setItem(key.name(), data);
+      storage.setItem(key.name(), data, priority);
       T oldValue = cache.put(key, value);
       fireEvent(StorageChangeEvent.ChangeType.PUT, key, value, oldValue, data, oldData);
     } catch (JavaScriptException e) {
@@ -252,6 +274,50 @@ public final class StorageExt {
       }
       throw e;
     }
+  }
+  
+  /**
+   * Store the specified value with the specified key in this storage.
+   *
+   * <p>
+   * Note: <code>null</code> value is not allowed. <br/>
+   * If the storage previously contained a mapping for the key, the old
+   * value is replaced.<br/>
+   * {@link StorageKeyFactory} is preferred to get a {@link StorageKey} instance for primitive types.
+   * </p>
+   *
+   * @param key key with which the specified value is to be associated
+   * @param value value to be associated with the specified key
+   * @throws SerializationException 
+   */
+  public <T> void putSilently(StorageKey<T> key, T value) throws SerializationException {
+      putSilently(key, value, -1);
+  }
+  
+  /**
+   * Store the specified value with the specified key in this storage.
+   *
+   * <p>
+   * Note: <code>null</code> value is not allowed. <br/>
+   * If the storage previously contained a mapping for the key, the old
+   * value is replaced.<br/>
+   * {@link StorageKeyFactory} is preferred to get a {@link StorageKey} instance for primitive types.
+   * </p>
+   *
+   * @param key key with which the specified value is to be associated
+   * @param value value to be associated with the specified key
+   * @param priority - if storage runs out of space it will be automatically cleared in order of priority.
+   * items stored with a higher priority value are deleted first.  Items with a negative priority  will not be 
+   * deleted and a StorageQuotaExceededException will fire.
+   * @throws SerializationException 
+   * @throws StorageQuotaExceededException
+   */
+  public <T> void putSilently(StorageKey<T> key, T value, int priority) throws SerializationException {
+      try {
+          put(key, value, priority);
+      } catch (StorageQuotaExceededException e) {
+          //ignore exception.
+      }
   }
 
   /**
