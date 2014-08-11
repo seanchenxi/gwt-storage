@@ -46,17 +46,13 @@ public class StorageTest implements EntryPoint {
   private static KeyProviderGetter KP;
 
   public void onModuleLoad() {
-    final boolean userKeyProvider = false;
+    KP = GWT.create(KeyProviderGetter.class);
 
-//    if(userKeyProvider){
-//      KP = GWT.create(KeyProviderGetter.class);
-//    }
-
-    testStorage(userKeyProvider, StorageExt.getLocalStorage(), new AsyncCallback<Boolean>() {
+    testStorage(KP != null, StorageExt.getLocalStorage(), new AsyncCallback<Boolean>() {
       @Override
       public void onSuccess(Boolean result) {
         if(result){
-          testStorage(userKeyProvider, StorageExt.getSessionStorage(), new AsyncCallback<Boolean>() {
+          testStorage(KP != null, StorageExt.getSessionStorage(), new AsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
               if(result){
@@ -108,7 +104,7 @@ public class StorageTest implements EntryPoint {
   private void doTest(StorageExt storage, final AsyncCallback<Boolean> callback) {
     StorageTestUtil.start();
     final HandlerRegistration hr1 = OtherTest.listenerTest(storage, StorageChangeEvent.Level.STRING);
-    final Iterator<Scheduler.RepeatingCommand> iterator = new ArrayList<Scheduler.RepeatingCommand>(StorageTestUtil.getTests()).iterator();
+    final Iterator<Scheduler.RepeatingCommand> iterator = new ArrayList<>(StorageTestUtil.getTests()).iterator();
     Scheduler.get().scheduleIncremental(new Scheduler.RepeatingCommand() {
       @Override
       public boolean execute() {
@@ -148,12 +144,13 @@ public class StorageTest implements EntryPoint {
 
     TestValue test1 = new TestValue("hello");
     TestValue test2 = new TestValue("hello2");
-    StorageKey<TestValue> key1 = userKeyProvider ? KP.testValueKey("objectKey") : StorageKeyFactory.<TestValue>objectKey("objectKey");
-    StorageKey<GenericTestValue<TestValue>> key2 = userKeyProvider ? KP.genericTestValueKey("genericObjectKey") : StorageKeyFactory.<GenericTestValue<TestValue>>objectKey("genericObjectKey");
+    StorageKey<TestValue> key1 = userKeyProvider ? KP.testValueKey("objectKey") : StorageKeyFactory.<TestValue>serializableKey("objectKey");
+    StorageKey<GenericTestValue<TestValue>> key2 = userKeyProvider ? KP.genericTestValueKey("genericObjectKey") : StorageKeyFactory.<GenericTestValue<TestValue>>isSerializableKey("genericObjectKey");
     StorageTestUtil.testPutValue(key1, test1, test2);
-    StorageTestUtil.testPutValue(key2, new GenericTestValue<TestValue>(test1), new GenericTestValue<TestValue>(test2));
+    StorageTestUtil.testPutValue(key2, new GenericTestValue<>(test1), new GenericTestValue<>(test2));
   }
 
+  @SuppressWarnings("unchecked")
   private void scheduleArrayValueTests(boolean userKP) {
     StorageTestUtil.testPutValue(userKP ? KP.boxedIntArrayKey() : KG.boxedIntArrayKey(), userKP ? KP.intArrayKey() : KG.intArrayKey(), new Integer[]{Integer.MAX_VALUE, Integer.MIN_VALUE}, new int[]{39023948, 234234});
     StorageTestUtil.testPutValue(userKP ? KP.stringArrayKey() : KG.stringArrayKey(), new String[]{"StringValue", "StringValue"}, new String[]{"StringValue2", "StringValue2"});
@@ -170,8 +167,8 @@ public class StorageTest implements EntryPoint {
     final TestValue[] values = new TestValue[]{hello2, hello1};
     final TestValue[] values2 = new TestValue[]{hello1, hello2};
     StorageTestUtil.testPutValue(userKP ? KP.testValueArrayKey() : KG.objectKey("objectArrayKey"), values, values2);
-    final GenericTestValue<TestValue>[] genericValues = new GenericTestValue[]{new GenericTestValue<TestValue>(hello2), new GenericTestValue<TestValue>(hello1)};
-    final GenericTestValue<TestValue>[] genericValues2 = new GenericTestValue[]{new GenericTestValue<TestValue>(hello1), new GenericTestValue<TestValue>(hello2)};
+    final GenericTestValue<TestValue>[] genericValues = new GenericTestValue[]{new GenericTestValue<>(hello2), new GenericTestValue<>(hello1)};
+    final GenericTestValue<TestValue>[] genericValues2 = new GenericTestValue[]{new GenericTestValue<>(hello1), new GenericTestValue<>(hello2)};
     StorageTestUtil.testPutValue(userKP ? KP.genericTestValueArrayKey() : KG.objectKey("genericObjectArrayKey"), genericValues, genericValues2);
   }
 
@@ -194,7 +191,7 @@ public class StorageTest implements EntryPoint {
 
           @Override
           public void onSuccess(List<RpcTestValue> result) {
-            StorageTestUtil.testPutValue(userKP ? KP.rpcTestValueListKey() : KG.objectKey("getRpcTestValueList"), new ArrayList<RpcTestValue>(result), new ArrayList<RpcTestValue>());
+            StorageTestUtil.testPutValue(userKP ? KP.rpcTestValueListKey() : KG.objectKey("getRpcTestValueList"), new ArrayList<>(result), new ArrayList<RpcTestValue>());
 
             TEST_SERVICE.getRpcTestValueStringMap(new AsyncCallback<Map<RpcTestMapKey, RpcTestMapValue>>() {
               @Override
@@ -204,7 +201,7 @@ public class StorageTest implements EntryPoint {
 
               @Override
               public void onSuccess(Map<RpcTestMapKey, RpcTestMapValue> result) {
-                StorageTestUtil.testPutValue(userKP ? KP.rpcTestValueStringMapKey() : KG.objectKey("getRpcTestValueStringMap"), new HashMap<RpcTestMapKey, RpcTestMapValue>(result), new HashMap<RpcTestMapKey, RpcTestMapValue>());
+                StorageTestUtil.testPutValue(userKP ? KP.rpcTestValueStringMapKey() : KG.objectKey("getRpcTestValueStringMap"), new HashMap<>(result), new HashMap<RpcTestMapKey, RpcTestMapValue>());
 
                 command.execute();
               }

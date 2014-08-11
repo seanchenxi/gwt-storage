@@ -31,13 +31,13 @@ public abstract class AbstractStorageKeyProvider implements StorageKeyProvider {
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> StorageKey<T> createIfAbsent(String key, Class<T> clazz) {
+  public static <T, V extends T> StorageKey<V> createIfAbsent(String key, Class<T> clazz) {
     StorageKey<?> storageKey = KEY_MAP.get(key);
     if (null == storageKey) {
       KEY_MAP.put(key, storageKey = new StorageKey<>(key, clazz));
     }
     try {
-      return (StorageKey<T>) storageKey;
+      return (StorageKey<V>) storageKey;
     } catch (ClassCastException e) {
       throw new IllegalStateException("The storage key " + key + " was already assigned to another type ", e);
     }

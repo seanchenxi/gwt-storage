@@ -64,7 +64,7 @@ public class StorageTestUtil {
     traceEmptyLine();
     trace("Preparing test tasks...", false);
     CURRENT_STORAGE = storage;
-    TESTS = new ArrayList<Scheduler.RepeatingCommand>();
+    TESTS = new ArrayList<>();
   }
 
   public static void start() {
@@ -113,6 +113,7 @@ public class StorageTestUtil {
     });
   }
 
+  @SuppressWarnings("unchecked")
   public static <T, V, E> void testPutValue(final StorageKey<T> key, final V value1, final E value2) {
     TESTS.add(new Scheduler.RepeatingCommand() {
       @Override

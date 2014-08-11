@@ -20,10 +20,7 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.JType;
-
 import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
-
-import java.io.Serializable;
 
 /**
  * Created by: Xi
@@ -105,8 +102,9 @@ class StorageKeyProviderMethod {
 
     public void setKeyClazz(JClassType keyClazz) {
       if(OBJECT_TYPE == null){
-        OBJECT_TYPE = keyClazz.getOracle().findType(Serializable.class.getName());
+        OBJECT_TYPE = keyClazz.getOracle().findType(Object.class.getName());
       }
+      //Since the referenced type was already verified before, we use Object.class for all non primitive/non array types
       toReturn.keyClazz = isPrimitive(keyClazz) ? keyClazz : OBJECT_TYPE;
     }
 
@@ -115,8 +113,8 @@ class StorageKeyProviderMethod {
         return false;
       }else if(clazz.isPrimitive() != null || String.class.getName().equalsIgnoreCase(clazz.getQualifiedSourceName())){
         return true;
-      }else if(clazz.isArray() != null){
-        return isPrimitive(clazz.isArray().getComponentType());
+      }else if(clazz.isArray() != null){ //Array should be considered as primitive type
+        return true;
       }else{
           String qualifiedSourceName = clazz.getQualifiedSourceName();
           for (JPrimitiveType primitiveType : JPrimitiveType.values()) {
