@@ -58,9 +58,9 @@ import com.seanchenxi.gwt.storage.client.serializer.StorageSerializer;
  *
  * @see <a href="http://www.w3.org/TR/webstorage/#storage-0">W3C Web Storage - Storage</a>
  * @see <a href="http://caniuse.com/#feat=namevalue-storage">Can I use... - Web Storage</a>
- * @see <a href="https://developers.google.com/web-toolkit/doc/latest/DevGuideHtml5Storage">GWT Developer's Guide - Client-side Storage (Web Storage)</a>
+ * @see <a href="http://www.gwtproject.org/doc/latest/DevGuideHtml5Storage.html">GWT Developer's Guide - Client-side Storage (Web Storage)</a>
  * @see <a href="
- *      http://google-web-toolkit.googlecode.com/svn/javadoc/latest/com/google/gwt/storage/client/Storage.html">
+ *      http://www.gwtproject.org/javadoc/latest/com/google/gwt/storage/client/Storage.html">
  *      com.google.gwt.storage.client.Storage</a>
  */
 public final class StorageExt {
@@ -163,7 +163,7 @@ public final class StorageExt {
    * @param <T> the type of stored value
    * @return <tt>true</tt> if this storage contains a value for the specified key.
    */
-  public <T extends Serializable> boolean containsKey(StorageKey<T> key) {
+  public <T> boolean containsKey(StorageKey<T> key) {
     return storage.getItem(key.name()) != null;
   }
 

@@ -16,12 +16,12 @@
 
 package com.seanchenxi.gwt.storage.client.value;
 
-import java.io.Serializable;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Created by: Xi
  */
-public class GenericTestValue<T extends TestValue> implements Serializable{
+public class GenericTestValue<T extends TestValue> implements IsSerializable{
 
   private T testValue;
 

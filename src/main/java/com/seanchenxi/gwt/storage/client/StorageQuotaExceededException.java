@@ -17,7 +17,7 @@
 package com.seanchenxi.gwt.storage.client;
 
 @SuppressWarnings("serial")
-public class StorageQuotaExceededException extends Exception {
+public class StorageQuotaExceededException extends RuntimeException {
 
   private StorageKey<?> key;
 

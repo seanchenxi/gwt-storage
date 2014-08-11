@@ -76,7 +76,7 @@ public class StorageTestUtil {
     return TESTS;
   }
 
-  public static <T1 extends Serializable, T2 extends Serializable, V1 extends T1, V2 extends T2> void testPutValue(final StorageKey<T1> key1, final StorageKey<T2> key2, final V1 value1, final V2 value2) {
+  public static <T1, T2 extends Serializable, V1 extends T1, V2 extends T2> void testPutValue(final StorageKey<T1> key1, final StorageKey<T2> key2, final V1 value1, final V2 value2) {
     TESTS.add(new Scheduler.RepeatingCommand() {
       @Override
       public boolean execute() {
@@ -113,7 +113,7 @@ public class StorageTestUtil {
     });
   }
 
-  public static <T extends Serializable, V, E> void testPutValue(final StorageKey<T> key, final V value1, final E value2) {
+  public static <T, V, E> void testPutValue(final StorageKey<T> key, final V value1, final E value2) {
     TESTS.add(new Scheduler.RepeatingCommand() {
       @Override
       public boolean execute() {
@@ -138,13 +138,13 @@ public class StorageTestUtil {
     });
   }
 
-  public static <T extends Serializable, V> void firstAssertGroup(String name, int expectedSize, StorageKey<T> key, V value) throws SerializationException {
+  public static <T, V> void firstAssertGroup(String name, int expectedSize, StorageKey<T> key, V value) throws SerializationException {
     assertEquals(name + " - storage size", expectedSize, CURRENT_STORAGE.size());
     assertTrue(name + " - containsKey", CURRENT_STORAGE.containsKey(key));
     assertEquals(name + " - stored value", value, CURRENT_STORAGE.get(key));
   }
 
-  public static <T extends Serializable, V> void secondAssertGroup(String name, int expectedSize, StorageKey<T> key, V value) throws SerializationException {
+  public static <T, V> void secondAssertGroup(String name, int expectedSize, StorageKey<T> key, V value) throws SerializationException {
     assertEquals(name + " - storage size", expectedSize, CURRENT_STORAGE.size());
     assertEquals(name + " - stored value", value, CURRENT_STORAGE.get(key));
   }

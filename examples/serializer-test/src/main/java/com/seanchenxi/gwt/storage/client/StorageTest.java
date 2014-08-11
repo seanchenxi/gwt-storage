@@ -40,9 +40,9 @@ import com.seanchenxi.gwt.storage.shared.RpcTestValue;
  */
 public class StorageTest implements EntryPoint {
 
-  private final static StorageSerializer OBJ_SERIALIZER = GWT.create(StorageSerializer.class);
-  private final static TestServiceAsync TEST_SERVICE = GWT.create(TestService.class);
-  private final static KeyFactoryGetter KG = new KeyFactoryGetter();
+  private static final StorageSerializer OBJ_SERIALIZER = GWT.create(StorageSerializer.class);
+  private static final TestServiceAsync TEST_SERVICE = GWT.create(TestService.class);
+  private static final KeyFactoryGetter KG = new KeyFactoryGetter();
   private static KeyProviderGetter KP;
 
   public void onModuleLoad() {

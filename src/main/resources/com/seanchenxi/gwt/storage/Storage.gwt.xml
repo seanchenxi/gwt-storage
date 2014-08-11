@@ -15,6 +15,7 @@
   -->
 <module>
 
+  <inherits name="com.google.gwt.lang.LongLib"/>
   <inherits name="com.google.gwt.storage.Storage" />
 
   <!--

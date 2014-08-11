@@ -33,7 +33,8 @@ public interface StorageSerializer {
    * <p>
    *   The <b>clazz</b> only used by serializer to distinguish primitive type and object type.<br/>
    *   For all primitive types, the <b>clazz</b> should equals to <b><T></b>.<br/>
-   *   Otherwise, use {@link java.io.Serializable} as <b>clazz</b>, and real class type for <b><T></b>.
+   *   Otherwise, use {@link java.io.Serializable} or {@link com.google.gwt.user.client.rpc.IsSerializable} for
+   *   <b>clazz</b>, and real class type for <b><T></b>.
    * </p>
    *
    * @param clazz the type of the given value to deserialize with
@@ -50,7 +51,8 @@ public interface StorageSerializer {
    * <p>
    *   The <b>clazz</b> only used to distinguish primitive type and object type.<br/>
    *   For all primitive types, the <b>clazz</b> should equals to <b><T></b>.<br/>
-   *   Otherwise, use {@link java.io.Serializable} as <b>clazz</b>, and real class type for <b><T></b>
+   *   Otherwise, use {@link java.io.Serializable} or {@link com.google.gwt.user.client.rpc.IsSerializable} for
+   *   <b>clazz</b>, and real class type for <b><T></b>
    * </p>
    *
    * @param clazz the type of the given value to serialize with

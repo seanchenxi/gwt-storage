@@ -137,7 +137,7 @@ public class StorageKeyFactory {
   }
 
   public static StorageKey<String[]> stringArrayKey(String keyName){
-    return new StorageKey<String[]>(keyName, String[].class);
+    return new StorageKey<>(keyName, String[].class);
   }
 
   public static StorageKey<boolean[]> boolArrayKey(String keyName){

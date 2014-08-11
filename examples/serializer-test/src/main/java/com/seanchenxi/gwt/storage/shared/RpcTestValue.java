@@ -16,12 +16,12 @@
 
 package com.seanchenxi.gwt.storage.shared;
 
-import java.io.Serializable;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
  * Created by: Xi
  */
-public class RpcTestValue implements Serializable {
+public class RpcTestValue implements IsSerializable {
 
   private long id;
 
