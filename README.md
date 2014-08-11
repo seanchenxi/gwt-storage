@@ -12,6 +12,11 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
   * Client side Java Object serialization. By reusing the **GWT RPC object serialization framework**. Means, all objects used in GWT RPC service will be automatically persistable in localStorage or sessionStorage. No more code/serializer generation.
   * Customizing the list of web storage persistable type with XML file.
   * **Extensible caching** possiblility to avoid repeating serialization/deserialization
+  
+### Coming new features: 
+  * [Value record priority](https://github.com/seanchenxi/gwt-storage/pull/3), thanks to [Richard Wallis](https://github.com/rdwallis)
+  * Data compressing
+  * Data recovering tools
 
 ## Stable version
   * [gwt-storage releases](https://github.com/seanchenxi/gwt-storage/releases/) 
