@@ -13,7 +13,7 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
   * Customizing the list of web storage persistable type with XML file.
   * **Extensible caching** possiblility to avoid repeating serialization/deserialization
   
-### Coming new features: 
+#### Coming new features: 
   * [Value record priority](https://github.com/seanchenxi/gwt-storage/pull/3), thanks to [Richard Wallis](https://github.com/rdwallis)
   * Data compressing
   * Data recovering tools
