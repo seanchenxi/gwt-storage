@@ -18,7 +18,7 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
   * Data compressing
   * Data recovering tools
 
-## Stable version
+## Stable version, v1.2.0
   * [gwt-storage releases](https://github.com/seanchenxi/gwt-storage/releases/) 
   * [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt)
 
@@ -29,6 +29,7 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
 ## Use gwt-storage in your project
   * Getting Started: <a target="_blank" href="https://github.com/seanchenxi/gwt-storage/wiki/Getting-Started">Getting Started</a>
   * Javadoc: <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.2.0/">v1.2.0</a><br/>
+  * Javadoc SNAPSHOT <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.2.1-SNAPSHOT/">v1.2.1-SNAPSHOT</a><br/>
 
 ### Maven Configuration
 Find the the available jars in [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt)
