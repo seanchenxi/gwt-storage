@@ -14,7 +14,8 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<!DOCTYPE StorageSerialization SYSTEM "storage-serialization.dtd">
+<!DOCTYPE StorageSerialization PUBLIC "-//seanchenxi.com//DTD Storage Serialization 1.1//EN"
+  "https://raw.githubusercontent.com/seanchenxi/gwt-storage/master/src/main/resources/com/seanchenxi/gwt/storage/rebind/storage-serialization.dtd">
 <StorageSerialization>
   <class>com.seanchenxi.gwt.storage.client.value.TestValue</class>
   <class>com.seanchenxi.gwt.storage.client.value.GenericTestValue</class>

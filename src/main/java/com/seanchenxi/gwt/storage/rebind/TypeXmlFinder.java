@@ -179,23 +179,16 @@ final class TypeXmlFinder extends StorageTypeFinder {
   }
 
   private StorageSerialization parseXmlResource(Resource resource) throws UnableToCompleteException {
-    InputStream input = null;
-    try{
+    try (InputStream input = resource.openContents()){
       JAXBContext jaxbContext = JAXBContext.newInstance(StorageSerialization.class);
       Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-      Source source = createSAXSource(input = resource.openContents());
+      Source source = createSAXSource(input);
       StorageSerialization storageSerialization = (StorageSerialization)unmarshaller.unmarshal(source);
       storageSerialization.setPath(resource.getPath());
       return storageSerialization;
     }catch(Exception e){
       logger.branch(TreeLogger.Type.WARN, "Error while parsing xml resource at " + resource.getPath(), e);
       throw new UnableToCompleteException();
-    } finally{
-      try{
-        if(input != null) input.close();
-      }catch(Exception e){
-        //To ignore
-      }
     }
   }
 

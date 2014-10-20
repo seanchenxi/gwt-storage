@@ -93,7 +93,6 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
     return builder.build(logger);
   }
 
-  @SuppressWarnings("unchecked")
   private boolean isNothingChanged(TreeLogger logger, GeneratorContext context, Set<JType> serializables, SerializableTypeOracle serializationOracle) {// caching use
     CachedGeneratorResult cachedResult = context.getCachedGeneratorResult();
     if (cachedResult == null || !context.isGeneratorResultCachingEnabled()){

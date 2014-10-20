@@ -50,21 +50,22 @@ public class StorageKeyProviderGenerator extends Generator {
 
     String packageName = toGenerate.getPackage().getName();
     simpleSourceName = toGenerate.getName().replace('.', '_') + "Impl";
-    PrintWriter pw = context.tryCreate(logger, packageName, simpleSourceName);
-    if (pw == null) {
-      return packageName + "." + simpleSourceName;
+    try (PrintWriter pw = context.tryCreate(logger, packageName, simpleSourceName)) {
+      if (pw == null) {
+        return packageName + "." + simpleSourceName;
+      }
+    
+      model = new StorageKeyProviderModel(logger, toGenerate);
+      model.loadMethods();
+    
+      ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, simpleSourceName);
+      factory.setSuperclass(AbstractStorageKeyProvider.class.getCanonicalName());
+      factory.addImplementedInterface(typeName);
+      SourceWriter sw = factory.createSourceWriter(context, pw);
+      writeMethods(sw);
+      sw.commit(logger);
+      return factory.getCreatedClassName();
     }
-
-    model = new StorageKeyProviderModel(logger, toGenerate);
-    model.loadMethods();
-
-    ClassSourceFileComposerFactory factory = new ClassSourceFileComposerFactory(packageName, simpleSourceName);
-    factory.setSuperclass(AbstractStorageKeyProvider.class.getCanonicalName());
-    factory.addImplementedInterface(typeName);
-    SourceWriter sw = factory.createSourceWriter(context, pw);
-    writeMethods(sw);
-    sw.commit(logger);
-    return factory.getCreatedClassName();
   }
 
   private void writeMethods(SourceWriter sw) throws UnableToCompleteException {

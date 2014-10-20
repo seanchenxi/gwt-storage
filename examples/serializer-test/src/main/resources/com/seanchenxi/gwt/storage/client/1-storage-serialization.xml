@@ -15,7 +15,7 @@
   limitations under the License.
   -->
 <!DOCTYPE StorageSerialization PUBLIC "-//seanchenxi.com//DTD Storage Serialization 1.1//EN"
-  "http://seanchenxi.com/gwt/gwt-storage/storage-serialization.dtd">
+  "https://raw.githubusercontent.com/seanchenxi/gwt-storage/master/src/main/resources/com/seanchenxi/gwt/storage/rebind/storage-serialization.dtd">
 <StorageSerialization>
   <class>java.util.List&lt;com.seanchenxi.gwt.storage.shared.RpcTestValue&gt;</class>
   <class>java.util.Map&lt;com.seanchenxi.gwt.storage.shared.RpcTestMapKey,com.seanchenxi.gwt.storage.shared.RpcTestMapValue&gt;</class>
