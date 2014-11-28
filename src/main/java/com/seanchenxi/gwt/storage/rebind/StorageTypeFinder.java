@@ -56,7 +56,7 @@ abstract class StorageTypeFinder {
   }
 
   protected static List<StorageTypeFinder> getStorageTypeFinders(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException {
-    final List<StorageTypeFinder> typeFinders = new ArrayList<>();
+    final List<StorageTypeFinder> typeFinders = new ArrayList<StorageTypeFinder>();
 
     JClassType keyProviderIntf = context.getTypeOracle().findType(StorageKeyProvider.class.getName());
     if(keyProviderIntf.getSubtypes() != null && keyProviderIntf.getSubtypes().length > 1){

@@ -27,14 +27,14 @@ public abstract class AbstractStorageKeyProvider implements StorageKeyProvider {
   private static final Map<String, StorageKey<?>> KEY_MAP;
 
   static {
-    KEY_MAP = new HashMap<>();
+    KEY_MAP = new HashMap<String, StorageKey<?>>();
   }
 
   @SuppressWarnings("unchecked")
   public static <T, V extends T> StorageKey<V> createIfAbsent(String key, Class<T> clazz) {
     StorageKey<?> storageKey = KEY_MAP.get(key);
     if (null == storageKey) {
-      KEY_MAP.put(key, storageKey = new StorageKey<>(key, clazz));
+      KEY_MAP.put(key, storageKey = new StorageKey<V>(key, clazz));
     }
     try {
       return (StorageKey<V>) storageKey;

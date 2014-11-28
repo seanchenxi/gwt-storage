@@ -28,7 +28,7 @@ class StorageMemoryCache implements StorageCache {
   private final HashMap<StorageKey<?>, Object> map;
 
   public StorageMemoryCache() {
-    map = new HashMap<>();
+    map = new HashMap<StorageKey<?>, Object>();
   }
 
   @Override

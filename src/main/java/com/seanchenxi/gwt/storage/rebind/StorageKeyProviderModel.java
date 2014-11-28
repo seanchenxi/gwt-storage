@@ -52,7 +52,7 @@ class StorageKeyProviderModel {
     this.storageKeyGenericType = providerType.getOracle().findType(StorageKey.class.getCanonicalName()).isGenericType();
     this.serializableIntf = providerType.getOracle().findType(Serializable.class.getCanonicalName()).isInterface();
     this.isSerializableIntf = providerType.getOracle().findType(IsSerializable.class.getCanonicalName()).isInterface();
-    this.methods = new ArrayList<>();
+    this.methods = new ArrayList<StorageKeyProviderMethod>();
     this.logger = logger;
   }
 

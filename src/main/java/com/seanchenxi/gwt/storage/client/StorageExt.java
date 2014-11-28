@@ -303,7 +303,7 @@ public final class StorageExt {
    */
   private Set<StorageChangeEvent.Handler> ensureHandlerSet() {
     if (handlers == null) {
-      handlers = new HashSet<>();
+      handlers = new HashSet<StorageChangeEvent.Handler>();
     }
     return handlers;
   }
