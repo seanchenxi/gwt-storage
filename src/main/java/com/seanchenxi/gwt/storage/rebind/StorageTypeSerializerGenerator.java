@@ -86,7 +86,7 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
   }
 
   private SerializableTypeOracle buildSerializableTypeOracle(TreeLogger logger, GeneratorContext context, Set<JType> serializables) throws UnableToCompleteException {
-    SerializableTypeOracleBuilder builder = new SerializableTypeOracleBuilder(logger, context.getPropertyOracle(), context);
+    SerializableTypeOracleBuilder builder = new SerializableTypeOracleBuilder(logger, context);
     for (JType type : serializables) {
       builder.addRootType(logger, type);
     }
