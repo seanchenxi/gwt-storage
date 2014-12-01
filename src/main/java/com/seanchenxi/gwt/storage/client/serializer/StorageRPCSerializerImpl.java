@@ -16,12 +16,12 @@
 
 package com.seanchenxi.gwt.storage.client.serializer;
 
-import java.util.HashMap;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader;
 import com.google.gwt.user.client.rpc.impl.Serializer;
+
+import java.util.HashMap;
 
 /**
  * Default implementation of {@link StorageSerializer}
@@ -36,7 +36,7 @@ final class StorageRPCSerializerImpl implements StorageSerializer {
 
   static{
     TYPE_SERIALIZER = GWT.create(StorageTypeSerializer.class);
-    TYPE_MAP = new HashMap<>();
+    TYPE_MAP = new HashMap<Class<?>, StorageValueType>();
 
     TYPE_MAP.put(boolean[].class, StorageValueType.BOOLEAN_VECTOR);
     TYPE_MAP.put(byte[].class, StorageValueType.BYTE_VECTOR);

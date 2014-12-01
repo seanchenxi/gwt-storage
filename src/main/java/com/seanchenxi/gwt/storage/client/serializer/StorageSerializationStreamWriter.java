@@ -49,7 +49,7 @@ final class StorageSerializationStreamWriter extends AbstractSerializationStream
   @Override
   public void prepareToWrite() {
     super.prepareToWrite();
-    tokenList = new ArrayList<>();
+    tokenList = new ArrayList<String>();
   }
 
   @Override

@@ -16,11 +16,6 @@
 
 package com.seanchenxi.gwt.storage.rebind;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JArrayType;
@@ -32,6 +27,11 @@ import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.seanchenxi.gwt.storage.client.StorageKey;
 import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by: Xi
@@ -52,7 +52,7 @@ class StorageKeyProviderModel {
     this.storageKeyGenericType = providerType.getOracle().findType(StorageKey.class.getCanonicalName()).isGenericType();
     this.serializableIntf = providerType.getOracle().findType(Serializable.class.getCanonicalName()).isInterface();
     this.isSerializableIntf = providerType.getOracle().findType(IsSerializable.class.getCanonicalName()).isInterface();
-    this.methods = new ArrayList<>();
+    this.methods = new ArrayList<StorageKeyProviderMethod>();
     this.logger = logger;
   }
 

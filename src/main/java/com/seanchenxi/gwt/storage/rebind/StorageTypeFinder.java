@@ -16,11 +16,6 @@
 
 package com.seanchenxi.gwt.storage.rebind;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
 import com.google.gwt.core.ext.BadPropertyValueException;
 import com.google.gwt.core.ext.ConfigurationProperty;
 import com.google.gwt.core.ext.GeneratorContext;
@@ -31,6 +26,11 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JRealClassType;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by: Xi
@@ -56,7 +56,7 @@ abstract class StorageTypeFinder {
   }
 
   protected static List<StorageTypeFinder> getStorageTypeFinders(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException {
-    final List<StorageTypeFinder> typeFinders = new ArrayList<>();
+    final List<StorageTypeFinder> typeFinders = new ArrayList<StorageTypeFinder>();
 
     JClassType keyProviderIntf = context.getTypeOracle().findType(StorageKeyProvider.class.getName());
     if(keyProviderIntf.getSubtypes() != null && keyProviderIntf.getSubtypes().length > 1){

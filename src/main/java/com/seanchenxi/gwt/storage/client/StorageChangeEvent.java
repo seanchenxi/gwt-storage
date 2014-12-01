@@ -81,7 +81,7 @@ public class StorageChangeEvent extends GwtEvent<StorageChangeEvent.Handler> {
 
   public static Type<StorageChangeEvent.Handler> getType() {
     if (TYPE == null) {
-      TYPE = new Type<>();
+      TYPE = new Type<StorageChangeEvent.Handler>();
     }
     return TYPE;
   }

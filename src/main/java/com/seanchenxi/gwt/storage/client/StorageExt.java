@@ -16,10 +16,6 @@
 
 package com.seanchenxi.gwt.storage.client;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.GWT.UncaughtExceptionHandler;
 import com.google.gwt.core.client.JavaScriptException;
@@ -28,6 +24,10 @@ import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.seanchenxi.gwt.storage.client.cache.StorageCache;
 import com.seanchenxi.gwt.storage.client.serializer.StorageSerializer;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Extends the GWT HTML5 Storage API, by adding <b>Object Value</b> Support.
@@ -303,7 +303,7 @@ public final class StorageExt {
    */
   private Set<StorageChangeEvent.Handler> ensureHandlerSet() {
     if (handlers == null) {
-      handlers = new HashSet<>();
+      handlers = new HashSet<StorageChangeEvent.Handler>();
     }
     return handlers;
   }

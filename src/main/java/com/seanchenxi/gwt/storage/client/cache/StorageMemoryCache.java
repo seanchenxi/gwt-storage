@@ -16,9 +16,9 @@
 
 package com.seanchenxi.gwt.storage.client.cache;
 
-import java.util.HashMap;
-
 import com.seanchenxi.gwt.storage.client.StorageKey;
+
+import java.util.HashMap;
 
 /**
  * Default implementation of {@link StorageCache}
@@ -28,7 +28,7 @@ class StorageMemoryCache implements StorageCache {
   private final HashMap<StorageKey<?>, Object> map;
 
   public StorageMemoryCache() {
-    map = new HashMap<>();
+    map = new HashMap<StorageKey<?>, Object>();
   }
 
   @Override
