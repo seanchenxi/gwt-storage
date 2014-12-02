@@ -166,10 +166,9 @@ final class TypeXmlFinder extends StorageTypeFinder {
   private List<StorageSerialization> findAllStorageSerializations() throws UnableToCompleteException{
     logger.branch(TreeLogger.Type.DEBUG, "Find StorageSerialization XML");
     List<StorageSerialization> storageSerializations = new ArrayList<StorageSerialization>();
-    Map<String,Resource> resourceMap = resourceOracle.getResourceMap();
-    for(String key : resourceMap.keySet()){
-      if(key.endsWith(SERIALIZATION_CONFIG)){
-        StorageSerialization storageSerialization = parseXmlResource(resourceMap.get(key));
+    for(String pathName : resourceOracle.getPathNames()){
+      if(pathName.endsWith(SERIALIZATION_CONFIG)){
+        StorageSerialization storageSerialization = parseXmlResource(resourceOracle.getResource(pathName));
         if(storageSerialization != null){
           storageSerializations.add(storageSerialization);
         }
