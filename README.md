@@ -23,6 +23,7 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
   * [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt)
 
 ## Previous Versions
+  * [gwt-storage v1.3.0](https://github.com/seanchenxi/gwt-storage/releases/tag/v1.3.0)
   * [gwt-storage v1.2.1](https://github.com/seanchenxi/gwt-storage/releases/tag/v1.2.1)
   * [gwt-storage v1.2.0](https://github.com/seanchenxi/gwt-storage/releases/tag/v1.2.0)
   * [gwt-storage v1.1](https://github.com/seanchenxi/gwt-storage/releases/tag/v1.1)
