@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>GWT Storage by seanchenxi</title>
@@ -11,81 +11,116 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
+</head>
+<body>
+<div class="wrapper">
+    <header>
         <h1>GWT Storage</h1>
+
         <p>A simple GWT Client-side HTML5 Web Storage API, Supports Object values</p>
 
-        <p class="view"><a href="https://github.com/seanchenxi/gwt-storage">View the Project on GitHub <small>seanchenxi/gwt-storage</small></a></p>
+        <p class="view"><a href="https://github.com/seanchenxi/gwt-storage">View the Project on GitHub
+            <small>seanchenxi/gwt-storage</small>
+        </a></p>
 
 
         <ul>
-          <li><a href="https://github.com/seanchenxi/gwt-storage/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/seanchenxi/gwt-storage/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/seanchenxi/gwt-storage">View On <strong>GitHub</strong></a></li>
+            <li><a href="https://github.com/seanchenxi/gwt-storage/zipball/master">Download <strong>ZIP
+                File</strong></a></li>
+            <li><a href="https://github.com/seanchenxi/gwt-storage/tarball/master">Download <strong>TAR
+                Ball</strong></a></li>
+            <li><a href="https://github.com/seanchenxi/gwt-storage">View On <strong>GitHub</strong></a></li>
         </ul>
-      </header>
-      <section>
+    </header>
+    <section>
         <h1>
-<a name="gwt-storage" class="anchor" href="#gwt-storage"><span class="octicon octicon-link"></span></a>GWT Storage</h1>
+            <a name="gwt-storage" class="anchor" href="#gwt-storage"><span class="octicon octicon-link"></span></a>GWT
+            Storage</h1>
 
-<p>A simple GWT Client-Side HTML5 <a href="http://www.w3.org/TR/webstorage/">Web Storage</a> API.</p>
+        <p>A simple GWT Client-Side HTML5 <a href="http://www.w3.org/TR/webstorage/">Web Storage</a> API.</p>
 
-<p>This project aims to extend the <a href="http://www.gwtproject.org/doc/latest/DevGuideHtml5Storage.html">GWT Client-side Storage API</a>, by adding <strong>Object Value</strong> support.</p>
+        <p>This project aims to extend the <a href="http://www.gwtproject.org/doc/latest/DevGuideHtml5Storage.html">GWT
+            Client-side Storage API</a>, by adding <strong>Object Value</strong> support.</p>
 
-<h2>
-<a name="key-features" class="anchor" href="#key-features"><span class="octicon octicon-link"></span></a>Key features</h2>
+        <h2>
+            <a name="key-features" class="anchor" href="#key-features"><span class="octicon octicon-link"></span></a>Key
+            features</h2>
 
-<ul>
-<li>Storing <strong>Java Object</strong> in HTML5 <a href="http://www.w3.org/TR/webstorage/">Web Storage</a> <em>(localStorage or sessionStorage)</em>
-</li>
-<li>Support <strong>all java types</strong> that meet the requirements of <a href="http://www.gwtproject.org/doc/latest/tutorial/RPC.html#serialize">GWT RPC serialization</a> (implements java.io.Serializable, etc...)</li>
-<li>Client side Java Object serialization. By reusing the <strong>GWT RPC object serialization framework</strong>. Means, all objects used in GWT RPC service will be automatically persistable in localStorage or sessionStorage. No more code/serializer generation.</li>
-<li>Customizing the list of web storage persistable type with XML file.</li>
-<li>
-<strong>Extensible caching</strong> possiblility to avoid repeating serialization/deserialization</li>
-</ul><h2>
-<a name="stable-version" class="anchor" href="#stable-version"><span class="octicon octicon-link"></span></a>Stable version</h2>
+        <ul>
+            <li>Storing <strong>Java Object</strong> in HTML5 <a href="http://www.w3.org/TR/webstorage/">Web Storage</a>
+                <em>(localStorage or sessionStorage)</em>
+            </li>
+            <li>Support <strong>all java types</strong> that meet the requirements of <a
+                    href="http://www.gwtproject.org/doc/latest/tutorial/RPC.html#serialize">GWT RPC serialization</a>
+                (implements java.io.Serializable, etc...)
+            </li>
+            <li>Client side Java Object serialization. By reusing the <strong>GWT RPC object serialization
+                framework</strong>. Means, all objects used in GWT RPC service will be automatically persistable in
+                localStorage or sessionStorage. No more code/serializer generation.
+            </li>
+            <li>Customizing the list of web storage persistable type with XML file.</li>
+            <li>
+                <strong>Extensible caching</strong> possiblility to avoid repeating serialization/deserialization
+            </li>
+        </ul>
+        <h2>
+            <a name="stable-version" class="anchor" href="#stable-version"><span class="octicon octicon-link"></span></a>Stable version, v1.3.0
+        </h2>
+        <ul>
+            <li>
+                <a href="https://github.com/seanchenxi/gwt-storage/releases/">gwt-storage releases</a>
+            </li>
+            <li>
+                <a href="http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt">Maven Central</a>
+            </li>
+        </ul>
+        <h2>
+            <a name="previous-versions" class="anchor" href="#previous-versions">
+                <span class="octicon octicon-link"></span>
+            </a>Previous Versions
+        </h2>
+        <ul>
+            <li><a href="https://github.com/seanchenxi/gwt-storage/releases/tag/v1.3.0">gwt-storage v1.3.0</a></li>
+            <li><a href="https://github.com/seanchenxi/gwt-storage/releases/tag/v1.2.1">gwt-storage v1.2.1</a></li>
+            <li><a href="https://github.com/seanchenxi/gwt-storage/releases/tag/v1.2.0">gwt-storage v1.2.0</a></li>
+            <li><a href="https://github.com/seanchenxi/gwt-storage/releases/tag/v1.1">gwt-storage v1.1</a></li>
+        </ul>
+        <h2>
+            <a name="use-gwt-storage-in-your-project" class="anchor" href="#use-gwt-storage-in-your-project"><span
+                    class="octicon octicon-link"></span></a>Use gwt-storage in your project</h2>
 
-<ul>
-<li>
-<a href="https://github.com/seanchenxi/gwt-storage/releases/">gwt-storage releases</a> </li>
-<li><a href="http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt">Maven Central</a></li>
-</ul><h2>
-<a name="previous-versions" class="anchor" href="#previous-versions"><span class="octicon octicon-link"></span></a>Previous Versions</h2>
+        <ul>
+            <li>Getting Started: <a target="_blank"
+                                    href="https://github.com/seanchenxi/gwt-storage/wiki/Getting-Started">Getting
+                Started</a>
+            </li>
+            <li>Javadoc: <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.3.0/">v1.3.0</a><br>
+            </li>
+        </ul>
+        <h3>
+            <a name="maven-configuration" class="anchor" href="#maven-configuration"><span
+                    class="octicon octicon-link"></span></a>Maven Configuration</h3>
 
-<ul>
-<li><a href="https://github.com/seanchenxi/gwt-storage/releases/tag/v1.1">gwt-storage v1.1</a></li>
-</ul><h2>
-<a name="use-gwt-storage-in-your-project" class="anchor" href="#use-gwt-storage-in-your-project"><span class="octicon octicon-link"></span></a>Use gwt-storage in your project</h2>
+        <p>Find the the available jars in <a href="http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt">Maven
+            Central</a></p>
 
-<ul>
-<li>Getting Started: <a target="_blank" href="https://github.com/seanchenxi/gwt-storage/wiki/Getting-Started">Getting Started</a>
-</li>
-<li>Javadoc: <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.2.0/">v1.2.0</a><br>
-</li>
-</ul><h3>
-<a name="maven-configuration" class="anchor" href="#maven-configuration"><span class="octicon octicon-link"></span></a>Maven Configuration</h3>
+        <h4>
+            <a name="release" class="anchor" href="#release"><span class="octicon octicon-link"></span></a>Release:</h4>
 
-<p>Find the the available jars in <a href="http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt">Maven Central</a></p>
-
-<h4>
-<a name="release" class="anchor" href="#release"><span class="octicon octicon-link"></span></a>Release:</h4>
-
-<div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
+        <div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.seanchenxi.gwt<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>gwt-storage<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.2.0<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.3.0<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</pre></div>
+</pre>
+        </div>
 
-<h4>
-<a name="snapshot" class="anchor" href="#snapshot"><span class="octicon octicon-link"></span></a>Snapshot:</h4>
+        <h4>
+            <a name="snapshot" class="anchor" href="#snapshot"><span class="octicon octicon-link"></span></a>Snapshot:
+        </h4>
 
-<div class="highlight highlight-xml"><pre><span class="nt">&lt;repositories&gt;</span>
+        <div class="highlight highlight-xml"><pre><span class="nt">&lt;repositories&gt;</span>
     <span class="nt">&lt;repository&gt;</span>
         <span class="nt">&lt;id&gt;</span>sonatype.snapshots<span class="nt">&lt;/id&gt;</span>
         <span class="nt">&lt;name&gt;</span>Sonatype snapshot repository<span class="nt">&lt;/name&gt;</span>
@@ -97,49 +132,61 @@
 <span class="nt">&lt;dependency&gt;</span>
     <span class="nt">&lt;groupId&gt;</span>com.seanchenxi.gwt<span class="nt">&lt;/groupId&gt;</span>
     <span class="nt">&lt;artifactId&gt;</span>gwt-storage<span class="nt">&lt;/artifactId&gt;</span>
-    <span class="nt">&lt;version&gt;</span>1.2.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;version&gt;</span>1.3.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
     <span class="nt">&lt;scope&gt;</span>provided<span class="nt">&lt;/scope&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
-</pre></div>
+</pre>
+        </div>
 
-<h2>
-<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+        <h2>
+            <a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
 
-<p><a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a></p>
+        <p><a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2.0</a></p>
 
-<h2>
-<a name="feedback" class="anchor" href="#feedback"><span class="octicon octicon-link"></span></a>Feedback</h2>
+        <h2>
+            <a name="feedback" class="anchor" href="#feedback"><span class="octicon octicon-link"></span></a>Feedback
+        </h2>
 
-<p>If you're using gwt-storage in your project, please let me know how useful (or not) this library is to you and what you think.
-  Suggestions are always welcome. Send me an email at <a href="mailto:xi@seanchenxi.com">xi@seanchenxi.com</a></p>
+        <p>If you're using gwt-storage in your project, please let me know how useful (or not) this library is to you
+            and what you think.
+            Suggestions are always welcome. Send me an email at <a href="mailto:xi@seanchenxi.com">xi@seanchenxi.com</a>
+        </p>
 
-<h2>
-<a name="donate" class="anchor" href="#donate"><span class="octicon octicon-link"></span></a>Donate</h2>  
-<div><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="9X8R4QQ6WPV78">
-<input type="image" src="https://www.paypalobjects.com/en_US/FR/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form>
-</div>
+        <h2>
+            <a name="donate" class="anchor" href="#donate"><span class="octicon octicon-link"></span></a>Donate</h2>
 
-      </section>
-      <footer>
+        <div>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                <input type="hidden" name="cmd" value="_s-xclick">
+                <input type="hidden" name="hosted_button_id" value="9X8R4QQ6WPV78">
+                <input type="image" src="https://www.paypalobjects.com/en_US/FR/i/btn/btn_donateCC_LG.gif" border="0"
+                       name="submit" alt="PayPal - The safer, easier way to pay online!">
+                <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+            </form>
+        </div>
+
+    </section>
+    <footer>
         <p>This project is maintained by <a href="https://github.com/seanchenxi">seanchenxi</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-              <script type="text/javascript">
-            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-          </script>
-          <script type="text/javascript">
-            try {
-              var pageTracker = _gat._getTracker("UA-36974191-2");
-            pageTracker._trackPageview();
-            } catch(err) {}
-          </script>
 
-  </body>
+        <p>
+            <small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a>
+            </small>
+        </p>
+    </footer>
+</div>
+<script src="javascripts/scale.fix.js"></script>
+<script type="text/javascript">
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+    try {
+        var pageTracker = _gat._getTracker("UA-36974191-2");
+        pageTracker._trackPageview();
+    } catch (err) {
+    }
+</script>
+
+</body>
 </html>
