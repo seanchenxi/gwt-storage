@@ -24,7 +24,7 @@
   <parent>
     <artifactId>gwt-storage-examples</artifactId>
     <groupId>com.seanchenxi.gwt</groupId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.3.1-SNAPSHOT</version>
   </parent>
   
   <artifactId>serializer-test</artifactId>
@@ -48,6 +48,10 @@
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-user</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-dev</artifactId>
     </dependency>
   </dependencies>
 </project>
