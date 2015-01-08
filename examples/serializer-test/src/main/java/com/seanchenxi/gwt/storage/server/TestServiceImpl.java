@@ -26,11 +26,21 @@ import com.seanchenxi.gwt.storage.client.service.TestService;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapKey;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapValue;
 import com.seanchenxi.gwt.storage.shared.RpcTestValue;
+import com.seanchenxi.gwt.storage.shared.StorageUtils;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 
 /**
  * Created by: Xi
  */
 public class TestServiceImpl extends RemoteServiceServlet implements TestService {
+
+  @Override
+  public void init(ServletConfig config) throws ServletException {
+    super.init(config);
+    StorageUtils.loadSerializationPolicy(config.getServletContext(), "storage_test");
+  }
 
   @Override
   public RpcTestValue getRpcTestValue(){

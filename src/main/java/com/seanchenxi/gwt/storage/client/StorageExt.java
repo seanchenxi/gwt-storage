@@ -23,7 +23,7 @@ import com.google.gwt.storage.client.Storage;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.seanchenxi.gwt.storage.client.cache.StorageCache;
-import com.seanchenxi.gwt.storage.client.serializer.StorageSerializer;
+import com.seanchenxi.gwt.storage.shared.StorageUtils;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -67,7 +67,6 @@ public final class StorageExt {
 
   private static StorageExt localStorage;
   private static StorageExt sessionStorage;
-  private static final StorageSerializer TYPE_SERIALIZER = GWT.create(StorageSerializer.class);
 
   /**
    * Returns a Local Storage.
@@ -185,7 +184,7 @@ public final class StorageExt {
   public <T> T get(StorageKey<T> key) throws SerializationException {
     T item = cache.get(key);
     if (item == null) {
-      item = TYPE_SERIALIZER.deserialize(key.getClazz(), storage.getItem(key.name()));
+      item = StorageUtils.deserialize(key.getClazz(), storage.getItem(key.name()));
       cache.put(key, item);
     }
     return item;
@@ -239,7 +238,7 @@ public final class StorageExt {
       throw new NullPointerException();
     }
     try {
-      String data = TYPE_SERIALIZER.serialize(key.getClazz(), value);
+      String data = StorageUtils.serialize(key.getClazz(), value);
       // Update store and cache
       String oldData = storage.getItem(key.name());
       storage.setItem(key.name(), data);
@@ -317,7 +316,7 @@ public final class StorageExt {
       T oldValue = oldVal;
       if (oldValue == null && oldData != null && StorageChangeEvent.Level.OBJECT.equals(eventLevel)) {    
         try {
-          oldValue = TYPE_SERIALIZER.deserialize(key.getClazz(), data);
+          oldValue = StorageUtils.deserialize(key.getClazz(), data);
         } catch (SerializationException e) {
           if (ueh != null)
             ueh.onUncaughtException(e);

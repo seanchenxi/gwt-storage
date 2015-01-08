@@ -53,7 +53,9 @@
   <replace-with class="com.seanchenxi.gwt.storage.client.serializer.StorageRPCSerializerImpl">
   	<when-type-is class="com.seanchenxi.gwt.storage.client.serializer.StorageSerializer" />
   </replace-with>
-  
+
   <source path='client'/>
+  <source path="shared" />
+  <super-source path="translatable" />
   
 </module>

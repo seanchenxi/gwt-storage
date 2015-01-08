@@ -38,6 +38,7 @@ import com.google.gwt.user.rebind.rpc.SerializationUtils;
 import com.google.gwt.user.rebind.rpc.TypeSerializerCreator;
 import com.google.gwt.user.rebind.rpc.GwtUtilityDelegate;
 import com.google.gwt.user.server.rpc.SerializationPolicyLoader;
+import com.seanchenxi.gwt.storage.shared.StorageUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -47,7 +48,9 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -58,7 +61,6 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
   private static final long GENERATOR_VERSION_ID = 1L;
 
   private static final String TYPE_SERIALIZER_SUFFIX = "Impl";
-  private static final String SERIALIZATION_POLICY_NAME = "StorageSerializerPolicy";
   private JClassType serializerType = null;
 
   @Override
@@ -82,12 +84,12 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
       return new RebindResult(RebindMode.USE_EXISTING, typeSerializerClassName);
     }
 
-    writeSerializationPolicyFile(logger, context, serializationOracle, serializationOracle);
-
     TypeSerializerCreator tsc =
         new TypeSerializerCreator(logger, serializationOracle, serializationOracle, context,
             typeSerializerClassName, typeSerializerSimpleName);
     tsc.realize(logger);
+
+    writeSerializationPolicyFile(logger, context, serializationOracle, Collections.unmodifiableMap(tsc.getTypeStrings()));
 
     if (context.isGeneratorResultCachingEnabled()) {
       RebindResult result = new RebindResult(RebindMode.USE_PARTIAL_CACHED, typeSerializerClassName);
@@ -122,9 +124,8 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
       serializationOracle, serializationOracle);
   }
 
-  protected void writeSerializationPolicyFile(TreeLogger logger, GeneratorContext ctx,
-                                                SerializableTypeOracle serializationSto,
-                                                SerializableTypeOracle deserializationSto)
+  protected void writeSerializationPolicyFile(TreeLogger logger, GeneratorContext ctx, SerializableTypeOracle serOracle,
+                                              Map<JType, String> typeStrings)
           throws UnableToCompleteException {
     try {
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -132,9 +133,7 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
               new OutputStreamWriter(baos, SerializationPolicyLoader.SERIALIZATION_POLICY_FILE_ENCODING);
       PrintWriter pw = new PrintWriter(osw);
 
-      JType[] serializableTypes =
-              unionOfTypeArrays(serializationSto.getSerializableTypes(), deserializationSto
-                      .getSerializableTypes(), new JType[] {serializerType});
+      JType[] serializableTypes = serOracle.getSerializableTypes();
 
       logger.branch(TreeLogger.Type.INFO, "Generate StorageSerialize policy file with " + serializableTypes.length + " types");
       pw.print(SerializationPolicyLoader.FINAL_FIELDS_KEYWORD);
@@ -147,11 +146,15 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
         if(type.isPrimitive() != null) continue;
         String binaryTypeName = SerializationUtils.getRpcTypeName(type);
         pw.print(binaryTypeName);
-        pw.print(", " + Boolean.toString(deserializationSto.isSerializable(type)));
-        pw.print(", " + Boolean.toString(deserializationSto.maybeInstantiated(type)));
-        pw.print(", " + Boolean.toString(serializationSto.isSerializable(type)));
-        pw.print(", " + Boolean.toString(serializationSto.maybeInstantiated(type)));
-        //no need pw.print(", " + typeStrings.get(type));
+        pw.print(", " + Boolean.toString(serOracle.isSerializable(type)));
+        pw.print(", " + Boolean.toString(serOracle.maybeInstantiated(type)));
+        pw.print(", " + Boolean.toString(serOracle.isSerializable(type)));
+        pw.print(", " + Boolean.toString(serOracle.maybeInstantiated(type)));
+        String typeString = typeStrings.get(type);
+        if(typeString == null){
+          typeString = SerializationUtils.getRpcTypeName(type);
+        }
+        pw.print(", " + typeString);
 
         /*
          * Include the serialization signature to bump the RPC file name if
@@ -194,7 +197,7 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
       byte[] serializationPolicyFileContents = baos.toByteArray();
 
       String serializationPolicyFileName =
-              SerializationPolicyLoader.getSerializationPolicyFileName(SERIALIZATION_POLICY_NAME);
+              SerializationPolicyLoader.getSerializationPolicyFileName(StorageUtils.SERIALIZATION_POLICY_NAME);
       OutputStream os = ctx.tryCreateResource(logger, serializationPolicyFileName);
       if (os != null) {
         os.write(serializationPolicyFileContents);
