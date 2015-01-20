@@ -35,12 +35,8 @@ import java.util.Set;
  */
 final class TypeProviderFinder extends StorageTypeFinder {
 
-  private final TypeOracle typeOracle;
-  private final TreeLogger logger;
-
   TypeProviderFinder(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException {
-    this.typeOracle = context.getTypeOracle();
-    this.logger = logger;
+    super(context, logger);
   }
 
   @Override
@@ -57,7 +53,7 @@ final class TypeProviderFinder extends StorageTypeFinder {
         JParameterizedType storageKeyType = method.getReturnType().isParameterized();
         if (storageKeyType != null) {
           JClassType type = storageKeyType.getTypeArgs()[0];
-          addIfIsValidType(serializables, type, logger);
+          addIfIsValidType(serializables, type);
         }
       }
     }

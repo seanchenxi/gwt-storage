@@ -26,11 +26,22 @@
   <set-property name="storage.cache" value="true" />
   
   <!--
-   - Configuration property define how to find types that will persist in web storage
-   - Valid values are (case insensitive): rpc/xml/mix(others are treated as mix).
+     Configuration property define how to find types that will persist in web storage
+     Valid values are (case insensitive): rpc/xml/mix(others are treated as mix).
    -->
   <define-configuration-property name="storage.type.finder" is-multi-valued="false" />
   <set-configuration-property name="storage.type.finder" value="rpc"/>
+
+  <!--
+      Contains regular expressions, optionally prefixed with '+' or '-'.
+      Each type being considered for serialization is tested against the
+      list of expressions in order, and if there is a match it is added to the
+      blacklist (if the prefix is '-' or no prefix is present), or removed (if
+      the prefix is '+').  If multiple entries in the list match a supplied
+      class, then the last one 'wins.'  For generic types, the regular
+      expression is applied to just the base class's fully qualified name.
+  -->
+  <define-configuration-property name="storage.blacklist" is-multi-valued="true" />
 
   <generate-with class="com.seanchenxi.gwt.storage.rebind.StorageKeyProviderGenerator">
     <when-type-assignable class="com.seanchenxi.gwt.storage.client.StorageKeyProvider"/>

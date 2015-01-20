@@ -25,7 +25,7 @@ import com.google.gwt.util.regexfilter.RegexFilter;
 /**
  * Created by: Xi
  */
-final class StorageTypeFilter extends RegexFilter {
+public final class StorageTypeFilter extends RegexFilter {
 
   public StorageTypeFilter(TreeLogger logger, List<String> regexes) throws UnableToCompleteException {
     super(logger, regexes);

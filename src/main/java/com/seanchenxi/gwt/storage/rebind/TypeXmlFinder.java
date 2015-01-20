@@ -55,9 +55,7 @@ final class TypeXmlFinder extends StorageTypeFinder {
   private static final String FEATURE_NAMESPACE_PREFIXES = "http://xml.org/sax/features/namespace-prefixes";
   private static final String STORAGE_SERIALIZATION_DTD = "storage-serialization.dtd";
 
-  private final TypeOracle typeOracle;
   private final ResourceOracle resourceOracle;
-  private final TreeLogger logger;
   private final JClassType[] collectionOrMap;
 
   static Source createSAXSource(InputStream input) throws SAXException{
@@ -73,9 +71,8 @@ final class TypeXmlFinder extends StorageTypeFinder {
   }
 
   TypeXmlFinder(GeneratorContext context, TreeLogger logger){
-    this.typeOracle = context.getTypeOracle();
+    super(context, logger);
     this.resourceOracle = context.getResourcesOracle();
-    this.logger = logger;
 
     JClassType[] _collectionOrMap = new JClassType[2];
     try{
@@ -133,9 +130,9 @@ final class TypeXmlFinder extends StorageTypeFinder {
 
       try{
         if(storageSerial.isAutoArrayType() && jType != null && jType.isArray() == null && !isCollectionOrMapType(jType)){
-          addIfIsValidType(serializables, typeOracle.getArrayType(jType), logger);
+          addIfIsValidType(serializables, typeOracle.getArrayType(jType));
         }else{
-          addIfIsValidType(serializables, jType, logger);
+          addIfIsValidType(serializables, jType);
         }
       }catch (Exception e){
         logger.branch(TreeLogger.Type.WARN, "Add className " +  className + " error", e);
@@ -153,11 +150,11 @@ final class TypeXmlFinder extends StorageTypeFinder {
       JClassType jBoxedType = typeOracle.findType(jpt.getQualifiedBoxedSourceName());
       boolean added = false;
       if(autoArrayType){
-        if(addIfIsValidType(serializables, typeOracle.getArrayType(jpt), logger))
-          added = addIfIsValidType(serializables, typeOracle.getArrayType(jBoxedType), logger);
+        if(addIfIsValidType(serializables, typeOracle.getArrayType(jpt)))
+          added = addIfIsValidType(serializables, typeOracle.getArrayType(jBoxedType));
       }else{
-        if(addIfIsValidType(serializables, jpt, logger))
-          added = addIfIsValidType(serializables, jBoxedType, logger);
+        if(addIfIsValidType(serializables, jpt))
+          added = addIfIsValidType(serializables, jBoxedType);
       }
       if(added) logger.branch(TreeLogger.Type.TRACE, "Added " + jpt.getQualifiedSourceName());
     }

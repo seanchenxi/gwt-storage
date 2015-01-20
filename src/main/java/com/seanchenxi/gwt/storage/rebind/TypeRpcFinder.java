@@ -1,6 +1,8 @@
 package com.seanchenxi.gwt.storage.rebind;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.core.ext.BadPropertyValueException;
@@ -20,22 +22,33 @@ import com.google.gwt.user.client.rpc.RemoteService;
  */
 final class TypeRpcFinder extends StorageTypeFinder {
 
-  private final TypeOracle typeOracle;
-  private final StorageTypeFilter typeFilter;
-  private final TreeLogger logger;
-
   TypeRpcFinder(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException{
-    this.typeOracle = context.getTypeOracle();
-    this.logger = logger;
-    StorageTypeFilter _typeFilter;
+    super(context, logger);
+
+    Set<String> regexes = new HashSet<String>();
+    try {
+      ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty(PROP_RPC_BLACKLIST);
+      logger.branch(TreeLogger.INFO, "Analyzing RPC blacklist information");
+      regexes.addAll(prop.getValues());
+    } catch (BadPropertyValueException e) {
+      logger.log(TreeLogger.DEBUG, "Could not find property " + PROP_RPC_BLACKLIST);
+    }
+
     try {
       ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty(PROP_STORAGE_BLACKLIST);
-      _typeFilter = new StorageTypeFilter(logger, prop.getValues());
+      String log = "Analyzing Storage blacklist information";
+      if(!regexes.isEmpty()){
+        log += ", will be an addition of RPC blacklist filter regex";
+      }
+      logger.branch(TreeLogger.INFO, log);
+      regexes.addAll(prop.getValues());
     } catch (BadPropertyValueException e) {
       logger.log(TreeLogger.DEBUG, "Could not find property " + PROP_STORAGE_BLACKLIST, e);
-      _typeFilter = null;
     }
-    typeFilter = _typeFilter;
+
+    if(!regexes.isEmpty()){
+      setTypeFilter(new StorageTypeFilter(logger, new ArrayList<String>(regexes)));
+    }
   }
 
   @Override
@@ -48,10 +61,10 @@ final class TypeRpcFinder extends StorageTypeFinder {
       for(JMethod method : remoteSvcType.getMethods()){
         JType type = method.getReturnType();
         if(JPrimitiveType.VOID != type){
-          addIfIsValidType(serializables, type, typeFilter, logger);
+          addIfIsValidType(serializables, type);
         }
         for(JType param : method.getParameterTypes()){
-          addIfIsValidType(serializables, param, typeFilter, logger);
+          addIfIsValidType(serializables, param);
         }
       }
     }

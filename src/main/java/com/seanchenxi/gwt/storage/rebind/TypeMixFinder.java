@@ -16,7 +16,10 @@
 
 package com.seanchenxi.gwt.storage.rebind;
 
+import com.google.gwt.core.ext.GeneratorContext;
+import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
+import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JType;
 
 import java.util.HashSet;
@@ -30,7 +33,8 @@ final class TypeMixFinder extends StorageTypeFinder {
 
   private final List<StorageTypeFinder> typeFinders;
 
-  TypeMixFinder(List<StorageTypeFinder> typeFinders){
+  TypeMixFinder(GeneratorContext context, TreeLogger logger, List<StorageTypeFinder> typeFinders){
+    super(context, logger);
     this.typeFinders = typeFinders;
   }
 
@@ -41,6 +45,23 @@ final class TypeMixFinder extends StorageTypeFinder {
       serializables.addAll(finder.findStorageTypes());
     }
     return serializables;
+  }
+
+  @Override
+  public void setTypeFilter(StorageTypeFilter typeFilter) {
+    for(StorageTypeFinder finder : typeFinders){
+      finder.setTypeFilter(typeFilter);
+    }
+  }
+
+  @Override
+  public boolean isAllowed(JClassType type){
+    for(StorageTypeFinder finder : typeFinders){
+      if(!finder.isAllowed(type)){
+        return false;
+      }
+    }
+    return true;
   }
 
 }

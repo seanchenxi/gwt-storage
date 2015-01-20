@@ -71,16 +71,15 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
     if (serializerType == null || serializerType.isInterface() == null)
       throw new UnableToCompleteException();
 
-    final Set<JType> serializables = StorageTypeFinder.getInstance(context, logger).findStorageTypes();
-
     String typeSerializerClassName = serializerType.getQualifiedSourceName() + TYPE_SERIALIZER_SUFFIX;
     String typeSerializerSimpleName = serializerType.getSimpleSourceName() + TYPE_SERIALIZER_SUFFIX;
+
+    final StorageTypeFinder storageTypeFinder = StorageTypeFinder.getInstance(context, logger);
+    SerializableTypeOracle serializationOracle = buildSerializableTypeOracle(logger, context, storageTypeFinder);
+
     JClassType typeSerializer = typeOracle.findType(typeSerializerClassName);
-
-    SerializableTypeOracle serializationOracle = buildSerializableTypeOracle(logger, context, serializables);
-
     if (typeSerializer != null && typeSerializer.isClass() != null
-        && isNothingChanged(logger, context, serializables, serializationOracle)) {
+        && isNothingChanged(logger, context, serializationOracle)) {
       return new RebindResult(RebindMode.USE_EXISTING, typeSerializerClassName);
     }
 
@@ -93,7 +92,8 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
 
     if (context.isGeneratorResultCachingEnabled()) {
       RebindResult result = new RebindResult(RebindMode.USE_PARTIAL_CACHED, typeSerializerClassName);
-      CachedRpcTypeInformation cti = new CachedRpcTypeInformation(serializationOracle, serializationOracle, serializables, new HashSet<JType>());
+      Set<JType> storageTypes = storageTypeFinder.findStorageTypes();
+      CachedRpcTypeInformation cti = new CachedRpcTypeInformation(serializationOracle, serializationOracle, storageTypes, new HashSet<JType>());
       result.putClientData(ProxyCreator.CACHED_TYPE_INFO_KEY, cti);
       return result;
     } else {
@@ -106,15 +106,13 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
     return GENERATOR_VERSION_ID;
   }
 
-  private SerializableTypeOracle buildSerializableTypeOracle(TreeLogger logger, GeneratorContext context, Set<JType> serializables) throws UnableToCompleteException {
+  private SerializableTypeOracle buildSerializableTypeOracle(TreeLogger logger, GeneratorContext context, StorageTypeFinder storageTypeFinder) throws UnableToCompleteException {
     SerializableTypeOracleBuilder builder = new SerializableTypeOracleBuilder(logger, context);
-    for (JType type : serializables) {
-      builder.addRootType(logger, type);
-    }
+    GwtUtilityDelegate.attachTypeFinder(builder, storageTypeFinder, logger);
     return builder.build(logger);
   }
 
-  private boolean isNothingChanged(TreeLogger logger, GeneratorContext context, Set<JType> serializables, SerializableTypeOracle serializationOracle) {// caching use
+  private boolean isNothingChanged(TreeLogger logger, GeneratorContext context, SerializableTypeOracle serializationOracle) {// caching use
     CachedGeneratorResult cachedResult = context.getCachedGeneratorResult();
     if (cachedResult == null || !context.isGeneratorResultCachingEnabled()){
       return false;
@@ -141,9 +139,8 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
       pw.print(GwtUtilityDelegate.shouldSerializeFinalFields(logger, ctx));
       pw.print('\n');
 
-      for (int i = 0; i < serializableTypes.length; ++i) {
-        JType type = serializableTypes[i];
-        if(type.isPrimitive() != null) continue;
+      for (JType type : serializableTypes) {
+        if (type.isPrimitive() != null) continue;
         String binaryTypeName = SerializationUtils.getRpcTypeName(type);
         pw.print(binaryTypeName);
         pw.print(", " + Boolean.toString(serOracle.isSerializable(type)));
@@ -151,7 +148,7 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
         pw.print(", " + Boolean.toString(serOracle.isSerializable(type)));
         pw.print(", " + Boolean.toString(serOracle.maybeInstantiated(type)));
         String typeString = typeStrings.get(type);
-        if(typeString == null){
+        if (typeString == null) {
           typeString = SerializationUtils.getRpcTypeName(type);
         }
         pw.print(", " + typeString);
@@ -224,20 +221,6 @@ public class StorageTypeSerializerGenerator extends IncrementalGenerator {
       logger.log(TreeLogger.ERROR, null, e);
       throw new UnableToCompleteException();
     }
-  }
-
-  /**
-   * Take the union of two type arrays, and then sort the results
-   * alphabetically.
-   */
-  private static JType[] unionOfTypeArrays(JType[]... types) {
-    Set<JType> typesList = new HashSet<JType>();
-    for (JType[] a : types) {
-      typesList.addAll(Arrays.asList(a));
-    }
-    JType[] serializableTypes = typesList.toArray(new JType[typesList.size()]);
-    Arrays.sort(serializableTypes, GwtUtilityDelegate.JTYPE_COMPARATOR);
-    return serializableTypes;
   }
 
   private void emitPolicyFileArtifact(TreeLogger logger, GeneratorContext context,

@@ -25,6 +25,8 @@ import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JRealClassType;
 import com.google.gwt.core.ext.typeinfo.JType;
+import com.google.gwt.core.ext.typeinfo.TypeOracle;
+
 import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
 
 import java.util.ArrayList;
@@ -35,13 +37,14 @@ import java.util.Set;
 /**
  * Created by: Xi
  */
-abstract class StorageTypeFinder {
+public abstract class StorageTypeFinder {
 
+  public static final String SERIALIZATION_CONFIG = "storage-serialization.xml";
+
+  public static final String PROP_RPC_BLACKLIST = "rpc.blacklist";
   public static final String PROP_STORAGE_BLACKLIST = "storage.blacklist";
   public static final String PROP_TYPE_FINDER = "storage.type.finder";
   public static final List<String> TYPE_FINDER_VALUES = Arrays.asList("rpc", "xml", "mix", "none");
-
-  public static final String SERIALIZATION_CONFIG = "storage-serialization.xml";
 
   public static StorageTypeFinder getInstance(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException{
     final List<StorageTypeFinder> typeFinders = getStorageTypeFinders(context, logger);
@@ -51,11 +54,11 @@ abstract class StorageTypeFinder {
       case 1:
         return typeFinders.get(0);
       default:
-        return new TypeMixFinder(typeFinders);
+        return new TypeMixFinder(context, logger, typeFinders);
     }
   }
 
-  protected static List<StorageTypeFinder> getStorageTypeFinders(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException {
+  private static List<StorageTypeFinder> getStorageTypeFinders(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException {
     final List<StorageTypeFinder> typeFinders = new ArrayList<StorageTypeFinder>();
 
     JClassType keyProviderIntf = context.getTypeOracle().findType(StorageKeyProvider.class.getName());
@@ -87,14 +90,24 @@ abstract class StorageTypeFinder {
     return typeFinders;
   }
 
-  protected static boolean addIfIsValidType(Set<JType> serializables, JType jType, TreeLogger logger) {
-    return addIfIsValidType(serializables, jType, null, logger);
+  protected final TreeLogger logger;
+  protected final TypeOracle typeOracle;
+
+  private StorageTypeFilter typeFilter;
+
+  public StorageTypeFinder(GeneratorContext context, TreeLogger logger) {
+    this.logger = logger;
+    this.typeOracle = context.getTypeOracle();
   }
 
-  protected static boolean addIfIsValidType(final Set<JType> serializables, JType jType, StorageTypeFilter filter, TreeLogger logger) {
+  public void setTypeFilter(StorageTypeFilter typeFilter) {
+    this.typeFilter = typeFilter;
+  }
+
+  protected boolean addIfIsValidType(final Set<JType> serializables, JType jType) {
     if(jType == null) return false;
     // we don't filter interface types here, GWT's SerializableTypeOracle will treat them
-    if(filter != null && !filter.isIncluded(logger, getBaseTypeName(jType.isClass()))){
+    if(!isAllowed(jType.isClass())){
       logger.branch(TreeLogger.DEBUG, jType + " was filtered.");
       return false;
     }else{
@@ -104,13 +117,26 @@ abstract class StorageTypeFinder {
     }
   }
 
+  public boolean isAllowed(JClassType type){
+    if(this.typeFilter == null){
+      return true;
+    }
+
+    String name = getBaseTypeName(type);
+    // For types not handled by getBaseTypeName just return true.
+    if (name == null) {
+      return true;
+    }
+    return typeFilter.isIncluded(logger, name);
+  }
+
   /**
    * Returns a simple types, including classes and
    * interfaces, parameterized, and raw types. Null is returned for other types
    * such as arrays and type parameters (e.g., 'E' in java.util.List<E>) because
    * filtering is meaningless for such types.
    */
-  private static String getBaseTypeName(JClassType type) {
+  protected String getBaseTypeName(JClassType type) {
     if(type == null){
       return null;
     }
@@ -125,5 +151,4 @@ abstract class StorageTypeFinder {
   }
 
   public abstract Set<JType> findStorageTypes() throws UnableToCompleteException;
-
 }
