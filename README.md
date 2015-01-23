@@ -14,6 +14,7 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
   * **Extensible caching** possiblility to avoid repeating serialization/deserialization
   
 #### Coming new features: 
+  * Server side data serialization [#8] (https://github.com/seanchenxi/gwt-storage/issues/8), thanks to [Freddy Boucher] (https://github.com/freddyboucher) and [Richard Wallis](https://github.com/rdwallis)
   * [Value record priority](https://github.com/seanchenxi/gwt-storage/pull/3), thanks to [Richard Wallis](https://github.com/rdwallis)
   * Data encryption
   * Data compression
