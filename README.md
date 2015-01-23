@@ -15,7 +15,8 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
   
 #### Coming new features: 
   * [Value record priority](https://github.com/seanchenxi/gwt-storage/pull/3), thanks to [Richard Wallis](https://github.com/rdwallis)
-  * Data compressing
+  * Data encryption
+  * Data compression
   * Data recovering tools
 
 ## Stable version, v1.3.0
