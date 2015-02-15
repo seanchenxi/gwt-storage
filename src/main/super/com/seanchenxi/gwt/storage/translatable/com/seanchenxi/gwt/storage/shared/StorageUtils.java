@@ -16,8 +16,11 @@
 
 package com.seanchenxi.gwt.storage.shared;
 
+import com.google.gwt.core.client.GwtScriptOnly;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.SerializationException;
+import com.google.gwt.user.server.rpc.RPC;
+import com.google.gwt.user.server.rpc.SerializationPolicy;
 
 import com.seanchenxi.gwt.storage.client.serializer.StorageSerializer;
 
@@ -34,7 +37,7 @@ public class StorageUtils {
   }
 
   public static String serialize(String str) throws SerializationException {
-    return serialize(String.class, str);
+    return SERIALIZER.serialize(String.class, str);
   }
 
   public static String serialize(boolean bool) throws SerializationException {
@@ -73,12 +76,59 @@ public class StorageUtils {
     return serialize(Object.class, value);
   }
 
-  public static <T> String serialize(Class<? super T> clazz, T instance) throws SerializationException {
-    return SERIALIZER.serialize(clazz, instance);
+  public static String serialize(String str, String moduleName) throws SerializationException {
+    return SERIALIZER.serialize(String.class, str);
+  }
+
+  public static String serialize(boolean bool, String moduleName) throws SerializationException {
+    return serialize(boolean.class, bool);
+  }
+
+  public static String serialize(byte value, String moduleName) throws SerializationException {
+    return serialize(byte.class, value);
+  }
+
+  public static String serialize(char value, String moduleName) throws SerializationException {
+    return serialize(char.class, value);
+  }
+
+  public static String serialize(double value, String moduleName) throws SerializationException {
+    return serialize(double.class, value);
+  }
+
+  public static String serialize(float value, String moduleName) throws SerializationException {
+    return serialize(float.class, value);
+  }
+
+  public static String serialize(int value, String moduleName) throws SerializationException {
+    return serialize(int.class, value);
+  }
+
+  public static String serialize(long value, String moduleName) throws SerializationException {
+    return serialize(long.class, value);
+  }
+
+  public static String serialize(short value, String moduleName) throws SerializationException {
+    return serialize(short.class, value);
+  }
+
+  public static String serialize(Object value, String moduleName) throws SerializationException {
+    return serialize(Object.class, value);
   }
 
   public static <T> T deserialize(Class<? super T> clazz, String serializedString) throws SerializationException {
     return SERIALIZER.deserialize(clazz, serializedString);
   }
 
+  public static <T> T deserialize(Class<? super T> clazz, String serializedString, String moduleName) throws SerializationException {
+    return deserialize(clazz, serializedString);
+  }
+
+  public static <T> String serialize(Class<? super T> clazz, T instance) throws SerializationException {
+    return SERIALIZER.serialize(clazz, instance);
+  }
+
+  public static <T> String serialize(Class<? super T> clazz, T instance, String moduleName) throws SerializationException {
+    return serialize(clazz, instance);
+  }
 }

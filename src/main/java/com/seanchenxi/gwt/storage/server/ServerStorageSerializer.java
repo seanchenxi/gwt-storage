@@ -26,14 +26,21 @@ import com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter;
  */
 public class ServerStorageSerializer {
 
-  public <T> T deserialize(Class<? super T> clazz, String serializedString) throws SerializationException {
+  public <T> T deserialize(Class<? super T> clazz, String serializedString, final SerializationPolicy serializationPolicy) throws SerializationException {
     throw new UnsupportedOperationException();
   }
 
   public <T> String serialize(Class<? super T> clazz, T instance, SerializationPolicy serializationPolicy) throws SerializationException {
-    if (serializationPolicy == null) {
-      throw new IllegalArgumentException("SerializationPolicy is null, please call ");
+    if (instance == null) {
+      return null;
+    }else if(String.class.equals(clazz)){
+      return (String) instance;
     }
+
+    if (serializationPolicy == null) {
+      throw new IllegalArgumentException("SerializationPolicy is null, please call StorageUtils.PolicyLoader.load(...) before");
+    }
+
     ServerSerializationStreamWriter stream = new ServerSerializationStreamWriter(serializationPolicy);
     stream.setFlags(AbstractSerializationStream.DEFAULT_FLAGS);
     stream.prepareToWrite();

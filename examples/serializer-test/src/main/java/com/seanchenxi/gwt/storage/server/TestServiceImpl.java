@@ -39,7 +39,7 @@ public class TestServiceImpl extends RemoteServiceServlet implements TestService
   @Override
   public void init(ServletConfig config) throws ServletException {
     super.init(config);
-    StorageUtils.loadSerializationPolicy(config.getServletContext(), "storage_test");
+    StorageUtils.PolicyLoader.load(config.getServletContext(), "storage_test");
   }
 
   @Override
