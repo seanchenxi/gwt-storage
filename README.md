@@ -64,7 +64,13 @@ Find the the available jars in [Maven Central](http://search.maven.org/#search%7
     <artifactId>gwt-storage</artifactId>
     <version>1.3.1-SNAPSHOT</version>
     <scope>provided</scope>
+    <!-- 
+        If you want to do sever side object2string serialization, 
+        you should change the scope to compile
+    -->
 </dependency>
+
+
 ```
 
 
