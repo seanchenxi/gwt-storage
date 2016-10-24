@@ -181,7 +181,8 @@ public class StorageTest implements EntryPoint {
 
       @Override
       public void onSuccess(RpcTestValue result) {
-        StorageTestUtil.testPutValue(userKP ? KP.rpcTestValueKey() : KG.objectKey("getRpcTestValue"), result, new RpcTestValue());
+        StorageKey<?> getRpcTestValue = userKP ? KP.rpcTestValueKey() : KG.objectKey("getRpcTestValue");
+        StorageTestUtil.testPutValue(getRpcTestValue, result, new RpcTestValue());
 
         TEST_SERVICE.getRpcTestValueList(new AsyncCallback<List<RpcTestValue>>() {
           @Override

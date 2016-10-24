@@ -44,7 +44,7 @@ public interface StorageKeyProvider {
   @Documented
   @Retention(RetentionPolicy.RUNTIME)
   @Target(ElementType.METHOD)
-  public @interface Key {
+  @interface Key {
 
     String value() default "";
 

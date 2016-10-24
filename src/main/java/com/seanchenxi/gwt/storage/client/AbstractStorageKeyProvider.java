@@ -27,7 +27,7 @@ public abstract class AbstractStorageKeyProvider implements StorageKeyProvider {
   private static final Map<String, StorageKey<?>> KEY_MAP;
 
   static {
-    KEY_MAP = new HashMap<String, StorageKey<?>>();
+    KEY_MAP = new HashMap<>();
   }
 
   @SuppressWarnings("unchecked")

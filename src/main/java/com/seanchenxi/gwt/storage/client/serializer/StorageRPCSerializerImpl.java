@@ -36,7 +36,7 @@ final class StorageRPCSerializerImpl implements StorageSerializer {
 
   static{
     TYPE_SERIALIZER = GWT.create(StorageTypeSerializer.class);
-    TYPE_MAP = new HashMap<Class<?>, StorageValueType>();
+    TYPE_MAP = new HashMap<>();
 
     TYPE_MAP.put(boolean[].class, StorageValueType.BOOLEAN_VECTOR);
     TYPE_MAP.put(byte[].class, StorageValueType.BYTE_VECTOR);

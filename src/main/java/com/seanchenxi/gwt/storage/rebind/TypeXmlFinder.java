@@ -36,7 +36,6 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.NotFoundException;
-import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.core.ext.typeinfo.TypeOracleException;
 import com.google.gwt.dev.resource.Resource;
 import com.google.gwt.dev.resource.ResourceOracle;
@@ -86,7 +85,7 @@ final class TypeXmlFinder extends StorageTypeFinder {
 
   @Override
   public Set<JType> findStorageTypes() throws UnableToCompleteException{
-    Set<JType> serializables = new HashSet<JType>();
+    Set<JType> serializables = new HashSet<>();
 
     // Find all Serialization resource
     List<StorageSerialization> storageSerializations = findAllStorageSerializations();
@@ -162,7 +161,7 @@ final class TypeXmlFinder extends StorageTypeFinder {
 
   private List<StorageSerialization> findAllStorageSerializations() throws UnableToCompleteException{
     logger.branch(TreeLogger.Type.DEBUG, "Find StorageSerialization XML");
-    List<StorageSerialization> storageSerializations = new ArrayList<StorageSerialization>();
+    List<StorageSerialization> storageSerializations = new ArrayList<>();
     for(String pathName : resourceOracle.getPathNames()){
       if(pathName.endsWith(SERIALIZATION_CONFIG)){
         StorageSerialization storageSerialization = parseXmlResource(resourceOracle.getResource(pathName));

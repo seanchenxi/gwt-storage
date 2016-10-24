@@ -2,7 +2,6 @@ package com.seanchenxi.gwt.storage.rebind;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.google.gwt.core.ext.BadPropertyValueException;
@@ -14,7 +13,6 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.JType;
-import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.client.rpc.RemoteService;
 
 /**
@@ -25,7 +23,7 @@ final class TypeRpcFinder extends StorageTypeFinder {
   TypeRpcFinder(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException{
     super(context, logger);
 
-    Set<String> regexes = new HashSet<String>();
+    Set<String> regexes = new HashSet<>();
     try {
       ConfigurationProperty prop = context.getPropertyOracle().getConfigurationProperty(PROP_RPC_BLACKLIST);
       logger.branch(TreeLogger.INFO, "Analyzing RPC blacklist information");
@@ -47,13 +45,13 @@ final class TypeRpcFinder extends StorageTypeFinder {
     }
 
     if(!regexes.isEmpty()){
-      setTypeFilter(new StorageTypeFilter(logger, new ArrayList<String>(regexes)));
+      setTypeFilter(new StorageTypeFilter(logger, new ArrayList<>(regexes)));
     }
   }
 
   @Override
   public Set<JType> findStorageTypes() throws UnableToCompleteException{
-    Set<JType> serializables = new HashSet<JType>();
+    Set<JType> serializables = new HashSet<>();
 
     JClassType remoteSvcIntf = typeOracle.findType(RemoteService.class.getName());
     JClassType[] remoteSvcTypes = remoteSvcIntf.getSubtypes();
