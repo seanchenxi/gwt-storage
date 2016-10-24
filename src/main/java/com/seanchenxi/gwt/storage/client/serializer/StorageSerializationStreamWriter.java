@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.ListIterator;
 
 import com.google.gwt.core.client.JsonUtils;
-import com.google.gwt.lang.LongLib;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamWriter;
 import com.google.gwt.user.client.rpc.impl.Serializer;
@@ -63,7 +62,7 @@ final class StorageSerializationStreamWriter extends AbstractSerializationStream
 
   @Override
   public void writeLong(long value) {
-    append(APOSTROPHE + LongLib.toBase64(value) + APOSTROPHE);
+    append(APOSTROPHE + longToBase64(value) + APOSTROPHE);
   }
 
   @Override
@@ -116,4 +115,55 @@ final class StorageSerializationStreamWriter extends AbstractSerializationStream
     append(buffer, table);
   }
 
+  /**
+   * Copy from {@link com.google.gwt.user.client.rpc.impl.AbstractSerializationStream#longToBase64(long)}
+   *
+   * Return an optionally single-quoted string containing a base-64 encoded
+   * version of the given long value.
+   *
+   * Keep this synchronized with the version in Base64Utils.
+   */
+  static String longToBase64(long value) {
+    int low = (int)(value & -1L);
+    int high = (int)(value >> 32);
+    StringBuilder sb = new StringBuilder();
+    boolean haveNonZero = base64Append(sb, high >> 28 & 15, false);
+    haveNonZero = base64Append(sb, high >> 22 & 63, haveNonZero);
+    haveNonZero = base64Append(sb, high >> 16 & 63, haveNonZero);
+    haveNonZero = base64Append(sb, high >> 10 & 63, haveNonZero);
+    haveNonZero = base64Append(sb, high >> 4 & 63, haveNonZero);
+    int v = (high & 15) << 2 | low >> 30 & 3;
+    haveNonZero = base64Append(sb, v, haveNonZero);
+    haveNonZero = base64Append(sb, low >> 24 & 63, haveNonZero);
+    haveNonZero = base64Append(sb, low >> 18 & 63, haveNonZero);
+    haveNonZero = base64Append(sb, low >> 12 & 63, haveNonZero);
+    base64Append(sb, low >> 6 & 63, haveNonZero);
+    base64Append(sb, low & 63, true);
+    return sb.toString();
+  }
+
+  private static boolean base64Append(StringBuilder sb, int digit, boolean haveNonZero) {
+    if(digit > 0) {
+      haveNonZero = true;
+    }
+
+    if(haveNonZero) {
+      int c;
+      if(digit < 26) {
+        c = 65 + digit;
+      } else if(digit < 52) {
+        c = 97 + digit - 26;
+      } else if(digit < 62) {
+        c = 48 + digit - 52;
+      } else if(digit == 62) {
+        c = 36;
+      } else {
+        c = 95;
+      }
+
+      sb.append((char)c);
+    }
+
+    return haveNonZero;
+  }
 }
