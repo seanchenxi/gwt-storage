@@ -1,0 +1,7 @@
+com.google.gwt.user.rebind.rpc
+com.seanchenxi.gwt.storage.client
+com.seanchenxi.gwt.storage.client.cache
+com.seanchenxi.gwt.storage.client.serializer
+com.seanchenxi.gwt.storage.rebind
+com.seanchenxi.gwt.storage.server
+com.seanchenxi.gwt.storage.shared
