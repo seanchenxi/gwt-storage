@@ -11,7 +11,7 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
   * Support **all java types** that meet the requirements of [GWT RPC serialization](http://www.gwtproject.org/doc/latest/tutorial/RPC.html#serialize) (implements java.io.Serializable, etc...)
   * Client side Java Object serialization. By reusing the **GWT RPC object serialization framework**. Means, all objects used in GWT RPC service will be automatically persistable in localStorage or sessionStorage. No more code/serializer generation.
   * Customizing the list of web storage persistable type with XML file.
-  * **Extensible caching** possiblility to avoid repeating serialization/deserialization
+  * **Extensible caching** possibility to avoid repeating serialization/deserialization
   
 #### Coming new features: 
   * Server side data serialization [#8] (https://github.com/seanchenxi/gwt-storage/issues/8), thanks to [Freddy Boucher] (https://github.com/freddyboucher) and [Richard Wallis](https://github.com/rdwallis)
@@ -20,11 +20,12 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
   * Data compression
   * Data recovering tools
 
-## Stable version, v1.3.0
+## Stable version, v1.4.0
   * [gwt-storage releases](https://github.com/seanchenxi/gwt-storage/releases/) 
   * [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt)
 
 ## Previous Versions
+  * [gwt-storage v1.4.0](https://github.com/seanchenxi/gwt-storage/releases/tag/v1.4.0)
   * [gwt-storage v1.3.0](https://github.com/seanchenxi/gwt-storage/releases/tag/v1.3.0)
   * [gwt-storage v1.2.1](https://github.com/seanchenxi/gwt-storage/releases/tag/v1.2.1)
   * [gwt-storage v1.2.0](https://github.com/seanchenxi/gwt-storage/releases/tag/v1.2.0)
@@ -32,8 +33,8 @@ This project aims to extend the [GWT Client-side Storage API](http://www.gwtproj
 
 ## Use gwt-storage in your project
   * Getting Started: <a target="_blank" href="https://github.com/seanchenxi/gwt-storage/wiki/Getting-Started">Getting Started</a>
-  * Javadoc: <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.3.0/">v1.3.0</a><br/>
-  * Javadoc SNAPSHOT <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.3.1-SNAPSHOT/">v1.3.1-SNAPSHOT</a><br/>
+  * Javadoc: <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.4.0/">v1.4.0</a><br/>
+  * Javadoc SNAPSHOT <a target="_blank" href="http://seanchenxi.github.io/gwt-storage/javadoc/1.4.1-SNAPSHOT/">v1.4.1-SNAPSHOT</a><br/>
 
 ### Maven Configuration
 Find the the available jars in [Maven Central](http://search.maven.org/#search%7Cga%7C1%7Ccom.seanchenxi.gwt)
@@ -43,7 +44,7 @@ Find the the available jars in [Maven Central](http://search.maven.org/#search%7
 <dependency>
     <groupId>com.seanchenxi.gwt</groupId>
     <artifactId>gwt-storage</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
     <scope>provided</scope>
 </dependency>
 ```
@@ -62,7 +63,7 @@ Find the the available jars in [Maven Central](http://search.maven.org/#search%7
 <dependency>
     <groupId>com.seanchenxi.gwt</groupId>
     <artifactId>gwt-storage</artifactId>
-    <version>1.3.1-SNAPSHOT</version>
+    <version>1.4.1-SNAPSHOT</version>
     <scope>provided</scope>
     <!-- 
         If you want to do sever side object2string serialization, 
