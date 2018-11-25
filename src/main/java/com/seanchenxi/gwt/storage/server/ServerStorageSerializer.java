@@ -19,6 +19,7 @@ package com.seanchenxi.gwt.storage.server;
 import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.client.rpc.impl.AbstractSerializationStream;
 import com.google.gwt.user.server.rpc.SerializationPolicy;
+import com.google.gwt.user.server.rpc.impl.ServerSerializationStreamReader;
 import com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter;
 
 /**
@@ -26,14 +27,26 @@ import com.google.gwt.user.server.rpc.impl.ServerSerializationStreamWriter;
  */
 public class ServerStorageSerializer {
 
-  public <T> T deserialize(Class<? super T> clazz, String serializedString, final SerializationPolicy serializationPolicy) throws SerializationException {
-    throw new UnsupportedOperationException();
+  private static final String SERVER_READABLE_STR_1 = "_i_b";
+  private static final String SERVER_READABLE_STR_2 = "_s";
+
+  public  <T> T deserialize(Class<? super T> clazz, String serializedString, final SerializationPolicy serializationPolicy) throws SerializationException {
+    if(serializedString == null || serializedString.trim().length() < 1){
+      return null;
+    }else if(String.class.isAssignableFrom(clazz)){
+      return (T) serializedString;
+    }
+
+    RpcProtocolReversing.Builder builder = RpcProtocolReversing.forServerRead(serializedString);
+    ServerSerializationStreamReader serverSerializationStreamReader = new ServerSerializationStreamReader(this.getClass().getClassLoader(), (moduleBaseURL, serializationPolicyStrongName) -> serializationPolicy);
+    serverSerializationStreamReader.prepareToRead(builder.build());
+    return (T) serverSerializationStreamReader.deserializeValue(clazz);
   }
 
   public <T> String serialize(Class<? super T> clazz, T instance, SerializationPolicy serializationPolicy) throws SerializationException {
     if (instance == null) {
       return null;
-    }else if(String.class.equals(clazz)){
+    }else if(String.class.isAssignableFrom(clazz)){
       return (String) instance;
     }
 
@@ -44,6 +57,8 @@ public class ServerStorageSerializer {
     ServerSerializationStreamWriter stream = new ServerSerializationStreamWriter(serializationPolicy);
     stream.setFlags(AbstractSerializationStream.DEFAULT_FLAGS);
     stream.prepareToWrite();
+    stream.writeString(SERVER_READABLE_STR_1);
+    stream.writeString(SERVER_READABLE_STR_2);
     if (clazz != void.class) {
       stream.serializeValue(instance, clazz);
     }

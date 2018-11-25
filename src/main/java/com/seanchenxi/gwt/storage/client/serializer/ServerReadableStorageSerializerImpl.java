@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Xi CHEN
+ * Copyright 2018 Xi CHEN
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,11 @@ package com.seanchenxi.gwt.storage.client.serializer;
  * Use GWT RPC way to realize object's serialization or deserialization.
  *
  */
-final class StorageRPCSerializerImpl extends AbstractStorageSerializerImpl {
+final class ServerReadableStorageSerializerImpl extends AbstractStorageSerializerImpl {
 
   @Override
   protected boolean isSeverReadable() {
-    return false;
+    return true;
   }
 
 }

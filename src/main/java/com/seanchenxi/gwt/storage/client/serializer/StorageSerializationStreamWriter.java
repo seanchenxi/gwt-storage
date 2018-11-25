@@ -45,6 +45,11 @@ final class StorageSerializationStreamWriter extends AbstractSerializationStream
     this.serializer = serializer;
   }
 
+
+  public <T> String getSerializationSignature(Class<? super T> clazz) {
+    return serializer.getSerializationSignature(clazz);
+  }
+
   @Override
   public void prepareToWrite() {
     super.prepareToWrite();

@@ -43,6 +43,13 @@
   -->
   <define-configuration-property name="storage.blacklist" is-multi-valued="true" />
 
+  <!--
+    Define if to use memory cache or not. default value is "true".
+  -->
+  <define-property name="storage.serverReadable" values="true, false" />
+  <set-property-fallback name="storage.serverReadable" value="false" />
+  <set-property name="storage.serverReadable" value="false" />
+
   <generate-with class="com.seanchenxi.gwt.storage.rebind.StorageKeyProviderGenerator">
     <when-type-assignable class="com.seanchenxi.gwt.storage.client.StorageKeyProvider"/>
   </generate-with>
@@ -61,8 +68,14 @@
   	<when-property-is name="storage.cache" value="false"/>
   </replace-with>
  
-  <replace-with class="com.seanchenxi.gwt.storage.client.serializer.StorageRPCSerializerImpl">
+  <replace-with class="com.seanchenxi.gwt.storage.client.serializer.ServerReadableStorageSerializerImpl">
   	<when-type-is class="com.seanchenxi.gwt.storage.client.serializer.StorageSerializer" />
+    <when-property-is name="storage.serverReadable" value="true" />
+  </replace-with>
+
+  <replace-with class="com.seanchenxi.gwt.storage.client.serializer.StorageRPCSerializerImpl">
+    <when-type-is class="com.seanchenxi.gwt.storage.client.serializer.StorageSerializer" />
+    <when-property-is name="storage.serverReadable" value="false" />
   </replace-with>
 
   <source path='client'/>
