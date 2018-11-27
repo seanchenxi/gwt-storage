@@ -38,6 +38,7 @@ import com.google.gwt.user.rebind.rpc.SerializationUtils;
 import com.google.gwt.user.rebind.rpc.TypeSerializerCreator;
 import com.google.gwt.user.rebind.rpc.GwtUtilityDelegate;
 import com.google.gwt.user.server.rpc.SerializationPolicyLoader;
+
 import com.seanchenxi.gwt.storage.shared.StorageUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -47,7 +48,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;

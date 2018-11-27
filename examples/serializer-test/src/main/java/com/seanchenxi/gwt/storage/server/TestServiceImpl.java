@@ -16,13 +16,11 @@
 
 package com.seanchenxi.gwt.storage.server;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import com.google.gwt.user.client.rpc.SerializationException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.seanchenxi.gwt.storage.client.service.TestService;
+import com.seanchenxi.gwt.storage.client.value.GenericTestValue;
+import com.seanchenxi.gwt.storage.client.value.TestValue;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapKey;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapValue;
 import com.seanchenxi.gwt.storage.shared.RpcTestValue;
@@ -30,6 +28,7 @@ import com.seanchenxi.gwt.storage.shared.StorageUtils;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import java.util.*;
 
 /**
  * Created by: Xi
@@ -62,4 +61,49 @@ public class TestServiceImpl extends RemoteServiceServlet implements TestService
     rpcTestMapKeyRpcTestMapValueHashMap.put(new RpcTestMapKey(RpcTestMapKey.MapKey.KEY_2), new RpcTestMapValue(new RpcTestMapValue.MapValue("KEY_2_VALUE")));
     return rpcTestMapKeyRpcTestMapValueHashMap;
   }
+
+  @Override
+  public TestValue testDeserialization(TestValue value, String serialized) throws SerializationException {
+    Object[] serverSide = test(value, serialized);
+    return (TestValue) serverSide[1];
+  }
+
+  @Override
+  public String testSerialization(TestValue value, String serialized) throws SerializationException {
+    Object[] serverSide = test(value, serialized);
+    return (String) serverSide[0];
+  }
+
+  @Override
+  public GenericTestValue<TestValue> testGenericDeserialization(GenericTestValue<TestValue> value1, String serialized) throws SerializationException {
+    Object[] serverSide = test(value1, serialized);
+    return (GenericTestValue<TestValue>) serverSide[1];
+  }
+
+  @Override
+  public String testGenericSerialization(GenericTestValue<TestValue> value1, String serialized) throws SerializationException {
+    Object[] serverSide = test(value1, serialized);
+    return (String) serverSide[0];
+  }
+
+  private <T> Object[] test(T value, String serialized) throws SerializationException {
+    try {
+      Object serverDeserialized = StorageUtils.deserialize(Object.class, serialized);
+      if(!Objects.equals(value, serverDeserialized)){
+        System.err.println("expected=" + value + ", got=" + serverDeserialized);
+        throw new SerializationException("expected=" + value + ", got=" + serverDeserialized);
+      }
+      String serverSerialized = StorageUtils.serialize(value);
+      if(!Objects.equals(serialized, serverSerialized)){
+        System.err.println("expected=" + serialized + ", got=" + serverSerialized);
+        throw new SerializationException("expected=" + serialized + ", got=" + serverSerialized);
+      }
+      return new Object[]{serverSerialized, serverDeserialized};
+    } catch (SerializationException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new SerializationException(e);
+    }
+  }
+
 }

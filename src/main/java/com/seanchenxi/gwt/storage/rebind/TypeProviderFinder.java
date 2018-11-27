@@ -18,12 +18,10 @@ package com.seanchenxi.gwt.storage.rebind;
 
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
-import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JParameterizedType;
 import com.google.gwt.core.ext.typeinfo.JType;
-import com.google.gwt.core.ext.typeinfo.TypeOracle;
 
 import com.seanchenxi.gwt.storage.client.StorageKeyProvider;
 
@@ -35,13 +33,13 @@ import java.util.Set;
  */
 final class TypeProviderFinder extends StorageTypeFinder {
 
-  TypeProviderFinder(GeneratorContext context, TreeLogger logger) throws UnableToCompleteException {
+  TypeProviderFinder(GeneratorContext context, TreeLogger logger) {
     super(context, logger);
   }
 
   @Override
-  public Set<JType> findStorageTypes() throws UnableToCompleteException {
-    Set<JType> serializables = new HashSet<JType>();
+  public Set<JType> findStorageTypes() {
+    Set<JType> serializables = new HashSet<>();
 
     JClassType keyProviderIntf = typeOracle.findType(StorageKeyProvider.class.getName());
     JClassType[] keyProviderTypes = keyProviderIntf.getSubtypes();

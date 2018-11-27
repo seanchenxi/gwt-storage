@@ -30,7 +30,8 @@ public class ServerStorageSerializer {
   private static final String SERVER_READABLE_STR_1 = "_i_b";
   private static final String SERVER_READABLE_STR_2 = "_s";
 
-  public  <T> T deserialize(Class<? super T> clazz, String serializedString, final SerializationPolicy serializationPolicy) throws SerializationException {
+  @SuppressWarnings("unchecked")
+  public <T> T deserialize(Class<? super T> clazz, String serializedString, final SerializationPolicy serializationPolicy) throws SerializationException {
     if(serializedString == null || serializedString.trim().length() < 1){
       return null;
     }else if(String.class.isAssignableFrom(clazz)){

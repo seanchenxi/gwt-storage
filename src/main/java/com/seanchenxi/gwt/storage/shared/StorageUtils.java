@@ -42,7 +42,7 @@ import javax.servlet.ServletContext;
  * But in different module folder.
  *
  * In Server side, before calling StorageUtils#serialize(...), the concerned GWT module's Storage Serialization file
- * should be already loaded by {@link com.seanchenxi.gwt.storage.shared.StorageUtils.PolicyLoader}.
+ * should be already loaded by {@link PolicyLoader}.
  *
  * You don't need to call to load the policy file every time before server side serialization.
  * You can do it only one time at your servlet initialization phase.

@@ -89,7 +89,7 @@ public class StorageTest implements EntryPoint {
   }
 
   private void testStorage(boolean userKeyProvider, final StorageExt storage, final AsyncCallback<Boolean> callback) {
-    StorageTestUtil.prepare(storage);
+    StorageTestUtil.prepare(storage, TEST_SERVICE);
 
     scheduleSimpleValueTests(userKeyProvider);
     scheduleArrayValueTests(userKeyProvider);

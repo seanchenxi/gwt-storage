@@ -21,6 +21,9 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.google.gwt.user.client.rpc.SerializationException;
+import com.seanchenxi.gwt.storage.client.value.GenericTestValue;
+import com.seanchenxi.gwt.storage.client.value.TestValue;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapKey;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapValue;
 import com.seanchenxi.gwt.storage.shared.RpcTestValue;
@@ -37,4 +40,11 @@ public interface TestService extends RemoteService {
 
   Map<RpcTestMapKey, RpcTestMapValue> getRpcTestValueStringMap();
 
+  TestValue testDeserialization(TestValue value, String serialized) throws SerializationException;
+
+  String testSerialization(TestValue value, String serialized) throws SerializationException;
+
+  GenericTestValue<TestValue> testGenericDeserialization(GenericTestValue<TestValue> value1, String serialized) throws SerializationException;
+
+  String testGenericSerialization(GenericTestValue<TestValue> value1, String serialized) throws SerializationException;
 }

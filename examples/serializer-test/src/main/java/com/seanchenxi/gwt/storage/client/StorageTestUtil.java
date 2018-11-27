@@ -15,22 +15,22 @@
  */
 package com.seanchenxi.gwt.storage.client;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.SerializationException;
+import com.google.gwt.user.client.ui.*;
+import com.seanchenxi.gwt.storage.client.service.TestServiceAsync;
+import com.seanchenxi.gwt.storage.client.value.GenericTestValue;
+import com.seanchenxi.gwt.storage.client.value.TestValue;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.rpc.SerializationException;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
  * Created by: Xi
@@ -56,8 +56,9 @@ public class StorageTestUtil {
 
   private static StorageExt CURRENT_STORAGE;
   private static List<Scheduler.RepeatingCommand> TESTS;
+  private static TestServiceAsync TEST_SERVICE_ASYNC;
 
-  public static void prepare(StorageExt storage) {
+  public static void prepare(StorageExt storage, TestServiceAsync TEST_SERVICE) {
     traceEmptyLine();
     storage.clear();
     assertEquals("storage size", 0, storage.size());
@@ -65,6 +66,7 @@ public class StorageTestUtil {
     trace("Preparing test tasks...", false);
     CURRENT_STORAGE = storage;
     TESTS = new ArrayList<>();
+    TEST_SERVICE_ASYNC = TEST_SERVICE;
   }
 
   public static void start() {
@@ -123,6 +125,60 @@ public class StorageTestUtil {
           final int expectedSize = CURRENT_STORAGE.size() + 1;
           CURRENT_STORAGE.put(key, (T) value1);
           firstAssertGroup(name, expectedSize, key, value1);
+
+          String serialized = CURRENT_STORAGE.getString(key.name());
+          if(value1 instanceof TestValue){
+            TEST_SERVICE_ASYNC.testDeserialization((TestValue)value1, serialized, new AsyncCallback<TestValue>() {
+              @Override
+              public void onFailure(Throwable throwable) {
+                traceError(name + "_RPC", "see server log", "see server log");
+                GWT.log(name + "_RPC", throwable);
+              }
+
+              @Override
+              public void onSuccess(TestValue severDeserialized) {
+                assertEquals(name + "_RPC", value1, severDeserialized);
+              }
+            });
+            TEST_SERVICE_ASYNC.testSerialization((TestValue)value1, serialized, new AsyncCallback<String>() {
+              @Override
+              public void onFailure(Throwable throwable) {
+                traceError(name + "_RPC", "see server log", "see server log");
+                GWT.log(name + "_RPC", throwable);
+              }
+
+              @Override
+              public void onSuccess(String serverSerialized) {
+                assertEquals(name + "_RPC", serialized, serverSerialized);
+              }
+            });
+          }else if(value1 instanceof GenericTestValue){
+            TEST_SERVICE_ASYNC.testGenericDeserialization((GenericTestValue)value1, serialized, new AsyncCallback<GenericTestValue<TestValue>>() {
+              @Override
+              public void onFailure(Throwable throwable) {
+                traceError(name + "_RPC", "see server log", "see server log");
+                GWT.log(name + "_RPC", throwable);
+              }
+
+              @Override
+              public void onSuccess(GenericTestValue severDeserialized) {
+                assertEquals(name + "_RPC", value1, severDeserialized);
+              }
+            });
+            TEST_SERVICE_ASYNC.testGenericSerialization((GenericTestValue)value1, serialized, new AsyncCallback<String>() {
+              @Override
+              public void onFailure(Throwable throwable) {
+                traceError(name + "_RPC", "see server log", "see server log");
+                GWT.log(name + "_RPC", throwable);
+              }
+
+              @Override
+              public void onSuccess(String severSerialized) {
+                assertEquals(name + "_RPC", serialized, severSerialized);
+              }
+            });
+          }
+
 
           CURRENT_STORAGE.put(key, (T) value2);
           secondAssertGroup(name, expectedSize, key, value2);
@@ -293,7 +349,7 @@ public class StorageTestUtil {
   }
 
   public static boolean end() {
-    boolean isOK = (StorageTestUtil.TESTS.size() * 5 + 4 == StorageTestUtil.line);
+    boolean isOK = (StorageTestUtil.TESTS.size() * 5 + 4 + 4 == StorageTestUtil.line);
     trace(isOK ? "<b>OK</b>" : "<b>KO</b>", !isOK);
     StorageTestUtil.CURRENT_STORAGE = null;
     StorageTestUtil.TESTS.clear();

@@ -16,13 +16,15 @@
 
 package com.seanchenxi.gwt.storage.client.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.seanchenxi.gwt.storage.client.value.GenericTestValue;
+import com.seanchenxi.gwt.storage.client.value.TestValue;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapKey;
 import com.seanchenxi.gwt.storage.shared.RpcTestMapValue;
 import com.seanchenxi.gwt.storage.shared.RpcTestValue;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by: Xi
@@ -34,4 +36,12 @@ public interface TestServiceAsync {
   void getRpcTestValueList(AsyncCallback<List<RpcTestValue>> async);
 
   void getRpcTestValueStringMap(AsyncCallback<Map<RpcTestMapKey, RpcTestMapValue>> async);
+
+  void testDeserialization(TestValue className, String serialized, AsyncCallback<TestValue> async);
+
+  void testGenericDeserialization(GenericTestValue<TestValue> value1, String serialized, AsyncCallback<GenericTestValue<TestValue>> async);
+
+  void testSerialization(TestValue value, String serialized, AsyncCallback<String> async);
+
+  void testGenericSerialization(GenericTestValue<TestValue> value1, String serialized, AsyncCallback<String> async);
 }

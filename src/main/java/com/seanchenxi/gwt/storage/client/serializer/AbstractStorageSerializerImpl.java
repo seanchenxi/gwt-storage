@@ -76,7 +76,6 @@ abstract class AbstractStorageSerializerImpl implements StorageSerializer {
     ClientSerializationStreamReader reader = new ClientSerializationStreamReader(TYPE_SERIALIZER);
     reader.prepareToRead(serializedString);
     if(serializedString.matches(SERVER_READABLE_REGEX)) {
-      GWT.log("SERVER READABLE MODE");
       reader.readString();
       reader.readString();
     }

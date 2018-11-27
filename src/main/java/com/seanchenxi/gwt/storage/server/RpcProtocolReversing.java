@@ -22,14 +22,13 @@ class RpcProtocolReversing {
         String build();
     }
 
-    private static final String APOSTROPHE = "'";
     private static final String BLANK = "";
     private static final String CLOSE_BRACKET = "]";
     private static final String COMMA = ",";
     private static final String OPEN_BRACKET = "[";
 
 
-    public static Builder forServerRead(String serializedString){
+    static Builder forServerRead(String serializedString){
         int stringTableStartPos = serializedString.indexOf(OPEN_BRACKET, 1);
         int stringTableEndPos = serializedString.indexOf(CLOSE_BRACKET, stringTableStartPos);
 
