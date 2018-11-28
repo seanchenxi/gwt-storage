@@ -73,10 +73,10 @@
     <gwt.version>2.8.2</gwt.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <plugin.maven.compiler.version>3.5.1</plugin.maven.compiler.version>
+    <plugin.maven.compiler.version>3.8.0</plugin.maven.compiler.version>
     <plugin.maven.source.version>3.0.1</plugin.maven.source.version>
     <plugin.maven.javadoc.version>2.10.4</plugin.maven.javadoc.version>
-    <plugin.maven.jar.version>3.0.2</plugin.maven.jar.version>
+    <plugin.maven.jar.version>3.1.0</plugin.maven.jar.version>
   </properties>
 
   <dependencies>
@@ -155,7 +155,7 @@
           </execution>
         </executions>
         <configuration>
-          <additionalparam>${javadoc.doclint.none}</additionalparam>
+          <additionalparam>-Xdoclint:none</additionalparam>
         </configuration>
       </plugin>
 
@@ -175,17 +175,5 @@
 
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>java8-disable-strict-javadoc</id>
-      <activation>
-        <jdk>[1.8,)</jdk>
-      </activation>
-      <properties>
-        <javadoc.doclint.none>-Xdoclint:none</javadoc.doclint.none>
-      </properties>
-    </profile>
-  </profiles>
 
 </project>
