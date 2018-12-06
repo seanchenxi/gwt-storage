@@ -85,7 +85,7 @@ final class RpcProtocolReversing {
 
 
     static Builder forServerRead(String serializedString) throws SerializationException {
-        if(!serializedString.matches("^\\[(('[a-zA-Z0-9+/=]+'|\\d)+,)+\\[(\".*\",?)+\\](,\\d){2}\\]$")){
+        if(!serializedString.matches("^\\[(('.*'|[+\\-]?\\d+),)+\\[(\".*\",?)+\\](,\\d){2,}\\]$")){
             throw new SerializationException("Data (" + serializedString + ") doesn't match the required data structure");
         }
 
