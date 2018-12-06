@@ -21,7 +21,7 @@
 
   <groupId>com.seanchenxi.gwt</groupId>
   <artifactId>gwt-storage</artifactId>
-  <version>1.4.2-SNAPSHOT</version>
+  <version>1.4.2</version>
 
   <packaging>jar</packaging>
 
