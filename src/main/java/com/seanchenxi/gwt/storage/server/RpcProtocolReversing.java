@@ -16,56 +16,91 @@
 
 package com.seanchenxi.gwt.storage.server;
 
-class RpcProtocolReversing {
+import com.google.gwt.user.client.rpc.SerializationException;
+
+import static org.apache.commons.text.StringEscapeUtils.unescapeJson;
+
+/**
+ * Used for server side deserialization
+ * This utility class will transform serialized data structure from
+ *  "server->client format" to "client->server format"
+ */
+final class RpcProtocolReversing {
 
     interface Builder {
         String build();
     }
 
-    private static final String BLANK = "";
-    private static final String CLOSE_BRACKET = "]";
-    private static final String COMMA = ",";
-    private static final String OPEN_BRACKET = "[";
+    private static final class ServerReadFormatBuilder implements Builder{
 
+        private final StringBuilder sb = new StringBuilder();
+        private final String rawNumbers;
+        private final String rawStringTable;
+        private final String rawFlags;
 
-    static Builder forServerRead(String serializedString){
-        int stringTableStartPos = serializedString.indexOf(OPEN_BRACKET, 1);
-        int stringTableEndPos = serializedString.indexOf(CLOSE_BRACKET, stringTableStartPos);
+        private ServerReadFormatBuilder(String rawNumbers, String rawStringTable, String rawFlags) {
+            this.rawNumbers = rawNumbers;
+            this.rawStringTable = rawStringTable;
+            this.rawFlags = rawFlags;
+        }
 
-        String[] numbers = serializedString.substring(1, stringTableStartPos).split(COMMA);
-        String[] stringTable = serializedString.substring(stringTableStartPos + 2, stringTableEndPos - 1).split("\"" + COMMA + "\\s*\"");
-        String[] flags = serializedString.substring(stringTableEndPos + 1, serializedString.length() - 1).split(COMMA);
+        @Override
+        public String build() {
+            sb.setLength(0);
+            reverseAppend(rawFlags.split(COMMA));
+            appendStringTable(rawStringTable.split("\"" + COMMA + "\\s*\""));
+            reverseAppend(rawNumbers.split(COMMA));
+            return sb.toString();
+        }
 
-        return new Builder() {
-
-            @Override
-            public String build() {
-                StringBuilder sb = new StringBuilder();
-                reverseAppend(sb, flags);
-                appendStringTable(sb, stringTable);
-                reverseAppend(sb, numbers);
-                return sb.toString();
+        private void appendStringTable(String[] stringTable){
+            append(String.valueOf(stringTable.length));
+            for (String st : stringTable) {
+                String value = unescapeJson(st).replace(PIPE, RPC_PIPE_REPLACE);
+                append(value);
             }
+        }
 
-            private void append(StringBuilder sb, String value){
-                sb.append(value).append("|");
-            }
-
-            private void appendStringTable(StringBuilder sb, String[] stringTable){
-                append(sb, stringTable.length+"");
-                append(sb, String.join("|", stringTable));
-            }
-
-            private void reverseAppend(StringBuilder sb, String[] array) {
-                for (int i = array.length - 1; i >= 0; i--) {
-                    if(array[i] == null || array[i].length() < 1){
-                        continue;
-                    }
-                    String str = array[i].replaceAll("^(\"|')", BLANK).replaceAll("(\"|')$", BLANK);
-                    append(sb, str);
+        private void reverseAppend(String[] array) {
+            for (int i = array.length - 1; i >= 0; i--) {
+                if(array[i] == null || array[i].length() < 1){
+                    continue;
                 }
+                String str = array[i].replaceAll("(^\'|\'$)", BLANK);
+                append(str);
             }
-        };
+        }
+
+        private void append(String value){
+            sb.append(value).append(PIPE);
+        }
+    }
+
+    private static final String STR_TABLE_START = "[\"";
+    private static final String STR_TABLE_END = "\"]";
+    private static final String BLANK = "";
+    private static final String COMMA = ",";
+    private static final String PIPE = "|";
+    private static final String RPC_PIPE_REPLACE = "\\!";
+
+
+    static Builder forServerRead(String serializedString) throws SerializationException {
+        if(!serializedString.matches("^\\[(('[a-zA-Z0-9+/=]+'|\\d)+,)+\\[(\".*\",?)+\\](,\\d){2}\\]$")){
+            throw new SerializationException("Data (" + serializedString + ") doesn't match the required data structure");
+        }
+
+        int rawNumbersStartPos = 1;
+        int rawNumbersEndPos = serializedString.indexOf(STR_TABLE_START, rawNumbersStartPos) - 1; // skip ending ,
+        int stringTableStartPos = rawNumbersEndPos + STR_TABLE_START.length() + 1; // skip [ and "
+        int stringTableEndPos = serializedString.indexOf(STR_TABLE_END, stringTableStartPos); // skip ending "
+        int flagsStartPos = stringTableEndPos + STR_TABLE_END.length() + 1; // skip connecting ,
+        int flagsEndPos = serializedString.length() - 1; // skip connecting ,
+
+        String rawNumbers = serializedString.substring(rawNumbersStartPos, rawNumbersEndPos);
+        String rawStringTable = serializedString.substring(stringTableStartPos, stringTableEndPos);
+        String rawFlags = serializedString.substring(flagsStartPos, flagsEndPos);
+
+        return new ServerReadFormatBuilder(rawNumbers, rawStringTable, rawFlags);
     }
 
 }
