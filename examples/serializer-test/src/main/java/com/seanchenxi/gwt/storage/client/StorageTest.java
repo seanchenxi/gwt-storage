@@ -142,7 +142,7 @@ public class StorageTest implements EntryPoint {
     StorageTestUtil.testPutValue(userKeyProvider? KP.longKey() : KG.longKey(), 12345L, 23456l);
     StorageTestUtil.testPutValue(userKeyProvider? KP.shortKey() : KG.shortKey(), Short.MAX_VALUE, Short.MIN_VALUE);
 
-    TestValue test1 = new TestValue("hello");
+    TestValue test1 = new TestValue("hello \n\r\t \n \r \t |[],\"");
     TestValue test2 = new TestValue("hello2");
     StorageKey<TestValue> key1 = userKeyProvider ? KP.testValueKey("objectKey") : StorageKeyFactory.<TestValue>serializableKey("objectKey");
     StorageKey<GenericTestValue<TestValue>> key2 = userKeyProvider ? KP.genericTestValueKey("genericObjectKey") : StorageKeyFactory.<GenericTestValue<TestValue>>isSerializableKey("genericObjectKey");

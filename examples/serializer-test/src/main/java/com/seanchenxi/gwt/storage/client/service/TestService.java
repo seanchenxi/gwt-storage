@@ -40,9 +40,9 @@ public interface TestService extends RemoteService {
 
   Map<RpcTestMapKey, RpcTestMapValue> getRpcTestValueStringMap();
 
-  TestValue testDeserialization(TestValue value, String serialized) throws SerializationException;
+  TestValue testDeserialization(TestValue value, String serialized, TestValue stored) throws SerializationException;
 
-  String testSerialization(TestValue value, String serialized) throws SerializationException;
+  String testSerialization(TestValue value, String serialized, TestValue stored) throws SerializationException;
 
   GenericTestValue<TestValue> testGenericDeserialization(GenericTestValue<TestValue> value1, String serialized) throws SerializationException;
 

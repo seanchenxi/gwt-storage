@@ -63,13 +63,13 @@ public class TestServiceImpl extends RemoteServiceServlet implements TestService
   }
 
   @Override
-  public TestValue testDeserialization(TestValue value, String serialized) throws SerializationException {
+  public TestValue testDeserialization(TestValue value, String serialized, TestValue stored) throws SerializationException {
     Object[] serverSide = test(value, serialized);
     return (TestValue) serverSide[1];
   }
 
   @Override
-  public String testSerialization(TestValue value, String serialized) throws SerializationException {
+  public String testSerialization(TestValue value, String serialized, TestValue stored) throws SerializationException {
     Object[] serverSide = test(value, serialized);
     return (String) serverSide[0];
   }

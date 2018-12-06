@@ -126,9 +126,10 @@ public class StorageTestUtil {
           CURRENT_STORAGE.put(key, (T) value1);
           firstAssertGroup(name, expectedSize, key, value1);
 
-          String serialized = CURRENT_STORAGE.getString(key.name());
+          final String serialized = CURRENT_STORAGE.getString(key.name());
+          final T stored = CURRENT_STORAGE.get(key);
           if(value1 instanceof TestValue){
-            TEST_SERVICE_ASYNC.testDeserialization((TestValue)value1, serialized, new AsyncCallback<TestValue>() {
+            TEST_SERVICE_ASYNC.testDeserialization((TestValue)value1, serialized, (TestValue)stored, new AsyncCallback<TestValue>() {
               @Override
               public void onFailure(Throwable throwable) {
                 traceError(name + "_RPC", "see server log", "see server log");
@@ -140,7 +141,7 @@ public class StorageTestUtil {
                 assertEquals(name + "_RPC", value1, severDeserialized);
               }
             });
-            TEST_SERVICE_ASYNC.testSerialization((TestValue)value1, serialized, new AsyncCallback<String>() {
+            TEST_SERVICE_ASYNC.testSerialization((TestValue)value1, serialized, (TestValue)stored, new AsyncCallback<String>() {
               @Override
               public void onFailure(Throwable throwable) {
                 traceError(name + "_RPC", "see server log", "see server log");

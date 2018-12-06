@@ -37,11 +37,11 @@ public interface TestServiceAsync {
 
   void getRpcTestValueStringMap(AsyncCallback<Map<RpcTestMapKey, RpcTestMapValue>> async);
 
-  void testDeserialization(TestValue className, String serialized, AsyncCallback<TestValue> async);
+  void testDeserialization(TestValue className, String serialized, TestValue stored, AsyncCallback<TestValue> async);
 
   void testGenericDeserialization(GenericTestValue<TestValue> value1, String serialized, AsyncCallback<GenericTestValue<TestValue>> async);
 
-  void testSerialization(TestValue value, String serialized, AsyncCallback<String> async);
+  void testSerialization(TestValue value, String serialized, TestValue stored, AsyncCallback<String> async);
 
   void testGenericSerialization(GenericTestValue<TestValue> value1, String serialized, AsyncCallback<String> async);
 }
