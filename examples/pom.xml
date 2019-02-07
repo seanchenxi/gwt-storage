@@ -23,7 +23,7 @@
 
     <artifactId>gwt-storage-examples</artifactId>
     <groupId>com.seanchenxi.gwt</groupId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
 
     <description>
         A grouping of all the examples included with the gwt-storage framework.
@@ -33,7 +33,7 @@
 
     <properties>
         <gwt.version>2.8.2</gwt.version>
-        <gwt.storage.version>1.4.2-SNAPSHOT</gwt.storage.version>
+        <gwt.storage.version>1.4.3</gwt.storage.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <plugin.maven.compiler.version>3.0</plugin.maven.compiler.version>

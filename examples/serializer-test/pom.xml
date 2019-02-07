@@ -24,7 +24,7 @@
   <parent>
     <artifactId>gwt-storage-examples</artifactId>
     <groupId>com.seanchenxi.gwt</groupId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.4.3-SNAPSHOT</version>
   </parent>
   
   <artifactId>serializer-test</artifactId>
